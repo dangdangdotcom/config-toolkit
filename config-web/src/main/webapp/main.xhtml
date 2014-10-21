@@ -1,0 +1,137 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<title>配置管理面板</title>
+</h:head>
+<h:body>
+	<h:form id="messageBox">
+		<p:growl id="messages" showDetail="true" life="2000" />
+		<p:confirmDialog global="true" showEffect="fade" hideEffect="explode" style="font-size:smaller;">
+			<p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+			<p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+		</p:confirmDialog>
+	</h:form>
+	<p:dialog header="Enter auth information" widgetVar="authPanel" modal="true" resizable="false" appendTo="@(body)"
+		style="font-size:small;">
+		<h:form id="authNode">
+			<h:panelGrid columns="2">
+				<h:outputText value="Node: "></h:outputText>
+				<p:inputText id="auth_node_name" value="#{nodeAuthMB.nodeName}" required="true" />
+
+				<h:outputText value="Password: "></h:outputText>
+				<p:password id="auth_password" value="#{nodeAuthMB.password}" required="true" />
+
+				<p:commandButton value="Sign in" actionListener="#{nodeAuthMB.checkAuth}"
+					update=":messageBox:messages,:authedNodeInfo:authedNodeView,:authedNodeForm:propertyGroups,:authedNodeForm:createNode,:authedNodeForm:uploadNode,:nodePropData:nodePropTable,:nodePropForm:createProperty"
+					onsuccess="PF('authPanel').hide()" style="font-size:small" />
+				<p:commandButton value="Sign up"
+					update=":messageBox:messages,:authedNodeInfo:authedNodeView,:authedNodeForm:propertyGroups,:authedNodeForm:createNode,:authedNodeForm:uploadNode,:nodePropData:nodePropTable,:nodePropForm:createProperty"
+					actionListener="#{nodeAuthMB.grantAuth}" onsuccess="PF('authPanel').hide()" style="font-size:small" />
+			</h:panelGrid>
+		</h:form>
+	</p:dialog>
+	<p:dialog header="Configuration Upload" widgetVar="uploadPanel" modal="true" width="550" resizable="false" appendTo="@(body)"
+		style="font-size:small;">
+		<h:form id="fileUploadForm">
+			<p:fileUpload id="fileUpload" fileUploadListener="#{propertyGroupMB.handleFileUpload}" dragDropSupport="false" multiple="true"
+                 update=":messageBox:messages,:authedNodeForm:propertyGroups" previewWidth="0" style="margin: 10px; font-size:small"/>  
+		</h:form>
+	</p:dialog>
+	<p:layout fullPage="true">
+		<p:layoutUnit position="north" size="90">
+			<p:panel style="margin:10px;">
+				<h:outputText value="配置 - 在分布式和集群环境中，同样应该是考虑要复用的东西." />
+			</p:panel>
+		</p:layoutUnit>
+		<p:layoutUnit position="south" size="50">
+			<h:outputText value="Copyright (C) WangYuxuan@DangDang" />
+		</p:layoutUnit>
+		<p:layoutUnit position="west" size="300">
+			<h:form id="authedNodeInfo">
+				<p:panel id="authedNodeView" header="#{nodeAuthMB.authedNode}" style="margin:10px; font-size: smaller">
+					<p:commandButton type="button" value="切换授权节点" onclick="PF('authPanel').show()" style="font-size:small;" />
+					<p:effect type="bounce" event="dblclick" />
+				</p:panel>
+			</h:form>
+			<h:form id="authedNodeForm">
+				<p:dataTable id="propertyGroups" value="#{propertyGroupMB.propertyGroups}" var="propertyGroup"
+					style="margin: 10px; font-size:smaller;" rowKey="#{propertyGroup}" selection="#{propertyGroupMB.selectedGroup}"
+					selectionMode="single">
+					<p:ajax event="rowSelect" update=":nodePropData:nodePropTable" listener="#{nodeDataMB.onMenuSelected}" />
+					<f:facet name="header">Property Groups</f:facet>
+					<p:column headerText="Group Name">
+						#{propertyGroup}
+					</p:column>
+					<p:column>
+						<p:commandLink value="Remove" update=":messageBox:messages,:authedNodeForm:propertyGroups"
+							actionListener="#{propertyGroupMB.deleteNode(propertyGroup)}" style="font-size:small; margin: 10px;">
+							<p:confirm header="Confirmation" message="确认删除配置组?" icon="ui-icon-alert" />
+						</p:commandLink>
+						<p:commandLink id="downloadLink" value="Export" ajax="false" icon="ui-icon-arrowthichk-s" style="font-size:small; margin: 10px;">  
+						    <p:fileDownload value="#{propertyExportMB.generateFile(propertyGroup)}" />  
+						</p:commandLink>
+					</p:column>
+				</p:dataTable>
+				<p:inputText id="newPropertyGroup" size="12" style="font-size:smaller; margin: 10px;"
+					binding="#{propertyGroupMB.newPropertyGroup}" />
+				<p:commandButton id="createNode" value="创建"  disabled="#{empty nodeAuthMB.authedNode}"
+					update=":messageBox:messages,:authedNodeForm:propertyGroups,:authedNodeForm:newPropertyGroup"
+					actionListener="#{propertyGroupMB.createNode}" style="margin: 10px; font-size:small" />
+				<p:commandButton id="uploadNode" type="button" value="上传"  disabled="#{empty nodeAuthMB.authedNode}"
+				 onclick="PF('uploadPanel').show()" style="font-size:small;" />
+			</h:form>
+		</p:layoutUnit>
+		<p:layoutUnit position="center">
+			<h:form id="nodePropForm">
+				<p:inputText id="newPropName" required="true" size="12" style="font-size:smaller; margin: 10px;"
+					binding="#{nodeDataMB.newPropName}" />
+				<p:inputText id="newPropValue" required="true" size="12" style="font-size:smaller; margin: 10px;"
+					binding="#{nodeDataMB.newPropValue}" />
+				<p:commandButton id="createProperty" value="创建" partialSubmit="true" disabled="#{empty nodeAuthMB.authedNode}"
+					update=":messageBox:messages,:nodePropData:nodePropTable,:nodePropForm:newPropName,:nodePropForm:newPropValue"
+					actionListener="#{nodeDataMB.createProperty}" style="margin: 10px; font-size:small" />
+			</h:form>
+			<h:form id="nodePropData">
+				<p:separator style="margin: 0px 10px 20px 10px;" />
+				<p:dataTable id="nodePropTable" var="nodeProp" editable="true" value="#{nodeDataMB.nodeProps}"
+					style="margin:10px;font-size:small">
+					<p:ajax event="rowEdit" listener="#{nodeDataMB.onPropertyEdit}" update=":messageBox:messages" />
+					<p:column style="width:6%">
+						<p:rowEditor />
+						<h:inputHidden value="#{nodeProp.oriName}" />
+					</p:column>
+					<p:column style="width:6%">
+						<p:commandLink update=":messageBox:messages,:nodePropData:nodePropTable"
+							actionListener="#{nodeDataMB.deleteProperty(nodeProp.name)}">
+							<h:outputText styleClass="ui-icon ui-icon-close" />
+							<p:confirm header="Confirmation" message="确认删除配置?" icon="ui-icon-alert" />
+						</p:commandLink>
+					</p:column>
+					<p:column headerText="Property Key" style="width:20%">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{nodeProp.name}" style="width:96%; word-wrap: break-word; word-break: break-all;" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText value="#{nodeProp.name}" style="width:96%" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+					<p:column headerText="Property Value">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{nodeProp.value}" style="width:96%; word-wrap: break-word; word-break: break-all;" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText value="#{nodeProp.value}" style="width:96%" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+				</p:dataTable>
+			</h:form>
+		</p:layoutUnit>
+	</p:layout>
+</h:body>
+</html>

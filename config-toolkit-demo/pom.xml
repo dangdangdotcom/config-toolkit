@@ -1,0 +1,52 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>config-toolkit-demo</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<parent>
+		<groupId>com.dangdang</groupId>
+		<artifactId>config-toolkit-parent</artifactId>
+		<version>1.0.1-RELEASE</version>
+	</parent>
+
+	<properties>
+		<config-toolkit-easyzk.version>1.0.2-RELEASE</config-toolkit-easyzk.version>
+		<zookeeper.version>3.4.6</zookeeper.version>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.dangdang</groupId>
+			<artifactId>config-toolkit-easyzk</artifactId>
+			<version>${config-toolkit-easyzk.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.zookeeper</groupId>
+			<artifactId>zookeeper</artifactId>
+			<version>${zookeeper.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-beans</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+		</dependency>
+
+		<!-- slf4j + logback -->
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
+		</dependency>
+	</dependencies>
+
+</project>
