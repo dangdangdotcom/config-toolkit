@@ -100,19 +100,6 @@
 		</plugins>
 	</build>
 
-	<distributionManagement>
-		<repository>
-			<id>releases</id>
-			<name>Internal Releases</name>
-			<url>http://nexus.dangdang.com:8081/nexus/content/repositories/releases
-			</url>
-		</repository>
-		<snapshotRepository>
-			<id>snapshots</id>
-			<name>Internal Snapshots</name>
-			<url>http://nexus.dangdang.com:8081/nexus/content/repositories/snapshots</url>
-		</snapshotRepository>
-	</distributionManagement>
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.curator</groupId>
