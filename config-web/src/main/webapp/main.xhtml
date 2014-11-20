@@ -18,7 +18,9 @@
 		<h:form id="authNode">
 			<h:panelGrid columns="2">
 				<h:outputText value="Node: "></h:outputText>
-				<p:inputText id="auth_node_name" value="#{nodeAuthMB.nodeName}" required="true" />
+				<p:inputText id="auth_node_name" value="#{nodeAuthMB.nodeName}" required="true" validatorMessage="Invalid format." >
+					<f:validateRegex pattern="^(\/\w+)+" />
+				</p:inputText>
 
 				<h:outputText value="Password: "></h:outputText>
 				<p:password id="auth_password" value="#{nodeAuthMB.password}" required="true" />
@@ -75,7 +77,9 @@
 					</p:column>
 				</p:dataTable>
 				<p:inputText id="newPropertyGroup" size="12" style="font-size:smaller; margin: 10px;"
-					binding="#{propertyGroupMB.newPropertyGroup}" />
+					binding="#{propertyGroupMB.newPropertyGroup}" validatorMessage="Invalid format.">
+					<f:validateRegex pattern="[^/]+" />
+				</p:inputText>
 				<p:commandButton id="createNode" value="创建"  disabled="#{empty nodeAuthMB.authedNode}"
 					update=":messageBox:messages,:authedNodeForm:propertyGroups,:authedNodeForm:newPropertyGroup"
 					actionListener="#{propertyGroupMB.createNode}" style="margin: 10px; font-size:small" />
@@ -86,7 +90,9 @@
 		<p:layoutUnit position="center">
 			<h:form id="nodePropForm">
 				<p:inputText id="newPropName" required="true" size="12" style="font-size:smaller; margin: 10px;"
-					binding="#{nodeDataMB.newPropName}" />
+					binding="#{nodeDataMB.newPropName}" validatorMessage="Invalid format.">
+					<f:validateRegex pattern="[^/]+" />
+				</p:inputText>
 				<p:inputText id="newPropValue" required="true" size="12" style="font-size:smaller; margin: 10px;"
 					binding="#{nodeDataMB.newPropValue}" />
 				<p:commandButton id="createProperty" value="创建" partialSubmit="true" disabled="#{empty nodeAuthMB.authedNode}"
