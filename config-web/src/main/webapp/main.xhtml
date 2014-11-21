@@ -34,10 +34,19 @@
 			</h:panelGrid>
 		</h:form>
 	</p:dialog>
+	<!-- Property Group Upload -->
 	<p:dialog header="Configuration Upload" widgetVar="uploadPanel" modal="true" width="550" resizable="false" appendTo="@(body)"
 		style="font-size:small;">
 		<h:form id="fileUploadForm">
-			<p:fileUpload id="fileUpload" fileUploadListener="#{propertyGroupMB.handleFileUpload}" dragDropSupport="false" multiple="true"
+			<p:fileUpload id="fileUpload" fileUploadListener="#{propertyGroupMB.propertyGroupUpload}" dragDropSupport="false" multiple="true" allowTypes="/^.*\.properties$/"
+                 update=":messageBox:messages,:authedNodeForm:propertyGroups" previewWidth="0" style="margin: 10px; font-size:small"/>  
+		</h:form>
+	</p:dialog>
+	<!-- Property Zip Package Upload -->
+	<p:dialog header="Configuration Upload" widgetVar="uploadZip" modal="true" width="550" resizable="false" appendTo="@(body)"
+		style="font-size:small;">
+		<h:form id="zipUploadForm">
+			<p:fileUpload id="fileUpload" fileUploadListener="#{propertyGroupMB.propertyZipUpload}" dragDropSupport="false" multiple="false" allowTypes="/^.*\.zip$/"
                  update=":messageBox:messages,:authedNodeForm:propertyGroups" previewWidth="0" style="margin: 10px; font-size:small"/>  
 		</h:form>
 	</p:dialog>
@@ -53,7 +62,11 @@
 		<p:layoutUnit position="west" size="300">
 			<h:form id="authedNodeInfo">
 				<p:panel id="authedNodeView" header="#{nodeAuthMB.authedNode}" style="margin:10px; font-size: smaller">
-					<p:commandButton type="button" value="切换授权节点" onclick="PF('authPanel').show()" style="font-size:small;" />
+					<p:commandButton type="button" value="切换授权节点" onclick="PF('authPanel').show()" style="font-size:small;display:block;margin-bottom:15px;" />
+					<p:commandLink type="button" value="Export All" ajax="false" disabled="#{empty nodeAuthMB.authedNode}" style="font-size:small;margin-right:6px;">
+						<p:fileDownload value="#{propertyExportMB.generateFileAll()}" />
+					</p:commandLink>
+					<p:commandLink type="button" value="Import All" disabled="#{empty nodeAuthMB.authedNode}" style="font-size:small;"  onclick="PF('uploadZip').show()" />
 					<p:effect type="bounce" event="dblclick" />
 				</p:panel>
 			</h:form>
