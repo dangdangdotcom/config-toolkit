@@ -13,7 +13,7 @@
 		<!-- Your module node in zookeeper -->
 		<constructor-arg name="rootNode" value="/projectx/modulex" />
 	</bean>
-
+	
 	<bean id="zookeeperSources" class="com.dangdang.config.service.easyzk.support.spring.ZookeeperSourceFactory" factory-method="create">
 		<constructor-arg name="configFactory" ref="configFactory" />
 		<!-- Your property groups -->
