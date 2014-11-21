@@ -19,7 +19,7 @@
 			<h:panelGrid columns="2">
 				<h:outputText value="Node: "></h:outputText>
 				<p:inputText id="auth_node_name" value="#{nodeAuthMB.nodeName}" required="true" validatorMessage="Invalid format." >
-					<f:validateRegex pattern="^(\/\w+)+" />
+					<f:validateRegex pattern="^\/.+" />
 				</p:inputText>
 
 				<h:outputText value="Password: "></h:outputText>
