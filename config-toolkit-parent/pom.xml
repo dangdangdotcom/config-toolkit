@@ -8,11 +8,20 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<config-common.version>1.0.2-RELEASE</config-common.version>
-		<spring.io.platform.version>1.0.2.RELEASE</spring.io.platform.version>
+        <spring.bom.version>3.2.9.RELEASE</spring.bom.version>
 		<apache.commons-collections.version>4.0</apache.commons-collections.version>
 		<druid.version>1.0.7</druid.version>
 		<curator.version>2.6.0</curator.version>
 		<cglib.version>2.2.2</cglib.version>
+        <!-- Test libs -->
+        <junit_version>4.10</junit_version>
+        <!-- Log libs -->
+        <slf4j_version>1.7.2</slf4j_version>
+        <jcl_version>1.1</jcl_version>
+        <log4j_version>1.2.16</log4j_version>
+        <logback_version>1.0.6</logback_version>
+        <jcl_over_slf4j_version>1.7.7</jcl_over_slf4j_version>
+        <guava_version>16.0.1</guava_version>
 	</properties>
 
 	<dependencyManagement>
@@ -22,14 +31,13 @@
 				<artifactId>config-common</artifactId>
 				<version>${config-common.version}</version>
 			</dependency>
-			
-			<dependency>
-				<groupId>io.spring.platform</groupId>
-				<artifactId>platform-bom</artifactId>
-				<version>${spring.io.platform.version}</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-framework-bom</artifactId>
+                <version>${spring.bom.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
 			<dependency>
 				<groupId>org.apache.commons</groupId>
 				<artifactId>commons-collections4</artifactId>
@@ -50,6 +58,51 @@
 				<artifactId>cglib</artifactId>
 				<version>${cglib.version}</version>
 			</dependency>
+            <!-- Test libs -->
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>${junit_version}</version>
+                <scope>test</scope>
+            </dependency>
+            <!-- Log libs -->
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${slf4j_version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-log4j12</artifactId>
+                <version>${slf4j_version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-logging</groupId>
+                <artifactId>commons-logging-api</artifactId>
+                <version>${jcl_version}</version>
+            </dependency>
+            <dependency>
+                <groupId>log4j</groupId>
+                <artifactId>log4j</artifactId>
+                <version>${log4j_version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-classic</artifactId>
+                <version>${logback_version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>jcl-over-slf4j</artifactId>
+                <version>${jcl_over_slf4j_version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${guava_version}</version>
+            </dependency>
+
 		</dependencies>
 	</dependencyManagement>
 
