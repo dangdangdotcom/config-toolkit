@@ -11,5 +11,6 @@
 		<module>config-common</module>
 		<module>config-toolkit-easyzk</module>
 		<module>config-web</module>
+        <module>config-toolkit-demo</module>
 	</modules>
 </project>
