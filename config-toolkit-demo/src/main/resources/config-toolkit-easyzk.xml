@@ -9,7 +9,7 @@
 
 	<bean id="configFactory" class="com.dangdang.config.service.easyzk.ConfigFactory">
 		<!-- Your zookeeper nodes -->
-		<constructor-arg name="connectStr" value="zoo.host1:8181,zoo.host2:8181,zoo.host3:8181" />
+		<constructor-arg name="connectStr" value="localhost:2181" />
 		<!-- Your module node in zookeeper -->
 		<constructor-arg name="rootNode" value="/projectx/modulex" />
 	</bean>
