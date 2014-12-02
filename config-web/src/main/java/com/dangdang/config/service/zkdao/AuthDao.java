@@ -75,7 +75,7 @@ public class AuthDao extends BaseDao implements IAuthDao {
 				LOGGER.info("Node exists.");
 				byte[] data = getClient().getData().forPath(nodeName);
 				// 判断节点是否被授权
-				if (data.length == 1 && data[0] != (byte) 0) {
+				if (data == null || (data.length == 1 && data[0] != (byte) 0)) {
 					getClient().setData().forPath(nodeName, sha1Digest);
 					suc = true;
 					LOGGER.info("Auth done.");
