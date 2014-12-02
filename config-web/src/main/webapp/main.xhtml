@@ -13,22 +13,22 @@
 			<p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
 		</p:confirmDialog>
 	</h:form>
-	<p:dialog header="Enter auth information" widgetVar="authPanel" modal="true" resizable="false" appendTo="@(body)"
+	<p:dialog header="Enter auth information. " widgetVar="authPanel" modal="true" resizable="false" appendTo="@(body)"
 		style="font-size:small;">
 		<h:form id="authNode">
 			<h:panelGrid columns="2">
 				<h:outputText value="Node: "></h:outputText>
-				<p:inputText id="auth_node_name" value="#{nodeAuthMB.nodeName}" required="true" validatorMessage="Invalid format." >
+				<p:inputText id="auth_node_name" value="#{nodeAuthMB.nodeName}" required="true" validatorMessage="Path must start with / character" >
 					<f:validateRegex pattern="^\/.+" />
 				</p:inputText>
 
 				<h:outputText value="Password: "></h:outputText>
 				<p:password id="auth_password" value="#{nodeAuthMB.password}" required="true" />
 
-				<p:commandButton value="Sign in" actionListener="#{nodeAuthMB.checkAuth}"
+				<p:commandButton value="连接节点" actionListener="#{nodeAuthMB.checkAuth}"
 					update=":messageBox:messages,:authedNodeInfo:authedNodeView,:authedNodeForm:propertyGroups,:authedNodeForm:createNode,:authedNodeForm:uploadNode,:nodePropData:nodePropTable,:nodePropForm:createProperty"
 					onsuccess="PF('authPanel').hide()" style="font-size:small" />
-				<p:commandButton value="Sign up"
+				<p:commandButton value="新建节点"
 					update=":messageBox:messages,:authedNodeInfo:authedNodeView,:authedNodeForm:propertyGroups,:authedNodeForm:createNode,:authedNodeForm:uploadNode,:nodePropData:nodePropTable,:nodePropForm:createProperty"
 					actionListener="#{nodeAuthMB.grantAuth}" onsuccess="PF('authPanel').hide()" style="font-size:small" />
 			</h:panelGrid>
@@ -39,7 +39,7 @@
 		style="font-size:small;">
 		<h:form id="fileUploadForm">
 			<p:fileUpload id="fileUpload" fileUploadListener="#{propertyGroupMB.propertyGroupUpload}" dragDropSupport="false" multiple="true" allowTypes="/^.*\.properties$/"
-                 update=":messageBox:messages,:authedNodeForm:propertyGroups" previewWidth="0" style="margin: 10px; font-size:small"/>  
+                 update=":messageBox:messages,:authedNodeForm:propertyGroups" previewWidth="0" style="margin: 10px; font-size:small"/>
 		</h:form>
 	</p:dialog>
 	<!-- Property Zip Package Upload -->
@@ -47,7 +47,7 @@
 		style="font-size:small;">
 		<h:form id="zipUploadForm">
 			<p:fileUpload id="fileUpload" fileUploadListener="#{propertyGroupMB.propertyZipUpload}" dragDropSupport="false" multiple="false" allowTypes="/^.*\.zip$/"
-                 update=":messageBox:messages,:authedNodeForm:propertyGroups" previewWidth="0" style="margin: 10px; font-size:small"/>  
+                 update=":messageBox:messages,:authedNodeForm:propertyGroups" previewWidth="0" style="margin: 10px; font-size:small"/>
 		</h:form>
 	</p:dialog>
 	<p:layout fullPage="true">
@@ -84,13 +84,13 @@
 							actionListener="#{propertyGroupMB.deleteNode(propertyGroup)}" style="font-size:small; margin: 10px;">
 							<p:confirm header="Confirmation" message="确认删除配置组?" icon="ui-icon-alert" />
 						</p:commandLink>
-						<p:commandLink id="downloadLink" value="Export" ajax="false" icon="ui-icon-arrowthichk-s" style="font-size:small; margin: 10px;">  
-						    <p:fileDownload value="#{propertyExportMB.generateFile(propertyGroup)}" />  
+						<p:commandLink id="downloadLink" value="Export" ajax="false" icon="ui-icon-arrowthichk-s" style="font-size:small; margin: 10px;">
+						    <p:fileDownload value="#{propertyExportMB.generateFile(propertyGroup)}" />
 						</p:commandLink>
 					</p:column>
 				</p:dataTable>
 				<p:inputText id="newPropertyGroup" size="12" style="font-size:smaller; margin: 10px;"
-					binding="#{propertyGroupMB.newPropertyGroup}" validatorMessage="Invalid format.">
+					binding="#{propertyGroupMB.newPropertyGroup}" validatorMessage="Path must start with / character">
 					<f:validateRegex pattern="[^/]+" />
 				</p:inputText>
 				<p:commandButton id="createNode" value="创建"  disabled="#{empty nodeAuthMB.authedNode}"
@@ -102,10 +102,12 @@
 		</p:layoutUnit>
 		<p:layoutUnit position="center">
 			<h:form id="nodePropForm">
-				<p:inputText id="newPropName" required="true" size="12" style="font-size:smaller; margin: 10px;"
-					binding="#{nodeDataMB.newPropName}" validatorMessage="Invalid format.">
+                <span>KEY: </span>
+                <p:inputText id="newPropName" required="true" size="12" style="font-size:smaller; margin: 10px;"
+					binding="#{nodeDataMB.newPropName}" validatorMessage="Path must start with / character">
 					<f:validateRegex pattern="[^/]+" />
 				</p:inputText>
+                <span>VALUE: </span>
 				<p:inputText id="newPropValue" required="true" size="12" style="font-size:smaller; margin: 10px;"
 					binding="#{nodeDataMB.newPropValue}" />
 				<p:commandButton id="createProperty" value="创建" partialSubmit="true" disabled="#{empty nodeAuthMB.authedNode}"
