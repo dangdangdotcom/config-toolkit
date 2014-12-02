@@ -13,7 +13,7 @@
 			<p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
 		</p:confirmDialog>
 	</h:form>
-	<p:dialog header="Enter auth information. " widgetVar="authPanel" modal="true" resizable="false" appendTo="@(body)"
+	<p:dialog header="应用ROOT节点" widgetVar="authPanel" modal="true" resizable="false" appendTo="@(body)"
 		style="font-size:small;">
 		<h:form id="authNode">
 			<h:panelGrid columns="2">
@@ -102,13 +102,13 @@
 		</p:layoutUnit>
 		<p:layoutUnit position="center">
 			<h:form id="nodePropForm">
-                <span>KEY: </span>
-                <p:inputText id="newPropName" required="true" size="12" style="font-size:smaller; margin: 10px;"
+                <h:outputLabel value="Key: " style="font-size:smaller; margin: 10px;" />
+                <p:inputText id="newPropName" required="true" size="12" style="font-size:smaller;"
 					binding="#{nodeDataMB.newPropName}" validatorMessage="Path must start with / character">
 					<f:validateRegex pattern="[^/]+" />
 				</p:inputText>
-                <span>VALUE: </span>
-				<p:inputText id="newPropValue" required="true" size="12" style="font-size:smaller; margin: 10px;"
+                <h:outputLabel value="Value: " style="font-size:smaller; margin: 10px;" />
+				<p:inputText id="newPropValue" required="true" size="12" style="font-size:smaller;"
 					binding="#{nodeDataMB.newPropValue}" />
 				<p:commandButton id="createProperty" value="创建" partialSubmit="true" disabled="#{empty nodeAuthMB.authedNode}"
 					update=":messageBox:messages,:nodePropData:nodePropTable,:nodePropForm:newPropName,:nodePropForm:newPropValue"
