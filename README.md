@@ -17,6 +17,10 @@
 * Spring集成
 * 配置管理web界面
 
+#### 词典
+* ConfigFactory - 配置工厂，用于定义zookeeper地址及配置根目录
+* ConfigNode - 配置组，一组配置信息，对应于遗留系统中的properties属性文件
+
 #### 使用
 - 直接使用
 <pre><code>
