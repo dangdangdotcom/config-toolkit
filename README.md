@@ -20,8 +20,11 @@
 #### 使用
 - 直接使用
 <pre><code>
-	ConfigFactory configFactory = new ConfigFactory(connectStr, rootNode);
+        // 创建配置工厂指向zk的地址及配置在zk中的根地址
+	ConfigFactory configFactory = new ConfigFactory("zoo.host1:8181,zoo.host2:8181,zoo.host3:8181", "/projectx/modulex");
+        // 从工厂中加载某配置组
 	ConfigNode node = configFactory.getConfigNode("group0");
+        // 从配置组中获取某配置
 	Assert.assertNotNull(node.getProperty("name"));
 </code></pre>
 
