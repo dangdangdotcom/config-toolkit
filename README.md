@@ -8,8 +8,8 @@
 * JAVA 7
 
 #### 模块
-* EasyZk - 封装属性配置的获取及更新
-* ConfigWeb - 提供web界面方便修改属性配置及迁移
+* EasyZk - 封装从应用到zookeeper之间属性配置的获取及更新
+* ConfigWeb - 提供web界面方便维护属性配置及遗留系统properties文件迁移，提供配置导入导出功能
 
 #### 特性
 * 集中管理集群配置
