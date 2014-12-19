@@ -5,7 +5,7 @@
 <hr>
 
 #### 依赖
-* JAVA 7
+* JAVA 6+
 
 #### 模块
 * EasyZk - 封装从应用到zookeeper之间属性配置的获取及更新
