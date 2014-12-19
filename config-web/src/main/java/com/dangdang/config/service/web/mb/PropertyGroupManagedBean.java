@@ -160,11 +160,21 @@ public class PropertyGroupManagedBean implements Serializable, IObserver {
 		String fileName = event.getFile().getFileName();
 		LOGGER.info("Deal uploaded file: {}", fileName);
 		String group = Files.getNameWithoutExtension(fileName);
-		try (InputStream inputstream = event.getFile().getInputstream()) {
+		InputStream inputstream = null;
+		try {
+			inputstream = event.getFile().getInputstream();
 			savePropertyGroup(fileName, group, inputstream);
 		} catch (IOException e) {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Failed", fileName + " parse error."));
 			LOGGER.error("Upload File Exception.", e);
+		} finally {
+			if (inputstream != null) {
+				try {
+					inputstream.close();
+				} catch (IOException e) {
+					// DO NOTHING
+				}
+			}
 		}
 	}
 
@@ -198,7 +208,9 @@ public class PropertyGroupManagedBean implements Serializable, IObserver {
 	public void propertyZipUpload(FileUploadEvent event) {
 		String fileName = event.getFile().getFileName();
 		LOGGER.info("Deal uploaded file: {}", fileName);
-		try (ZipInputStream zipInputStream = new ZipInputStream(event.getFile().getInputstream())) {
+		ZipInputStream zipInputStream = null;
+		try {
+			zipInputStream = new ZipInputStream(event.getFile().getInputstream());
 			ZipEntry nextEntry = null;
 			while ((nextEntry = zipInputStream.getNextEntry()) != null) {
 				String entryName = nextEntry.getName();
@@ -207,6 +219,14 @@ public class PropertyGroupManagedBean implements Serializable, IObserver {
 		} catch (IOException e) {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Failed", fileName + " parse error."));
 			LOGGER.error("Upload File Exception.", e);
+		} finally {
+			if (zipInputStream != null) {
+				try {
+					zipInputStream.close();
+				} catch (IOException e) {
+					// DO NOTHING
+				}
+			}
 		}
 	}
 

@@ -2,12 +2,11 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.dangdang</groupId>
 	<artifactId>config-toolkit-parent</artifactId>
-	<version>1.0.1-RELEASE</version>
+	<version>1.1.0-RELEASE</version>
 	<packaging>pom</packaging>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<config-common.version>1.0.2-RELEASE</config-common.version>
         <spring.bom.version>3.2.9.RELEASE</spring.bom.version>
 		<apache.commons-collections.version>4.0</apache.commons-collections.version>
 		<druid.version>1.0.7</druid.version>
@@ -29,8 +28,9 @@
 			<dependency>
 				<groupId>com.dangdang</groupId>
 				<artifactId>config-common</artifactId>
-				<version>${config-common.version}</version>
+				<version>1.1.0-RELEASE</version>
 			</dependency>
+			
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-framework-bom</artifactId>
@@ -124,8 +124,8 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
-					<source>1.7</source>
-					<target>1.7</target>
+					<source>1.6</source>
+					<target>1.6</target>
 					<encoding>UTF-8</encoding>
 				</configuration>
 			</plugin>

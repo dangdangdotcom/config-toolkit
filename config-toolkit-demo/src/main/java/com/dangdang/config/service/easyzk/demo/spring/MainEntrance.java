@@ -29,16 +29,21 @@ import com.google.common.base.Preconditions;
 public class MainEntrance {
 
 	public static void main(String[] args) {
-		try (ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("classpath:config-toolkit-easyzk.xml")) {
+		ClassPathXmlApplicationContext context = null;
+		try {
+			context = new ClassPathXmlApplicationContext("classpath:config-toolkit-easyzk.xml");
 			context.registerShutdownHook();
 			context.start();
 
 			ExampleBean bean = context.getBean(ExampleBean.class);
 			System.out.println(bean);
-			
+
 			Preconditions.checkState("Welcome".equals(bean.getStringProperty()));
 			Preconditions.checkState(1123 == bean.getIntProperty());
-		} catch (RuntimeException e) {
+		} finally {
+			if (context != null) {
+				context.close();
+			}
 		}
 	}
 }
