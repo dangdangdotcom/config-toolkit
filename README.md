@@ -23,6 +23,14 @@
 * ConfigNode - 配置组，一组配置信息，对应于遗留系统中的properties属性文件
 
 #### 使用
+- maven
+<pre><code>
+    &lt;dependency&gt;
+      &lt;groupId&gt;com.dangdang&lt;/groupId&gt;
+      &lt;artifactId&gt;config-toolkit-easyzk&lt;/artifactId&gt;
+      &lt;version&gt;1.1.0-RELEASE&lt;/version&gt;
+    &lt;/dependency&gt;
+</code></pre>
 - 直接使用
 <pre><code>
         // 创建配置工厂指向zk的地址及配置在zk中的根地址
