@@ -113,6 +113,7 @@ public class ConfigNode extends AbstractSubject {
 		GetChildrenBuilder childrenBuilder = client.getChildren();
 
 		try {
+			properties.clear();
 			List<String> children = childrenBuilder.watched().forPath(nodePath);
 			if (children != null) {
 				for (String child : children) {
