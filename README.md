@@ -69,7 +69,7 @@
 
 - 本地配置覆盖(一般用于调试集群中的单点)
 
-在classpath下添加本地配置文件，格式为XML<br/>
+在classpath下添加本地配置文件,格式为XML,默认为local-override.xml,可能通过指定环境变量来修改`-Dlocal-override.file=yourfile.xml`<br/>
 [例]：
 <pre><code>
 	&lt;?xml version="1.0" encoding="UTF-8"?&gt;
