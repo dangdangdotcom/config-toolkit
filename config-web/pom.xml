@@ -8,7 +8,7 @@
 		<groupId>com.dangdang</groupId>
 		<artifactId>config-toolkit-parent</artifactId>
 		<relativePath>../config-toolkit-parent</relativePath>
-		<version>1.1.0-RELEASE</version>
+		<version>1.2.0-RELEASE</version>
 	</parent>
 	<name>config-web Maven Webapp</name>
 

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<node-factories xmlns="http://www.w3school.com.cn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="https://github.com/dangdangdotcom/config-toolkit/blob/master/config-toolkit-easyzk/src/main/resources/local-override.xsd">
+	<node-factory root="/projectx/modulex">
+		<group id="property-group1">
+			<node key="string_property_key">Welcome here.</node>
+		</group>
+	</node-factory>
+	<node-factory root="/projecty/moduley">
+		<group id="property-group1">
+			<node key="int_property_key">200</node>
+		</group>
+		<group id="property-group2">
+			<node key="int_property_key">100</node>
+		</group>
+	</node-factory>
+</node-factories>

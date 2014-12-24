@@ -21,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.dangdang.config.service.easyzk.ConfigNode.KeyLoadingMode;
+import com.dangdang.config.service.easyzk.support.localoverride.OverridedConfigNode;
 
 /**
  * 配置工厂
@@ -75,7 +76,7 @@ public final class ConfigFactory {
 			LOGGER.debug("Get node[{}] with mode[{}] and keys[{}]", node, keyLoadingMode, keysSpecified);
 		}
 
-		ConfigNode configNode = new ConfigNode(configProfile, node);
+		ConfigNode configNode = new OverridedConfigNode(configProfile, node);
 
 		// Load configurations in remote zookeeper.
 		configNode.defineKeyLoadingPattern(keyLoadingMode, keysSpecified);
