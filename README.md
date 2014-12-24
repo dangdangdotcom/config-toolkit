@@ -16,6 +16,7 @@
 * 集中管理集群配置
 * 实现配置热更新
 * Spring集成
+* 本地配置覆盖
 * 配置管理web界面
 
 #### 词典
@@ -28,16 +29,16 @@
     &lt;dependency&gt;
       &lt;groupId&gt;com.dangdang&lt;/groupId&gt;
       &lt;artifactId&gt;config-toolkit-easyzk&lt;/artifactId&gt;
-      &lt;version&gt;1.1.0-RELEASE&lt;/version&gt;
+      &lt;version&gt;1.2.0-RELEASE&lt;/version&gt;
     &lt;/dependency&gt;
 </code></pre>
 - 直接使用
 <pre><code>
-        // 创建配置工厂指向zk的地址及配置在zk中的根地址
+    // 创建配置工厂指向zk的地址及配置在zk中的根地址，映射到zookeeper中的/projectx/modulex
 	ConfigFactory configFactory = new ConfigFactory("zoo.host1:8181,zoo.host2:8181,zoo.host3:8181", "/projectx/modulex");
-        // 从工厂中加载某配置组
+    // 从工厂中加载某配置组，映射到zookeeper中的/projectx/modulex/group0
 	ConfigNode node = configFactory.getConfigNode("group0");
-        // 从配置组中获取某配置
+    // 从配置组中获取某配置，映射到zookeeper中的/projectx/modulex/group0/name
 	Assert.assertNotNull(node.getProperty("name"));
 </code></pre>
 
@@ -65,3 +66,21 @@
 		&lt;property name="propertySources" ref="zookeeperSources" /&gt;
 	&lt;/bean&gt;
 </code></pre>
+
+- 本地配置覆盖(一般用于调试集群中的单点)
+
+在classpath下添加本地配置文件，格式为XML<br/>
+[例]：
+<pre><code>
+	&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+	&lt;node-factories xmlns="http://www.w3school.com.cn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="https://github.com/dangdangdotcom/config-toolkit/blob/master/config-toolkit-easyzk/local-override.xsd"&gt;
+		&lt;node-factory root="/projectx/modulex"&gt;
+			&lt;group id="property-group1"&gt;
+				&lt;node key="string_property_key"&gt;Welcome here.&lt;/node&gt;
+			&lt;/group&gt;
+		&lt;/node-factory&gt;
+	&lt;/node-factories&gt;
+</code></pre>
+
+以上的配置会覆盖zookeeper中`/projectx/modulex/property-group1/string_property_key`的值为`Welcome here.`
