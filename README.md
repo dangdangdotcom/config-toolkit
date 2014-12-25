@@ -74,7 +74,7 @@
 [例]：
 <pre><code>
 	&lt;?xml version="1.0" encoding="UTF-8"?&gt;
-	&lt;node-factories xmlns="http://www.w3school.com.cn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	&lt;node-factories xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		xsi:schemaLocation="http://crnlmchina.github.io/local-override.xsd"&gt;
 		&lt;node-factory root="/projectx/modulex"&gt;
 			&lt;group id="property-group1"&gt;
