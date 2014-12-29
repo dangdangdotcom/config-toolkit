@@ -17,6 +17,7 @@ package com.dangdang.config.service.web.mb;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -28,6 +29,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.curator.utils.ZKPaths;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
@@ -115,11 +117,9 @@ public class PropertyExportManagedBean {
 		String authedNode = nodeAuth.getAuthedNode();
 		List<String> children = nodeService.listChildren(authedNode);
 		if (children != null && !children.isEmpty()) {
-			ByteArrayOutputStream out = null;
-			ZipOutputStream zipOutputStream = null;
 			try {
-				out = new ByteArrayOutputStream();
-				zipOutputStream = new ZipOutputStream(out);
+				ByteArrayOutputStream out = new ByteArrayOutputStream();
+				ZipOutputStream zipOutputStream = new ZipOutputStream(out);
 				for (String child : children) {
 					String groupPath = ZKPaths.makePath(authedNode, child);
 					String fileName = ZKPaths.getNodeFromPath(groupPath) + ".properties";
@@ -133,28 +133,15 @@ public class PropertyExportManagedBean {
 					}
 				}
 
-				out.flush();
-				InputStream in = new ByteArrayInputStream(out.toByteArray());
+				zipOutputStream.close();
+				byte[] data = out.toByteArray();
+				FileUtils.writeByteArrayToFile(new File("D://inline.zip"), data);
+				InputStream in = new ByteArrayInputStream(data);
 
-				String fileName = authedNode + ".zip";
+				String fileName = authedNode.replace('/', '-') + ".zip";
 				file = new DefaultStreamedContent(in, "application/zip", fileName, Charsets.UTF_8.name());
 			} catch (IOException e) {
 				LOGGER.error(e.getMessage(), e);
-			} finally {
-				if (zipOutputStream != null) {
-					try {
-						zipOutputStream.close();
-					} catch (IOException e) {
-						// DO NOTHING
-					}
-				}
-				if (out != null) {
-					try {
-						out.close();
-					} catch (IOException e) {
-						// DO NOTHING
-					}
-				}
 			}
 		}
 
