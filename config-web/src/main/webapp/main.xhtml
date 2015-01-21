@@ -63,10 +63,10 @@
 			<h:form id="authedNodeInfo">
 				<p:panel id="authedNodeView" header="#{nodeAuthMB.authedNode}" style="margin:10px; font-size: smaller">
 					<p:commandButton type="button" value="切换授权节点" onclick="PF('authPanel').show()" style="font-size:small;display:block;margin-bottom:15px;" />
-					<p:commandLink type="button" value="Export All" ajax="false" disabled="#{empty nodeAuthMB.authedNode}" style="font-size:small;margin-right:6px;">
+					<p:commandLink type="button" value="Export All (Zip)" ajax="false" disabled="#{empty nodeAuthMB.authedNode}" style="font-size:small;margin-right:6px;">
 						<p:fileDownload value="#{propertyExportMB.generateFileAll()}" />
 					</p:commandLink>
-					<p:commandLink type="button" value="Import All" disabled="#{empty nodeAuthMB.authedNode}" style="font-size:small;"  onclick="PF('uploadZip').show()" />
+					<p:commandLink type="button" value="Import All (Zip)" disabled="#{empty nodeAuthMB.authedNode}" style="font-size:small;"  onclick="PF('uploadZip').show()" />
 					<p:effect type="bounce" event="dblclick" />
 				</p:panel>
 			</h:form>
@@ -79,7 +79,7 @@
 					<p:column headerText="Group Name">
 						#{propertyGroup}
 					</p:column>
-					<p:column>
+					<p:column headerText="Operations">
 						<p:commandLink value="Remove" update=":messageBox:messages,:authedNodeForm:propertyGroups"
 							actionListener="#{propertyGroupMB.deleteNode(propertyGroup)}" style="font-size:small; margin: 10px;">
 							<p:confirm header="Confirmation" message="确认删除配置组?" icon="ui-icon-alert" />
