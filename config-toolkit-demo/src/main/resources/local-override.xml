@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <node-factories xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="https://github.com/dangdangdotcom/config-toolkit/blob/master/config-toolkit-easyzk/local-override.xsd">
+	xsi:schemaLocation="http://crnlmchina.github.io/local-override.xsd">
 	<node-factory root="/projectx/modulex">
 		<group id="property-group1">
 			<node key="string_property_key">Welcome here.</node>
