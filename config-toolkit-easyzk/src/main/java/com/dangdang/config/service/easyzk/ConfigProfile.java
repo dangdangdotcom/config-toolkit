@@ -44,14 +44,27 @@ public class ConfigProfile {
 	 */
 	private final RetryPolicy retryPolicy;
 
-	public ConfigProfile(final String connectStr, final String rootNode) {
-		this(connectStr, rootNode, new ExponentialBackoffRetry(100, 2));
+	private final boolean openLocalCache;
+
+	/**
+	 * 一致性检查, 主动检查本地数据与zk中心数据的一致性, 防止出现因连接中断而丢失更新消息, 默认开启
+	 */
+	private boolean consistencyCheck = true;
+
+	/**
+	 * 检查频率, in milliseconds
+	 */
+	private long consistencyCheckRate = 60 * 1000;
+	
+	public ConfigProfile(final String connectStr, final String rootNode, final boolean openLocalCache) {
+		this(connectStr, rootNode, openLocalCache, new ExponentialBackoffRetry(100, 2));
 	}
 
-	public ConfigProfile(final String connectStr, final String rootNode, final RetryPolicy retryPolicy) {
+	public ConfigProfile(final String connectStr, final String rootNode, final boolean openLocalCache, final RetryPolicy retryPolicy) {
 		super();
 		this.connectStr = Preconditions.checkNotNull(connectStr);
 		this.rootNode = Preconditions.checkNotNull(rootNode);
+		this.openLocalCache = openLocalCache;
 		this.retryPolicy = Preconditions.checkNotNull(retryPolicy);
 	}
 
@@ -67,8 +80,30 @@ public class ConfigProfile {
 		return retryPolicy;
 	}
 
+	public final boolean isConsistencyCheck() {
+		return consistencyCheck;
+	}
+
+	public final void setConsistencyCheck(boolean consistencyCheck) {
+		this.consistencyCheck = consistencyCheck;
+	}
+
+	public final long getConsistencyCheckRate() {
+		return consistencyCheckRate;
+	}
+
+	public final void setConsistencyCheckRate(long consistencyCheckRate) {
+		this.consistencyCheckRate = consistencyCheckRate;
+	}
+
+	public final boolean isOpenLocalCache() {
+		return openLocalCache;
+	}
+
 	@Override
 	public String toString() {
-		return Objects.toStringHelper(this).add("connectStr", connectStr).add("rootNode", rootNode).add("retryPolicy", retryPolicy).toString();
+		return Objects.toStringHelper(this).add("connectStr", connectStr).add("rootNode", rootNode).add("retryPolicy", retryPolicy)
+				.add("consistencyCheck", consistencyCheck).add("consistencyCheckRate", consistencyCheckRate).add("openLocalCache", openLocalCache)
+				.toString();
 	}
 }

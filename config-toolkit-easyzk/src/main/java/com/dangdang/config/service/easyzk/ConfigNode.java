@@ -18,6 +18,8 @@ package com.dangdang.config.service.easyzk;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.annotation.PreDestroy;
 
@@ -50,7 +52,7 @@ public class ConfigNode extends AbstractSubject {
 	/**
 	 * 节点名字
 	 */
-	private String node;
+	String node;
 
 	private KeyLoadingMode keyLoadingMode;
 
@@ -92,18 +94,30 @@ public class ConfigNode extends AbstractSubject {
 		client = CuratorFrameworkFactory.newClient(configProfile.getConnectStr(), configProfile.getRetryPolicy());
 		client.getCuratorListenable().addListener(new ConfigNodeEventListener(this));
 		client.start();
-		loadNode();
+		loadNode(false);
 
 		// Update local cache
 		if (configLocalCache != null) {
 			configLocalCache.saveLocalCache(this, node);
+		}
+
+		// Consistency check
+		if (configProfile.isConsistencyCheck()) {
+			new Timer().scheduleAtFixedRate(new TimerTask() {
+
+				@Override
+				public void run() {
+					LOGGER.info("Do consistency check for node: {}", node);
+					loadNode(true);
+				}
+			}, 0L, configProfile.getConsistencyCheckRate());
 		}
 	}
 
 	/**
 	 * 加载节点并监听节点变化
 	 */
-	void loadNode() {
+	void loadNode(boolean consistencyCheck) {
 		final String nodePath = ZKPaths.makePath(configProfile.getRootNode(), node);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug(String.format("Loading properties for node: [%s], with loading mode: [%s] and keys specified: [%s]", nodePath,
@@ -113,7 +127,9 @@ public class ConfigNode extends AbstractSubject {
 		GetChildrenBuilder childrenBuilder = client.getChildren();
 
 		try {
-			properties.clear();
+			if (!consistencyCheck) {
+				properties.clear();
+			}
 			List<String> children = childrenBuilder.watched().forPath(nodePath);
 			if (children != null) {
 				for (String child : children) {
@@ -154,13 +170,15 @@ public class ConfigNode extends AbstractSubject {
 		GetDataBuilder data = client.getData();
 		String childValue = new String(data.watched().forPath(nodePath), Charsets.UTF_8);
 
-		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug(String.format("Loading data: key[%s] - value[%s]", nodeName, childValue));
-		}
-		properties.put(nodeName, childValue);
+		if (Objects.equal(childValue, properties.get(nodeName))) {
+			LOGGER.debug("Key data not change, ignore: key[{}]", nodeName);
+		} else {
+			LOGGER.debug("Loading data: key[{}] - value[{}]", nodeName, childValue);
+			properties.put(nodeName, childValue);
 
-		// 通知注册者
-		notify(nodeName, childValue);
+			// 通知注册者
+			notify(nodeName, childValue);
+		}
 	}
 
 	/**

@@ -22,6 +22,7 @@ import org.slf4j.LoggerFactory;
 
 import com.dangdang.config.service.easyzk.ConfigNode.KeyLoadingMode;
 import com.dangdang.config.service.easyzk.support.localoverride.OverridedConfigNode;
+import com.google.common.base.Preconditions;
 
 /**
  * 配置工厂
@@ -40,12 +41,16 @@ public final class ConfigFactory {
 	public ConfigFactory(String connectStr, String rootNode) {
 		this(connectStr, rootNode, false);
 	}
-	
+
 	public ConfigFactory(String connectStr, String rootNode, boolean openLocalCache) {
+		this(new ConfigProfile(connectStr, rootNode, openLocalCache));
+	}
+
+	public ConfigFactory(ConfigProfile configProfile) {
 		super();
-		this.configProfile = new ConfigProfile(connectStr, rootNode);
-		if (openLocalCache) {
-			this.configLocalCache = new ConfigLocalCache(rootNode);
+		this.configProfile = Preconditions.checkNotNull(configProfile);
+		if (configProfile.isOpenLocalCache()) {
+			this.configLocalCache = new ConfigLocalCache(configProfile.getRootNode());
 		}
 	}
 

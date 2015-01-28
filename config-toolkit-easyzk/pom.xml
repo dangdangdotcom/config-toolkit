@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<artifactId>config-toolkit-easyzk</artifactId>
-	<version>1.2.0-RELEASE</version>
+	<version>1.3.0-RELEASE</version>
 	<packaging>jar</packaging>
 	<parent>
 		<groupId>com.dangdang</groupId>
@@ -22,6 +22,7 @@
 		<dependency>
 			<groupId>com.dangdang</groupId>
 			<artifactId>config-common</artifactId>
+			<version>1.3.0-RELEASE</version>
 		</dependency>
 
 		<dependency>
