@@ -17,7 +17,6 @@ package com.dangdang.config.service.web.mb;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -29,7 +28,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.curator.utils.ZKPaths;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
@@ -135,7 +133,6 @@ public class PropertyExportManagedBean {
 
 				zipOutputStream.close();
 				byte[] data = out.toByteArray();
-				FileUtils.writeByteArrayToFile(new File("D://inline.zip"), data);
 				InputStream in = new ByteArrayInputStream(data);
 
 				String fileName = authedNode.replace('/', '-') + ".zip";
