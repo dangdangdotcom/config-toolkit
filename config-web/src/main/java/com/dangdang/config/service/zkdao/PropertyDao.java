@@ -48,7 +48,7 @@ public class PropertyDao extends BaseDao implements IPropertyDao {
 				suc = Objects.equal(nodeName, opResult);
 			}
 		} catch (Exception e) {
-			Throwables.propagate(e);
+			throw Throwables.propagate(e);
 		}
 		return suc;
 	}
@@ -63,7 +63,7 @@ public class PropertyDao extends BaseDao implements IPropertyDao {
 				suc = opResult != null;
 			}
 		} catch (Exception e) {
-			Throwables.propagate(e);
+			throw Throwables.propagate(e);
 		}
 		return suc;
 	}
@@ -73,7 +73,7 @@ public class PropertyDao extends BaseDao implements IPropertyDao {
 		try {
 			getClient().delete().deletingChildrenIfNeeded().forPath(nodeName);
 		} catch (Exception e) {
-			Throwables.propagate(e);
+			throw Throwables.propagate(e);
 		}
 	}
 

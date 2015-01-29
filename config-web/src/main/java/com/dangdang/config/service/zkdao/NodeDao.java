@@ -53,7 +53,7 @@ public class NodeDao extends BaseDao implements INodeDao {
 				}
 			}
 		} catch (Exception e) {
-			Throwables.propagate(e);
+			throw Throwables.propagate(e);
 		}
 		return properties;
 	}
@@ -65,7 +65,7 @@ public class NodeDao extends BaseDao implements INodeDao {
 			GetChildrenBuilder childrenBuilder = getClient().getChildren();
 			children = childrenBuilder.forPath(node);
 		} catch (Exception e) {
-			Throwables.propagate(e);
+			throw Throwables.propagate(e);
 		}
 		return children;
 	}

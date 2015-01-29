@@ -51,7 +51,7 @@ public class AuthDao extends BaseDao implements IAuthDao {
 			byte[] data = getClient().getData().forPath(nodeName);
 			isPass = Arrays.equals(hash, data);
 		} catch (Exception e) {
-			Throwables.propagate(e);
+			throw Throwables.propagate(e);
 		}
 		return isPass;
 	}
@@ -85,7 +85,7 @@ public class AuthDao extends BaseDao implements IAuthDao {
 			}
 
 		} catch (Exception e) {
-			Throwables.propagate(e);
+			throw Throwables.propagate(e);
 		}
 		return suc;
 	}
