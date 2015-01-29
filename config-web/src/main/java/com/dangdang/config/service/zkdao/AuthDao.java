@@ -15,16 +15,11 @@
  */
 package com.dangdang.config.service.zkdao;
 
-import java.util.Arrays;
-
 import org.apache.zookeeper.data.Stat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Charsets;
 import com.google.common.base.Throwables;
-import com.google.common.hash.HashCode;
-import com.google.common.hash.HashFunction;
 import com.google.common.hash.Hashing;
 
 /**
@@ -45,14 +40,14 @@ public class AuthDao extends BaseDao implements IAuthDao {
 
 	@Override
 	public boolean checkAuth(String nodeName, String password) {
-		byte[] hash = sha1Digest(password);
+		String hash = sha1Digest(password);
 		boolean isPass = false;
 		try {
 			// 判断节点是否存在
 			Stat stat = getClient().checkExists().forPath(nodeName);
 			if (stat != null) {
 				byte[] data = getClient().getData().forPath(nodeName);
-				isPass = Arrays.equals(hash, data);
+				isPass = hash.equals(new String(data));
 			}
 		} catch (Exception e) {
 			throw Throwables.propagate(e);
@@ -67,7 +62,7 @@ public class AuthDao extends BaseDao implements IAuthDao {
 		}
 
 		boolean suc = false;
-		byte[] sha1Digest = sha1Digest(password);
+		byte[] sha1Digest = sha1Digest(password).getBytes();
 		try {
 			// 判断节点是否存在
 			Stat stat = getClient().checkExists().forPath(nodeName);
@@ -94,9 +89,7 @@ public class AuthDao extends BaseDao implements IAuthDao {
 		return suc;
 	}
 
-	private byte[] sha1Digest(String text) {
-		HashFunction hf = Hashing.sha1();
-		HashCode hashCode = hf.hashString(text, Charsets.UTF_8);
-		return hashCode.asBytes();
+	private String sha1Digest(String text) {
+		return Hashing.sha1().hashBytes(text.getBytes()).toString();
 	}
 }

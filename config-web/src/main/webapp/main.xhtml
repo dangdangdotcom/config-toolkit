@@ -28,9 +28,8 @@
 				<p:commandButton value="连接节点" actionListener="#{nodeAuthMB.checkAuth}"
 					update=":messageBox:messages,:authedNodeInfo:authedNodeView,:authedNodeForm:propertyGroups,:authedNodeForm:createNode,:authedNodeForm:uploadNode,:nodePropData:nodePropTable,:nodePropForm:createProperty"
 					onsuccess="PF('authPanel').hide()" style="font-size:small" />
-				<p:commandButton value="新建节点"
-					update=":messageBox:messages,:authedNodeInfo:authedNodeView,:authedNodeForm:propertyGroups,:authedNodeForm:createNode,:authedNodeForm:uploadNode,:nodePropData:nodePropTable,:nodePropForm:createProperty"
-					actionListener="#{nodeAuthMB.grantAuth}" onsuccess="PF('authPanel').hide()" style="font-size:small" />
+					
+				<h:outputText value="密码为节点的值, 使用SHA1 HEX加密, 请手动设置." style="color:red;" />
 			</h:panelGrid>
 		</h:form>
 	</p:dialog>

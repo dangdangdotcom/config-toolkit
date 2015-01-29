@@ -62,17 +62,17 @@ public class NodeAuthManagedBean extends AbstractSubject implements Serializable
 		}
 	}
 
-	public void grantAuth() {
-		boolean login = authService.auth(nodeName, password);
-		FacesContext context = FacesContext.getCurrentInstance();
-		if (login) {
-			context.addMessage(null, new FacesMessage("Grant auth suc."));
-			authedNode = nodeName;
-			notify(authedNode, null);
-		} else {
-			context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Grant fail.", "Node auth has been granted, cannot do duplicate grant."));
-		}
-	}
+//	public void grantAuth() {
+//		boolean login = authService.auth(nodeName, password);
+//		FacesContext context = FacesContext.getCurrentInstance();
+//		if (login) {
+//			context.addMessage(null, new FacesMessage("Grant auth suc."));
+//			authedNode = nodeName;
+//			notify(authedNode, null);
+//		} else {
+//			context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Grant fail.", "Node auth has been granted, cannot do duplicate grant."));
+//		}
+//	}
 
 	public void setNodeName(String nodeName) {
 		this.nodeName = nodeName;
