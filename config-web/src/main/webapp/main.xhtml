@@ -18,8 +18,8 @@
 		<h:form id="authNode">
 			<h:panelGrid columns="2">
 				<h:outputText value="Node: "></h:outputText>
-				<p:inputText id="auth_node_name" value="#{nodeAuthMB.nodeName}" required="true" validatorMessage="Path must start with / character" >
-					<f:validateRegex pattern="^\/.+" />
+				<p:inputText id="auth_node_name" value="#{nodeAuthMB.nodeName}" required="true" validatorMessage="Path must be like /xxx/yyy format." >
+					<f:validateRegex pattern="^(\/[^/]+)+" />
 				</p:inputText>
 
 				<h:outputText value="Password: "></h:outputText>

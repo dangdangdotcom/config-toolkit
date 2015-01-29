@@ -134,7 +134,7 @@ public class PropertyGroupManagedBean implements Serializable, IObserver {
 			refreshGroups();
 			newPropertyGroup.setValue(null);
 		} else {
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Property group creation failed.", newPropertyGroupName));
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Property group creation failed.", newPropertyGroupName));
 		}
 	}
 
@@ -165,7 +165,7 @@ public class PropertyGroupManagedBean implements Serializable, IObserver {
 			inputstream = event.getFile().getInputstream();
 			savePropertyGroup(fileName, group, inputstream);
 		} catch (IOException e) {
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Failed", fileName + " parse error."));
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "File parse error.", fileName));
 			LOGGER.error("Upload File Exception.", e);
 		} finally {
 			if (inputstream != null) {
@@ -193,10 +193,10 @@ public class PropertyGroupManagedBean implements Serializable, IObserver {
 				refreshGroups();
 				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Succesful", fileName + " is uploaded."));
 			} else {
-				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Failed", fileName + " create group " + group + " failed."));
+				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Create group with file error.", fileName));
 			}
 		} else {
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Failed", fileName + " is empty."));
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "File is empty.", fileName));
 		}
 	}
 
@@ -217,7 +217,7 @@ public class PropertyGroupManagedBean implements Serializable, IObserver {
 				savePropertyGroup(entryName, Files.getNameWithoutExtension(entryName), zipInputStream);
 			}
 		} catch (IOException e) {
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Failed", fileName + " parse error."));
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Upload File error.", fileName));
 			LOGGER.error("Upload File Exception.", e);
 		} finally {
 			if (zipInputStream != null) {

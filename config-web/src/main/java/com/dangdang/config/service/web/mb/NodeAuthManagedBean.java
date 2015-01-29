@@ -46,7 +46,7 @@ public class NodeAuthManagedBean extends AbstractSubject implements Serializable
 	private String password;
 
 	private String authedNode;
-	
+
 	@ManagedProperty(value = "#{authService}")
 	private IAuthService authService;
 
@@ -58,19 +58,19 @@ public class NodeAuthManagedBean extends AbstractSubject implements Serializable
 			authedNode = nodeName;
 			notify(authedNode, null);
 		} else {
-			context.addMessage(null, new FacesMessage("Login fail."));
+			context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Login fail.", "Authentication not passed."));
 		}
 	}
-	
+
 	public void grantAuth() {
 		boolean login = authService.auth(nodeName, password);
 		FacesContext context = FacesContext.getCurrentInstance();
-		if(login) {
+		if (login) {
 			context.addMessage(null, new FacesMessage("Grant auth suc."));
 			authedNode = nodeName;
 			notify(authedNode, null);
 		} else {
-			context.addMessage(null, new FacesMessage("Node auth has been granted, cannot do duplicate grant."));
+			context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Grant fail.", "Node auth has been granted, cannot do duplicate grant."));
 		}
 	}
 

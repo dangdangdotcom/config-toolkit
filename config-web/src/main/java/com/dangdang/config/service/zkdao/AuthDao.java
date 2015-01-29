@@ -48,8 +48,12 @@ public class AuthDao extends BaseDao implements IAuthDao {
 		byte[] hash = sha1Digest(password);
 		boolean isPass = false;
 		try {
-			byte[] data = getClient().getData().forPath(nodeName);
-			isPass = Arrays.equals(hash, data);
+			// 判断节点是否存在
+			Stat stat = getClient().checkExists().forPath(nodeName);
+			if (stat != null) {
+				byte[] data = getClient().getData().forPath(nodeName);
+				isPass = Arrays.equals(hash, data);
+			}
 		} catch (Exception e) {
 			throw Throwables.propagate(e);
 		}

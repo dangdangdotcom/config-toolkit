@@ -156,7 +156,7 @@ public class NodeDataManagedBean implements Serializable {
 		if (suc) {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Property Saved suc.", name));
 		} else {
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Property Saved failed.", name));
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Property Saved failed.", name));
 		}
 
 	}
@@ -204,7 +204,7 @@ public class NodeDataManagedBean implements Serializable {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Property created.", propPath));
 			refreshNodeProperties();
 		} else {
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Property creation failed.", propPath));
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Property creation failed.", propPath));
 		}
 	}
 
