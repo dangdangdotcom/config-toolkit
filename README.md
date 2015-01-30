@@ -93,7 +93,9 @@
 一般linux系统都带有python，可以使用python脚本方便生成：<br/>
 
 > `python -c "import hashlib;print hashlib.sha1('abc').hexdigest();"`
+> 
 > `# a9993e364706816aba3e25717850c26c9cd0d89d`
+> 
 > `echo "set /aaa/bbb a9993e364706816aba3e25717850c26c9cd0d89d" |./zkCli.sh -server localhost:2181`
 
 ![Config Web Snapshot](http://crnlmchina.github.io/config-web.jpg)
