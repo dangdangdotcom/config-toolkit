@@ -91,6 +91,9 @@
 > 为避免误操作其它数据，Config Web将不再提供授权功能，仅保留鉴权，遗留系统的密码需要重置。<br/>
 鉴权密码为节点的值，使用SHA1 HEX字符串加密，请手动操作zookeeper命令行创建密码。<br/>
 一般linux系统都带有python，可以使用python脚本方便生成：<br/>
-`python -c "import hashlib;print hashlib.sha1('123').hexdigest();"`
+
+> `python -c "import hashlib;print hashlib.sha1('abc').hexdigest();"`
+> `# a9993e364706816aba3e25717850c26c9cd0d89d`
+> `echo "set /aaa/bbb a9993e364706816aba3e25717850c26c9cd0d89d" |./zkCli.sh -server localhost:2181`
 
 ![Config Web Snapshot](http://crnlmchina.github.io/config-web.jpg)
