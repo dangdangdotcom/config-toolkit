@@ -18,12 +18,12 @@
 		<h:form id="authNode">
 			<h:panelGrid columns="2">
 				<h:outputText value="Node: "></h:outputText>
-				<p:inputText id="auth_node_name" value="#{nodeAuthMB.nodeName}" required="true" validatorMessage="Path must be like /xxx/yyy format." >
+				<p:autoComplete id="auth_node_name" value="#{nodeAuthMB.nodeName}" completeMethod="#{nodeAuthMB.complete}" required="true" validatorMessage="Path must be like /xxx/yyy format." size="30">
 					<f:validateRegex pattern="^(\/[^/]+)+" />
-				</p:inputText>
+				</p:autoComplete>
 
 				<h:outputText value="Password: "></h:outputText>
-				<p:password id="auth_password" value="#{nodeAuthMB.password}" required="true" />
+				<p:password id="auth_password" value="#{nodeAuthMB.password}" required="true" size="30" />
 
 				<p:commandButton value="连接节点" actionListener="#{nodeAuthMB.checkAuth}"
 					update=":messageBox:messages,:authedNodeInfo:authedNodeView,:authedNodeForm:propertyGroups,:authedNodeForm:createNode,:authedNodeForm:uploadNode,:nodePropData:nodePropTable,:nodePropForm:createProperty"
