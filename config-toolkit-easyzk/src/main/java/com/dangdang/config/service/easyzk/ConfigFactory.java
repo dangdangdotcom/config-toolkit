@@ -77,9 +77,7 @@ public final class ConfigFactory {
 	 * @return
 	 */
 	public ConfigNode getConfigNode(String node, KeyLoadingMode keyLoadingMode, Set<String> keysSpecified) {
-		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("Get node[{}] with mode[{}] and keys[{}]", node, keyLoadingMode, keysSpecified);
-		}
+		LOGGER.debug("Get node[{}] with mode[{}] and keys[{}]", node, keyLoadingMode, keysSpecified);
 
 		ConfigNode configNode = new OverridedConfigNode(configProfile, node);
 

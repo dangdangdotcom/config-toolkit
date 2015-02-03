@@ -107,7 +107,7 @@ public class ConfigNode extends AbstractSubject {
 
 				@Override
 				public void run() {
-					LOGGER.info("Do consistency check for node: {}", node);
+					LOGGER.debug("Do consistency check for node: {}", node);
 					loadNode(true);
 				}
 			}, 0L, configProfile.getConsistencyCheckRate());
@@ -119,10 +119,7 @@ public class ConfigNode extends AbstractSubject {
 	 */
 	void loadNode(boolean consistencyCheck) {
 		final String nodePath = ZKPaths.makePath(configProfile.getRootNode(), node);
-		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug(String.format("Loading properties for node: [%s], with loading mode: [%s] and keys specified: [%s]", nodePath,
-					keyLoadingMode, keysSpecified));
-		}
+		LOGGER.debug("Loading properties for node: {}, with loading mode: {} and keys specified: {}", nodePath, keyLoadingMode, keysSpecified);
 
 		GetChildrenBuilder childrenBuilder = client.getChildren();
 
@@ -171,7 +168,7 @@ public class ConfigNode extends AbstractSubject {
 		String childValue = new String(data.watched().forPath(nodePath), Charsets.UTF_8);
 
 		if (Objects.equal(childValue, properties.get(nodeName))) {
-			LOGGER.debug("Key data not change, ignore: key[{}]", nodeName);
+			LOGGER.trace("Key data not change, ignore: key[{}]", nodeName);
 		} else {
 			LOGGER.debug("Loading data: key[{}] - value[{}]", nodeName, childValue);
 			properties.put(nodeName, childValue);

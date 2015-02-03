@@ -64,9 +64,7 @@ public class ConfigLocalCache {
 	 */
 	public void saveLocalCache(ConfigNode configNode, String node) {
 		String localFilePath = genCacheFilePath(node);
-		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug(String.format("Saving cache to file: [%s]", localFilePath));
-		}
+		LOGGER.debug("Saving cache to file: {}", localFilePath);
 
 		Map<String, String> data = configNode.exportProperties();
 		if (data != null && data.size() > 0) {

@@ -32,9 +32,9 @@ import com.google.common.base.Preconditions;
  *
  */
 public final class ConfigNodeEventListener implements CuratorListener {
-	
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(ConfigNodeEventListener.class);
-	
+
 	private final ConfigNode configNode;
 
 	public ConfigNodeEventListener(ConfigNode configNode) {
@@ -50,10 +50,7 @@ public final class ConfigNodeEventListener implements CuratorListener {
 
 		final WatchedEvent watchedEvent = event.getWatchedEvent();
 		if (watchedEvent != null) {
-
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug(watchedEvent.toString());
-			}
+			LOGGER.debug("Watched event: {}" + watchedEvent);
 
 			if (watchedEvent.getState() == KeeperState.SyncConnected) {
 				boolean someChange = false;
