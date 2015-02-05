@@ -18,6 +18,7 @@ package com.dangdang.config.service.web.mb;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -33,6 +34,7 @@ import org.slf4j.LoggerFactory;
 
 import com.dangdang.config.service.INodeService;
 import com.dangdang.config.service.entity.PropertyItem;
+import com.dangdang.config.service.observer.IObserver;
 import com.google.common.base.Strings;
 
 /**
@@ -41,7 +43,7 @@ import com.google.common.base.Strings;
  */
 @ManagedBean(name = "nodeDataMB")
 @ViewScoped
-public class NodeDataManagedBean implements Serializable {
+public class NodeDataManagedBean implements Serializable, IObserver {
 
 	private static final long serialVersionUID = 1L;
 
@@ -57,6 +59,11 @@ public class NodeDataManagedBean implements Serializable {
 
 	public void setNodeAuth(NodeAuthManagedBean nodeAuth) {
 		this.nodeAuth = nodeAuth;
+	}
+	
+	@PostConstruct
+	private void init() {
+		nodeAuth.register(this);
 	}
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(NodeDataManagedBean.class);
@@ -92,7 +99,11 @@ public class NodeDataManagedBean implements Serializable {
 
 		LOGGER.info("Find properties of node: [{}].", nodePath);
 
-		nodeProps = nodeService.findProperties(nodePath);
+		if (Strings.isNullOrEmpty(nodePath)) {
+			nodeProps = null;
+		} else {
+			nodeProps = nodeService.findProperties(nodePath);
+		}
 	}
 
 	/**
@@ -237,5 +248,17 @@ public class NodeDataManagedBean implements Serializable {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Select a property group first."));
 		}
 		return !notChecked;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.dangdang.config.service.observer.IObserver#notifiy(java.lang.String,
+	 * java.lang.String)
+	 */
+	@Override
+	public void notifiy(String data, String value) {
+		nodeProps = null;
 	}
 }

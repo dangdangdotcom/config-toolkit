@@ -239,5 +239,7 @@ public class PropertyGroupManagedBean implements Serializable, IObserver {
 		if (!Strings.isNullOrEmpty(rootNode)) {
 			propertyGroups = nodeService.listChildren(rootNode);
 		}
+		
+		selectedGroup = null;
 	}
 }
