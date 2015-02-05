@@ -17,6 +17,7 @@ package com.dangdang.config.service.easyzk.support.localoverride;
 
 import java.util.Map;
 
+import org.apache.curator.framework.CuratorFramework;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,8 +41,8 @@ public class OverridedConfigNode extends ConfigNode {
 	 * @param configProfile
 	 * @param node
 	 */
-	public OverridedConfigNode(ConfigProfile configProfile, String node) {
-		super(configProfile, node);
+	public OverridedConfigNode(ConfigProfile configProfile, CuratorFramework client, String node) {
+		super(configProfile, client, node);
 		localProperties = LocalOverrideFileLoader.loadLocalProperties(configProfile.getRootNode(), node);
 		LOGGER.info("Loading local override configs: {}", localProperties);
 	}

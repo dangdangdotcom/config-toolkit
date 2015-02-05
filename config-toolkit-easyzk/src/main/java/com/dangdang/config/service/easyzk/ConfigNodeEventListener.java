@@ -56,7 +56,7 @@ public final class ConfigNodeEventListener implements CuratorListener {
 				boolean someChange = false;
 				switch (watchedEvent.getType()) {
 				case NodeChildrenChanged:
-					configNode.loadNode(false);
+					configNode.loadNode();
 					someChange = true;
 					break;
 				case NodeDataChanged:

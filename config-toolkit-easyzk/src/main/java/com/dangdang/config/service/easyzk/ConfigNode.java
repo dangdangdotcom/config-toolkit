@@ -20,6 +20,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import javax.annotation.PreDestroy;
 
@@ -36,6 +38,7 @@ import com.google.common.base.Charsets;
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Throwables;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
@@ -76,9 +79,10 @@ public class ConfigNode extends AbstractSubject {
 
 	static final Logger LOGGER = LoggerFactory.getLogger(ConfigNode.class);
 
-	protected ConfigNode(ConfigProfile configProfile, String node) {
+	protected ConfigNode(ConfigProfile configProfile, CuratorFramework client, String node) {
 		super();
 		this.configProfile = configProfile;
+		this.client = client;
 		this.node = node;
 	}
 
@@ -91,10 +95,9 @@ public class ConfigNode extends AbstractSubject {
 	 * 初始化节点
 	 */
 	protected void initConfigNode() {
-		client = CuratorFrameworkFactory.newClient(configProfile.getConnectStr(), configProfile.getRetryPolicy());
 		client.getCuratorListenable().addListener(new ConfigNodeEventListener(this));
-		client.start();
-		loadNode(false);
+		
+		loadNode();
 
 		// Update local cache
 		if (configLocalCache != null) {
@@ -108,29 +111,65 @@ public class ConfigNode extends AbstractSubject {
 				@Override
 				public void run() {
 					LOGGER.debug("Do consistency check for node: {}", node);
-					loadNode(true);
+					consistencyCheck();
 				}
 			}, 0L, configProfile.getConsistencyCheckRate());
 		}
 	}
 
+	private ReadWriteLock lock = new ReentrantReadWriteLock();
+
 	/**
 	 * 加载节点并监听节点变化
 	 */
-	void loadNode(boolean consistencyCheck) {
+	void loadNode() {
 		final String nodePath = ZKPaths.makePath(configProfile.getRootNode(), node);
 		LOGGER.debug("Loading properties for node: {}, with loading mode: {} and keys specified: {}", nodePath, keyLoadingMode, keysSpecified);
 
 		GetChildrenBuilder childrenBuilder = client.getChildren();
 
 		try {
-			if (!consistencyCheck) {
-				properties.clear();
-			}
 			List<String> children = childrenBuilder.watched().forPath(nodePath);
 			if (children != null) {
-				for (String child : children) {
-					loadKey(ZKPaths.makePath(nodePath, child));
+				lock.writeLock().lock();
+				try {
+					properties.clear();
+					for (String child : children) {
+						loadKey(ZKPaths.makePath(nodePath, child));
+					}
+				} finally {
+					lock.writeLock().unlock();
+				}
+			}
+		} catch (Exception e) {
+			throw Throwables.propagate(e);
+		}
+	}
+
+	/**
+	 * 一致性检查
+	 */
+	void consistencyCheck() {
+		final String nodePath = ZKPaths.makePath(configProfile.getRootNode(), node);
+		GetChildrenBuilder childrenBuilder = client.getChildren();
+		try {
+			List<String> children = childrenBuilder.watched().forPath(nodePath);
+			if (children != null) {
+				List<String> redundances = Lists.newArrayList(properties.keySet());
+				redundances.removeAll(children);
+				if (!redundances.isEmpty()) {
+					for (String redundance : redundances) {
+						properties.remove(redundance);
+					}
+				}
+				// 由于一致性检查可能比较频繁,所以做与loadNode()的隔离即可,所以使用读锁
+				lock.readLock().lock();
+				try {
+					for (String child : children) {
+						loadKey(ZKPaths.makePath(nodePath, child));
+					}
+				} finally {
+					lock.readLock().unlock();
 				}
 			}
 		} catch (Exception e) {
@@ -195,7 +234,12 @@ public class ConfigNode extends AbstractSubject {
 	 * @return
 	 */
 	public String getProperty(String key) {
-		return properties.get(key);
+		lock.readLock().lock();
+		try {
+			return properties.get(key);
+		} finally {
+			lock.readLock().unlock();
+		}
 	}
 
 	public String getNode() {
@@ -213,15 +257,6 @@ public class ConfigNode extends AbstractSubject {
 	 */
 	public Map<String, String> exportProperties() {
 		return Maps.newHashMap(properties);
-	}
-
-	/**
-	 * 导入属性列表
-	 * 
-	 * @param imports
-	 */
-	public void importProperties(Map<String, String> imports) {
-		this.properties.putAll(imports);
 	}
 
 	/**

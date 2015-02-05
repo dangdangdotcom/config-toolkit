@@ -40,8 +40,13 @@ public class LocalOverrideTest {
 			}
 		});
 
-		Preconditions.checkState("Welcome here.".equals(propertyGroup1.getProperty("string_property_key")));
-		Preconditions.checkState(1123 == Integer.parseInt(propertyGroup1.getProperty("int_property_key")));
+		String stringProperty = propertyGroup1.getProperty("string_property_key");
+		System.out.println(stringProperty);
+		Preconditions.checkState("Welcome here.".equals(stringProperty));
+		
+		String intProperty = propertyGroup1.getProperty("int_property_key");
+		System.out.println(intProperty);
+		Preconditions.checkState(1123 == Integer.parseInt(intProperty));
 	}
 
 }

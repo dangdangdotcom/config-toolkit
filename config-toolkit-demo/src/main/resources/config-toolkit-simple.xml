@@ -7,7 +7,7 @@
              http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd
              http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
 
-<!-- Config Factory -->
+	<!-- Config Factory -->
 	<bean id="configFactory" class="com.dangdang.config.service.easyzk.ConfigFactory">
 		<!-- Your zookeeper nodes -->
 		<constructor-arg name="connectStr" value="localhost:2181" />

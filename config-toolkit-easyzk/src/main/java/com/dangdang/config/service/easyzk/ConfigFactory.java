@@ -17,6 +17,8 @@ package com.dangdang.config.service.easyzk;
 
 import java.util.Set;
 
+import org.apache.curator.framework.CuratorFramework;
+import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,6 +38,8 @@ public final class ConfigFactory {
 
 	private ConfigLocalCache configLocalCache;
 
+	private CuratorFramework client;
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(ConfigFactory.class);
 
 	public ConfigFactory(String connectStr, String rootNode) {
@@ -52,6 +56,8 @@ public final class ConfigFactory {
 		if (configProfile.isOpenLocalCache()) {
 			this.configLocalCache = new ConfigLocalCache(configProfile.getRootNode());
 		}
+		client = CuratorFrameworkFactory.newClient(configProfile.getConnectStr(), configProfile.getRetryPolicy());
+		client.start();
 	}
 
 	/**
@@ -79,7 +85,7 @@ public final class ConfigFactory {
 	public ConfigNode getConfigNode(String node, KeyLoadingMode keyLoadingMode, Set<String> keysSpecified) {
 		LOGGER.debug("Get node[{}] with mode[{}] and keys[{}]", node, keyLoadingMode, keysSpecified);
 
-		ConfigNode configNode = new OverridedConfigNode(configProfile, node);
+		final ConfigNode configNode = new OverridedConfigNode(configProfile, client, node);
 
 		// Load configurations in remote zookeeper.
 		configNode.defineKeyLoadingPattern(keyLoadingMode, keysSpecified);

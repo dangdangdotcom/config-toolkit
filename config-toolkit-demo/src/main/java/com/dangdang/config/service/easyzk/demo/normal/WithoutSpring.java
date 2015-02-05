@@ -27,7 +27,7 @@ import com.google.common.base.Preconditions;
 public class WithoutSpring {
 
 	public static void main(String[] args) {
-		ConfigFactory configFactory = new ConfigFactory("localhost", "/projectx/modulex");
+		ConfigFactory configFactory = new ConfigFactory("zoo.host1:8181", "/projectx/modulex");
 
 		ConfigNode propertyGroup1 = configFactory.getConfigNode("property-group1");
 		System.out.println(propertyGroup1);
