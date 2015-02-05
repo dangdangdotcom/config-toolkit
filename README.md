@@ -44,7 +44,7 @@
 
 - Spring PlaceholderConfigurer集成
 <pre><code>
-	&lt;bean id="configFactory" class="com.dangdang.config.service.easyzk.ConfigFactory" factory-method="create"&gt;
+	&lt;bean id="configFactory" class="com.dangdang.config.service.easyzk.ConfigFactory"&gt;
 		&lt;constructor-arg name="connectStr" value="zoo.host1:8181,zoo.host2:8181,zoo.host3:8181" /&gt;
 		&lt;constructor-arg name="rootNode" value="/projectx/modulex" /&gt;
 	&lt;/bean&gt;
