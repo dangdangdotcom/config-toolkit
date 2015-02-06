@@ -18,6 +18,7 @@ package com.dangdang.config.service.easyzk.demo.spring;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.dangdang.config.service.easyzk.demo.ExampleBean;
+import com.dangdang.config.service.easyzk.demo.ExampleBeanWithConfigNode;
 import com.google.common.base.Preconditions;
 
 /**
@@ -31,15 +32,18 @@ public class MainEntrance {
 	public static void main(String[] args) {
 		ClassPathXmlApplicationContext context = null;
 		try {
-			context = new ClassPathXmlApplicationContext("classpath:config-toolkit-easyzk.xml");
+			context = new ClassPathXmlApplicationContext("classpath:config-toolkit-simple.xml");
 			context.registerShutdownHook();
 			context.start();
 
-			ExampleBean bean = context.getBean(ExampleBean.class);
-			System.out.println(bean);
-
-			Preconditions.checkState("Welcome".equals(bean.getStringProperty()));
-			Preconditions.checkState(1123 == bean.getIntProperty());
+			ExampleBeanWithConfigNode bean = context.getBean(ExampleBeanWithConfigNode.class);
+			while (true) {
+				bean.someMethod();
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+				}
+			}
 		} finally {
 			if (context != null) {
 				context.close();

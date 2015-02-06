@@ -10,11 +10,11 @@ import com.dangdang.config.service.easyzk.ConfigNode;
  *
  */
 public class ExampleBeanWithConfigNode {
-	
+
 	private ConfigNode propertyGroup1;
-	
-	public void someMethod(){
-		System.out.println(propertyGroup1.getProperty("someKey"));
+
+	public void someMethod() {
+		System.out.println(propertyGroup1.getProperty("string_property_key"));
 	}
 
 	public void setPropertyGroup1(ConfigNode propertyGroup1) {
