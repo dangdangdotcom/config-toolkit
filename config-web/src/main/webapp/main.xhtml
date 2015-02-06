@@ -73,13 +73,13 @@
 				<p:dataTable id="propertyGroups" value="#{propertyGroupMB.propertyGroups}" var="propertyGroup"
 					style="margin: 10px; font-size:smaller;" rowKey="#{propertyGroup}" selection="#{propertyGroupMB.selectedGroup}"
 					selectionMode="single">
-					<p:ajax event="rowSelect" update=":nodePropData:nodePropTable" listener="#{nodeDataMB.onMenuSelected}" />
+					<p:ajax event="rowSelect" update=":nodePropData:nodePropTable" listener="#{propertyGroupMB.onMenuSelected}" />
 					<f:facet name="header">Property Groups</f:facet>
 					<p:column headerText="Group Name">
 						#{propertyGroup}
 					</p:column>
 					<p:column headerText="Operations">
-						<p:commandLink value="Remove" update=":messageBox:messages,:authedNodeForm:propertyGroups"
+						<p:commandLink value="Remove" update=":messageBox:messages,:authedNodeForm:propertyGroups,:nodePropData:nodePropTable"
 							actionListener="#{propertyGroupMB.deleteNode(propertyGroup)}" style="font-size:small; margin: 10px;">
 							<p:confirm header="Confirmation" message="确认删除配置组?" icon="ui-icon-alert" />
 						</p:commandLink>

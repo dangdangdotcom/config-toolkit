@@ -28,7 +28,6 @@ import javax.faces.context.FacesContext;
 import org.apache.curator.utils.ZKPaths;
 import org.primefaces.component.inputtext.InputText;
 import org.primefaces.event.RowEditEvent;
-import org.primefaces.event.SelectEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -60,7 +59,7 @@ public class NodeDataManagedBean implements Serializable, IObserver {
 	public void setNodeAuth(NodeAuthManagedBean nodeAuth) {
 		this.nodeAuth = nodeAuth;
 	}
-	
+
 	@PostConstruct
 	private void init() {
 		nodeAuth.register(this);
@@ -79,22 +78,10 @@ public class NodeDataManagedBean implements Serializable, IObserver {
 	}
 
 	/**
-	 * 获取节点下的属性列表
-	 * 
-	 * @return
-	 */
-	public void onMenuSelected(SelectEvent event) {
-		selectedNode = (String) event.getObject();
-
-		LOGGER.info("Tree item changed to {}.", selectedNode);
-
-		refreshNodeProperties();
-	}
-
-	/**
 	 * 刷新节点属性
 	 */
-	private void refreshNodeProperties() {
+	public void refreshNodeProperties(String selectedNode) {
+		this.selectedNode = selectedNode;
 		String nodePath = getSelectedNodePath();
 
 		LOGGER.info("Find properties of node: [{}].", nodePath);
@@ -112,6 +99,8 @@ public class NodeDataManagedBean implements Serializable, IObserver {
 	 * @return
 	 */
 	private String getSelectedNodePath() {
+		if (Strings.isNullOrEmpty(selectedNode))
+			return null;
 		return ZKPaths.makePath(nodeAuth.getAuthedNode(), selectedNode);
 	}
 
@@ -213,7 +202,7 @@ public class NodeDataManagedBean implements Serializable, IObserver {
 		boolean created = nodeService.createProperty(propPath, propValue);
 		if (created) {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Property created.", propPath));
-			refreshNodeProperties();
+			refreshNodeProperties(selectedNode);
 		} else {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Property creation failed.", propPath));
 		}
@@ -234,7 +223,7 @@ public class NodeDataManagedBean implements Serializable, IObserver {
 
 		nodeService.deleteProperty(propPath);
 		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Property deleted.", propPath));
-		refreshNodeProperties();
+		refreshNodeProperties(selectedNode);
 	}
 
 	/**

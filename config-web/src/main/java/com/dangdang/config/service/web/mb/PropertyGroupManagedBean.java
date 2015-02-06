@@ -37,6 +37,7 @@ import javax.faces.context.FacesContext;
 import org.apache.curator.utils.ZKPaths;
 import org.primefaces.component.inputtext.InputText;
 import org.primefaces.event.FileUploadEvent;
+import org.primefaces.event.SelectEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -74,6 +75,13 @@ public class PropertyGroupManagedBean implements Serializable, IObserver {
 
 	public void setNodeAuth(NodeAuthManagedBean nodeAuth) {
 		this.nodeAuth = nodeAuth;
+	}
+	
+	@ManagedProperty(value = "#{nodeDataMB}")
+	private NodeDataManagedBean nodeData;
+
+	public final void setNodeData(NodeDataManagedBean nodeData) {
+		this.nodeData = nodeData;
 	}
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(PropertyGroupManagedBean.class);
@@ -133,6 +141,7 @@ public class PropertyGroupManagedBean implements Serializable, IObserver {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Property group created.", newPropertyGroupName));
 			refreshGroups();
 			newPropertyGroup.setValue(null);
+			nodeData.refreshNodeProperties(null);
 		} else {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Property group creation failed.", newPropertyGroupName));
 		}
@@ -149,6 +158,20 @@ public class PropertyGroupManagedBean implements Serializable, IObserver {
 		nodeService.deleteProperty(ZKPaths.makePath(nodeAuth.getAuthedNode(), propertyGroup));
 		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Property group deleted.", propertyGroup));
 		refreshGroups();
+		nodeData.refreshNodeProperties(null);
+	}
+	
+	/**
+	 * 选中配置组
+	 * 
+	 * @return
+	 */
+	public void onMenuSelected(SelectEvent event) {
+		String selectedNode = (String) event.getObject();
+
+		LOGGER.info("Tree item changed to {}.", selectedNode);
+
+		nodeData.refreshNodeProperties(selectedNode);
 	}
 
 	/**
