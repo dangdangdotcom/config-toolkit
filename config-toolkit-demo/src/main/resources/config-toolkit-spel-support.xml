@@ -8,26 +8,21 @@
              http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
 
 	<context:component-scan base-package="com.dangdang.config.service.easyzk.demo" />
-	
+
 	<!-- Old version -->
-	<!-- 
-	 <util:properties id="propertyGroup1" location="clsspath:property-group1.properties" />
-	 -->
+<!-- 	<util:properties id="propertyGroup1" location="classpath:property-group1.properties" /> -->
 
 	<!-- New version -->
 	<bean id="configFactory" class="com.dangdang.config.service.easyzk.ConfigFactory" destroy-method="close">
-		<!-- Your zookeeper nodes -->
 		<constructor-arg name="connectStr" value="zoo.host1:8181" />
-		<!-- Your module node in zookeeper -->
 		<constructor-arg name="rootNode" value="/projectx/modulex" />
 	</bean>
 
 	<bean name="propertyGroup1" class="com.dangdang.config.service.easyzk.support.spring.ConfigNodeIndexer">
-        <constructor-arg name="configNode">
-            <bean class="com.dangdang.config.service.easyzk.ConfigNode" 
-                factory-bean="configFactory" factory-method="getConfigNode">
-                <constructor-arg name="node" value="property-group1" />
-            </bean>
-        </constructor-arg>
-    </bean>
+		<constructor-arg name="configNode">
+			<bean class="com.dangdang.config.service.easyzk.ConfigNode" factory-bean="configFactory" factory-method="getConfigNode">
+				<constructor-arg name="node" value="property-group1" />
+			</bean>
+		</constructor-arg>
+	</bean>
 </beans>

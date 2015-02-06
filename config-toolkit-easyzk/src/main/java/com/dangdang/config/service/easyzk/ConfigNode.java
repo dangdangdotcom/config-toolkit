@@ -23,6 +23,8 @@ import java.util.TimerTask;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+import javax.annotation.PreDestroy;
+
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.api.GetChildrenBuilder;
 import org.apache.curator.framework.api.GetDataBuilder;
@@ -88,12 +90,14 @@ public class ConfigNode extends AbstractSubject {
 		this.keysSpecified = keysSpecified != null ? Sets.newHashSet(keysSpecified) : keysSpecified;
 	}
 
+	private Timer timer;
+
 	/**
 	 * 初始化节点
 	 */
 	protected void initConfigNode() {
 		client.getCuratorListenable().addListener(new ConfigNodeEventListener(this));
-		
+
 		loadNode();
 
 		// Update local cache
@@ -103,7 +107,8 @@ public class ConfigNode extends AbstractSubject {
 
 		// Consistency check
 		if (configProfile.isConsistencyCheck()) {
-			new Timer().scheduleAtFixedRate(new TimerTask() {
+			timer = new Timer();
+			timer.scheduleAtFixedRate(new TimerTask() {
 
 				@Override
 				public void run() {
@@ -265,6 +270,13 @@ public class ConfigNode extends AbstractSubject {
 		 * 排除某些属性
 		 */
 		EXCLUDE;
+	}
+
+	@PreDestroy
+	private void destroy() {
+		if (timer != null) {
+			timer.cancel();
+		}
 	}
 
 	@Override
