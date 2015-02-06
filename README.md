@@ -29,7 +29,7 @@
     &lt;dependency&gt;
       &lt;groupId&gt;com.dangdang&lt;/groupId&gt;
       &lt;artifactId&gt;config-toolkit-easyzk&lt;/artifactId&gt;
-      &lt;version&gt;1.3.2-RELEASE&lt;/version&gt;
+      &lt;version&gt;1.4.2-RELEASE&lt;/version&gt;
     &lt;/dependency&gt;
 </code></pre>
 - 直接使用
