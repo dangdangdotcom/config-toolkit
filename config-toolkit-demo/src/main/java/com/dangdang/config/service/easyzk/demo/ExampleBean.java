@@ -26,6 +26,8 @@ public class ExampleBean {
 	private String stringProperty;
 	
 	private int intProperty;
+	
+	private boolean cool;
 
 	public ExampleBean(String stringProperty, int intProperty) {
 		super();
@@ -41,9 +43,17 @@ public class ExampleBean {
 		return intProperty;
 	}
 
+	public boolean isCool() {
+		return cool;
+	}
+
+	public void setCool(boolean cool) {
+		this.cool = cool;
+	}
+
 	@Override
 	public String toString() {
-		return "ExampleBean [stringProperty=" + stringProperty + ", intProperty=" + intProperty + "]";
+		return "ExampleBean [stringProperty=" + stringProperty + ", intProperty=" + intProperty + ", cool=" + cool + "]";
 	}
 	
 }

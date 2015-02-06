@@ -8,30 +8,25 @@
              http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
 
 	<!-- Old version -->
-	<!-- 
-	<bean class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer">
-		<property name="order" value="1" />
-		<property name="ignoreUnresolvablePlaceholders" value="true" />
-		<property name="locations">
-			<list>
-				<value>classpath:property-group1.properties</value>
-				<value>classpath:property-group2.properties</value>
-			</list>
-		</property>
-	</bean>
-	 -->
+<!-- 	<bean class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer"> -->
+<!-- 		<property name="order" value="1" /> -->
+<!-- 		<property name="ignoreUnresolvablePlaceholders" value="true" /> -->
+<!-- 		<property name="locations"> -->
+<!-- 			<list> -->
+<!-- 				<value>classpath:property-group1.properties</value> -->
+<!-- 				<value>classpath:property-group2.properties</value> -->
+<!-- 			</list> -->
+<!-- 		</property> -->
+<!-- 	</bean> -->
 
 	<!-- New version -->
 	<bean id="configFactory" class="com.dangdang.config.service.easyzk.ConfigFactory" destroy-method="close">
-		<!-- Your zookeeper nodes -->
 		<constructor-arg name="connectStr" value="zoo.host1:8181" />
-		<!-- Your module node in zookeeper -->
 		<constructor-arg name="rootNode" value="/projectx/modulex" />
 	</bean>
 
 	<bean id="zookeeperSources" class="com.dangdang.config.service.easyzk.support.spring.ZookeeperSourceFactory" factory-method="create">
 		<constructor-arg name="configFactory" ref="configFactory" />
-		<!-- Your property groups -->
 		<constructor-arg name="nodes">
 			<list>
 				<value>property-group1</value>
@@ -47,6 +42,8 @@
 	</bean>
 
 	<!-- Inject property with used spring style -->
-	<bean class="com.dangdang.config.service.easyzk.demo.ExampleBean" c:stringProperty="${string_property_key}" c:intProperty="${int_property_key}" />
+	<bean class="com.dangdang.config.service.easyzk.demo.ExampleBean" c:stringProperty="${string_property_key}" c:intProperty="${int_property_key}">
+		<property name="cool" value="${cool}" />
+	</bean>
 
 </beans>
