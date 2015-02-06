@@ -59,7 +59,7 @@ public class LocalOverrideFileLoader {
 				final Element factoriesNode = Preconditions.checkNotNull(doc.getDocumentElement(), "Root xml node node-factories not exists.");
 
 				Node factoryNode = findChild(factoriesNode, "node-factory", "root", rootNode);
-				if (factoriesNode != null) {
+				if (factoryNode != null) {
 					Node nodeGroup = findChild(factoryNode, "group", "id", group);
 					if (nodeGroup != null) {
 						NodeList childNodes = nodeGroup.getChildNodes();

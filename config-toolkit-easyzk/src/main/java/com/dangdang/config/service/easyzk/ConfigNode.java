@@ -26,6 +26,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import javax.annotation.PreDestroy;
 
 import org.apache.curator.framework.CuratorFramework;
+import org.apache.curator.framework.api.CuratorListener;
 import org.apache.curator.framework.api.GetChildrenBuilder;
 import org.apache.curator.framework.api.GetDataBuilder;
 import org.apache.curator.utils.ZKPaths;
@@ -92,11 +93,13 @@ public class ConfigNode extends AbstractSubject {
 
 	private Timer timer;
 
+	private CuratorListener listener = new ConfigNodeEventListener(this);
+
 	/**
 	 * 初始化节点
 	 */
 	protected void initConfigNode() {
-		client.getCuratorListenable().addListener(new ConfigNodeEventListener(this));
+		client.getCuratorListenable().addListener(listener);
 
 		loadNode();
 
@@ -277,6 +280,7 @@ public class ConfigNode extends AbstractSubject {
 		if (timer != null) {
 			timer.cancel();
 		}
+		client.getCuratorListenable().removeListener(listener);
 	}
 
 	@Override
