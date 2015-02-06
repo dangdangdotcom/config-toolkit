@@ -23,8 +23,6 @@ import java.util.TimerTask;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-import javax.annotation.PreDestroy;
-
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.api.GetChildrenBuilder;
 import org.apache.curator.framework.api.GetDataBuilder;
@@ -213,16 +211,6 @@ public class ConfigNode extends AbstractSubject {
 
 			// 通知注册者
 			notify(nodeName, childValue);
-		}
-	}
-
-	/**
-	 * 关闭连接
-	 */
-	@PreDestroy
-	private void destroy() {
-		if (client != null) {
-			client.close();
 		}
 	}
 

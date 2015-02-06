@@ -15,6 +15,8 @@
  */
 package com.dangdang.config.service.easyzk;
 
+import java.io.Closeable;
+import java.io.IOException;
 import java.util.Set;
 
 import org.apache.curator.framework.CuratorFramework;
@@ -32,7 +34,7 @@ import com.google.common.base.Preconditions;
  * @author <a href="mailto:wangyuxuan@dangdang.com">Yuxuan Wang</a>
  *
  */
-public final class ConfigFactory {
+public final class ConfigFactory implements Closeable {
 
 	private ConfigProfile configProfile;
 
@@ -94,6 +96,16 @@ public final class ConfigFactory {
 
 		configNode.initConfigNode();
 		return configNode;
+	}
+	
+	/* (non-Javadoc)
+	 * @see java.io.Closeable#close()
+	 */
+	@Override
+	public void close() throws IOException {
+		if (client != null) {
+			client.close();
+		}
 	}
 
 }

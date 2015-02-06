@@ -30,12 +30,12 @@ import com.dangdang.config.service.easyzk.ConfigNode;
 @Configuration
 public class ConfigCenter {
 
-	@Bean
+	@Bean(destroyMethod = "close")
 	public ConfigFactory getConfigFactory() {
 		return new ConfigFactory("zoo.host1:8181,zoo.host2:8181,zoo.host3:8181", "/projectx/modulex");
 	}
 
-	@Bean(name="propertyGroup1")
+	@Bean(name = "propertyGroup1")
 	public ConfigNode getPropertyGroup1(ConfigFactory configFactory) {
 		return configFactory.getConfigNode("property-group1");
 	}

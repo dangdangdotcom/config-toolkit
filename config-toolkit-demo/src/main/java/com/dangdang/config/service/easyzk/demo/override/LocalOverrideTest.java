@@ -15,6 +15,8 @@
  */
 package com.dangdang.config.service.easyzk.demo.override;
 
+import java.io.IOException;
+
 import com.dangdang.config.service.easyzk.ConfigFactory;
 import com.dangdang.config.service.easyzk.ConfigNode;
 import com.dangdang.config.service.observer.IObserver;
@@ -47,6 +49,11 @@ public class LocalOverrideTest {
 		String intProperty = propertyGroup1.getProperty("int_property_key");
 		System.out.println(intProperty);
 		Preconditions.checkState(1123 == Integer.parseInt(intProperty));
+		
+		try {
+			configFactory.close();
+		} catch (IOException e) {
+		}
 	}
 
 }
