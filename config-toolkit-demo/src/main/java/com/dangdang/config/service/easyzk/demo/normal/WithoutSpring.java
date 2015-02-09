@@ -15,6 +15,8 @@
  */
 package com.dangdang.config.service.easyzk.demo.normal;
 
+import java.io.IOException;
+
 import com.dangdang.config.service.easyzk.ConfigFactory;
 import com.dangdang.config.service.easyzk.ConfigNode;
 import com.dangdang.config.service.observer.IObserver;
@@ -48,11 +50,17 @@ public class WithoutSpring {
 		Object lock = new Object();
 		synchronized (lock) {
 			try {
-				while (true)
-					lock.wait();
+				lock.wait();
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
+		}
+
+		try {
+			configFactory.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 

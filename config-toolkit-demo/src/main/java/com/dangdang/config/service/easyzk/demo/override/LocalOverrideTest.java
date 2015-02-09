@@ -53,6 +53,7 @@ public class LocalOverrideTest {
 		try {
 			configFactory.close();
 		} catch (IOException e) {
+			//
 		}
 	}
 

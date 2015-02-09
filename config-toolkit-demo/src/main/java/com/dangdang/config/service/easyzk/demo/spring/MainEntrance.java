@@ -17,9 +17,7 @@ package com.dangdang.config.service.easyzk.demo.spring;
 
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import com.dangdang.config.service.easyzk.demo.ExampleBean;
 import com.dangdang.config.service.easyzk.demo.ExampleBeanWithConfigNode;
-import com.google.common.base.Preconditions;
 
 /**
  * Load spring, and validation the property
@@ -42,6 +40,7 @@ public class MainEntrance {
 				try {
 					Thread.sleep(1000);
 				} catch (InterruptedException e) {
+					//
 				}
 			}
 		} finally {
