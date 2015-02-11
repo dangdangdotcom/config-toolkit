@@ -41,7 +41,8 @@
 		</h:form>
 	</p:dialog>
 	<!-- Property Zip Package Upload -->
-	<p:dialog header="Configuration Upload" widgetVar="uploadZip" modal="true" width="550" resizable="false" appendTo="@(body)" style="font-size:small;">
+	<p:dialog header="Configuration Group Upload" widgetVar="uploadZip" modal="true" width="550" resizable="false" appendTo="@(body)"
+		style="font-size:small;">
 		<h:form id="zipUploadForm">
 			<p:fileUpload id="fileUpload" fileUploadListener="#{propertyGroupMB.propertyZipUpload}" dragDropSupport="false" multiple="false"
 				allowTypes="/^.*\.zip$/" update=":messageBox:messages,:authedNodeForm:propertyGroups" previewWidth="0" style="margin: 10px; font-size:small"
@@ -49,10 +50,17 @@
 		</h:form>
 	</p:dialog>
 	<!-- Create Version -->
-	<p:dialog header="Version Creation" widgetVar="createVersion" modal="true" width="550" resizable="false" appendTo="@(body)" style="font-size:small;">
+	<p:dialog header="Version Creation" widgetVar="createVersion" modal="true" width="350" resizable="false" appendTo="@(body)" style="font-size:small;">
 		<h:form id="createVersionForm">
 			<p:inputText id="createVersion" binding="#{versionMB.versionToBeCreatedInput}" />
 			<p:commandButton actionListener="#{versionMB.createVersion}" icon="ui-icon-check" update="@(form)" oncomplete="PF('createVersion').hide()" />
+		</h:form>
+	</p:dialog>
+	<!-- Clone Version -->
+	<p:dialog header="Clone Creation" widgetVar="cloneVersion" modal="true" width="350" resizable="false" appendTo="@(body)" style="font-size:small;">
+		<h:form id="cloneVersionForm">
+			<p:inputText id="cloneVersion" binding="#{versionMB.versionToCloneInput}" />
+			<p:commandButton actionListener="#{versionMB.cloneVersion}" icon="ui-icon-check" update="@(form)" oncomplete="PF('cloneVersion').hide()" />
 		</h:form>
 	</p:dialog>
 	<p:layout fullPage="true">
@@ -65,15 +73,16 @@
 						<p:outputLabel id="authedNodeView" value="#{nodeAuthMB.authedNode}" style="margin-left:10px;" />
 					</p:toolbarGroup>
 					<p:toolbarGroup align="right" style="vertical-align:middle;">
+						<p:outputLabel for="versionSelector" value="版本:" style="margin-right: 6px;" />
 						<p:selectOneMenu id="versionSelector" value="#{versionMB.selectedVersion}" disabled="#{empty nodeAuthMB.authedNode}" style="font-size:small;">
 							<p:ajax listener="#{propertyGroupMB.refreshGroup}" event="change" update="@(form)" />
 							<f:selectItem itemLabel="Select Version..." />
 							<f:selectItems value="#{versionMB.versions}" />
 						</p:selectOneMenu>
 						<p:separator style="margin: 0px 5px 0px 5px;" />
-						<p:commandLink id="createVersionBt" type="button" value="新建版本" onclick="PF('createVersion').show()"
-							style="font-size:small;margin-right:6px;" disabled="#{empty nodeAuthMB.authedNode}" />
-						<p:commandLink id="cloneBt" type="button" value="克隆版本" style="font-size:small;margin-right:6px;"
+						<p:commandLink id="createVersionBt" type="button" value="新建版本" onclick="PF('createVersion').show()" style="font-size:small;margin-right:6px;"
+							disabled="#{empty nodeAuthMB.authedNode}" />
+						<p:commandLink id="cloneBt" type="button" value="克隆版本" onclick="PF('cloneVersion').show()" style="font-size:small;margin-right:6px;"
 							disabled="#{empty nodeAuthMB.authedNode || empty versionMB.selectedVersion}" />
 						<p:separator style="margin: 0px 5px 0px 5px;" />
 						<p:commandLink id="exportAllBt" type="button" value="导出(ZIP)" ajax="false" style="font-size:small;margin-right:6px;"

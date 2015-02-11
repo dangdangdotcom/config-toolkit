@@ -47,7 +47,7 @@ public class NodeDataManagedBean implements Serializable, IObserver {
 	private static final long serialVersionUID = 1L;
 
 	@ManagedProperty(value = "#{nodeService}")
-	private transient INodeService nodeService;
+	private INodeService nodeService;
 
 	public void setNodeService(INodeService nodeService) {
 		this.nodeService = nodeService;

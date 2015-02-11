@@ -50,7 +50,7 @@ import com.google.common.base.Strings;
 public class PropertyExportManagedBean {
 
 	@ManagedProperty(value = "#{nodeService}")
-	private transient INodeService nodeService;
+	private INodeService nodeService;
 
 	public void setNodeService(INodeService nodeService) {
 		this.nodeService = nodeService;

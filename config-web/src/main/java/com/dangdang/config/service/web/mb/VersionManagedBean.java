@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.dangdang.config.service.INodeService;
+import com.dangdang.config.service.entity.PropertyItem;
 import com.dangdang.config.service.observer.IObserver;
 import com.google.common.base.Strings;
 
@@ -32,7 +33,7 @@ public class VersionManagedBean implements IObserver, Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@ManagedProperty(value = "#{nodeService}")
-	private transient INodeService nodeService;
+	private INodeService nodeService;
 
 	public void setNodeService(INodeService nodeService) {
 		this.nodeService = nodeService;
@@ -56,6 +57,7 @@ public class VersionManagedBean implements IObserver, Serializable {
 	private String selectedVersion;
 	private List<String> versions;
 	private InputText versionToBeCreatedInput;
+	private InputText versionToCloneInput;
 
 	/**
 	 * 创建版本
@@ -70,10 +72,52 @@ public class VersionManagedBean implements IObserver, Serializable {
 
 			nodeService.createProperty(ZKPaths.makePath(nodeAuth.getAuthedNode(), versionToBeCreated), "1");
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Version created.", versionToBeCreated));
-			
+
 			refresh();
 			selectedVersion = versionToBeCreated;
-			versionToBeCreated = null;
+		}
+	}
+
+	/**
+	 * 克隆版本
+	 */
+	public void cloneVersion() {
+		String versionToClone = (String) versionToCloneInput.getValue();
+		if (!Strings.isNullOrEmpty(versionToClone) && !Strings.isNullOrEmpty(selectedVersion)) {
+
+			if (LOGGER.isInfoEnabled()) {
+				LOGGER.info("Clone version [{}] from version [{}].", versionToClone, selectedVersion);
+			}
+
+			String sourceVersionPath = ZKPaths.makePath(nodeAuth.getAuthedNode(), selectedVersion);
+			String destinationVersionPath = ZKPaths.makePath(nodeAuth.getAuthedNode(), versionToClone);
+			boolean suc = nodeService.createProperty(destinationVersionPath, "1");
+			if (!suc) {
+				FacesContext.getCurrentInstance().addMessage(null,
+						new FacesMessage(FacesMessage.SEVERITY_ERROR, "Version creation failed.", versionToClone));
+				return;
+			}
+
+			List<String> sourceGroups = nodeService.listChildren(sourceVersionPath);
+			if (sourceGroups != null) {
+				for (String sourceGroup : sourceGroups) {
+					String sourceGroupFullPath = ZKPaths.makePath(sourceVersionPath, sourceGroup);
+					String destinationGroupFullPath = ZKPaths.makePath(destinationVersionPath, sourceGroup);
+
+					nodeService.createProperty(destinationGroupFullPath, "1");
+					List<PropertyItem> sourceProperties = nodeService.findProperties(sourceGroupFullPath);
+					if (sourceProperties != null) {
+						for (PropertyItem sourceProperty : sourceProperties) {
+							nodeService.createProperty(ZKPaths.makePath(destinationGroupFullPath, sourceProperty.getName()),
+									sourceProperty.getValue());
+						}
+					}
+				}
+			}
+
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Version cloned.", versionToClone));
+			refresh();
+			selectedVersion = versionToClone;
 		}
 	}
 
@@ -126,6 +170,14 @@ public class VersionManagedBean implements IObserver, Serializable {
 
 	public void setVersionToBeCreatedInput(InputText versionToBeCreatedInput) {
 		this.versionToBeCreatedInput = versionToBeCreatedInput;
+	}
+
+	public InputText getVersionToCloneInput() {
+		return versionToCloneInput;
+	}
+
+	public void setVersionToCloneInput(InputText versionToCloneInput) {
+		this.versionToCloneInput = versionToCloneInput;
 	}
 
 }

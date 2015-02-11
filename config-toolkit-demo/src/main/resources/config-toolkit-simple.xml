@@ -13,6 +13,7 @@
 		<constructor-arg name="connectStr" value="zoo.host1:8181" />
 		<!-- Your module node in zookeeper -->
 		<constructor-arg name="rootNode" value="/projectx/modulex" />
+		<constructor-arg name="version" value="1.1" />
 	</bean>
 	
 	<!-- Config Node -->
