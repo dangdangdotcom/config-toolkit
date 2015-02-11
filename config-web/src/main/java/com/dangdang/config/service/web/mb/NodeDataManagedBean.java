@@ -17,6 +17,7 @@ package com.dangdang.config.service.web.mb;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -33,8 +34,11 @@ import org.slf4j.LoggerFactory;
 
 import com.dangdang.config.service.INodeService;
 import com.dangdang.config.service.entity.PropertyItem;
+import com.dangdang.config.service.entity.PropertyItemVO;
 import com.dangdang.config.service.observer.IObserver;
 import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 /**
  * @author <a href="mailto:wangyuxuan@dangdang.com">Yuxuan Wang</a>
@@ -60,6 +64,13 @@ public class NodeDataManagedBean implements Serializable, IObserver {
 		this.nodeAuth = nodeAuth;
 	}
 
+	@ManagedProperty(value = "#{versionMB}")
+	private VersionManagedBean versionMB;
+
+	public void setVersionMB(VersionManagedBean versionMB) {
+		this.versionMB = versionMB;
+	}
+
 	@PostConstruct
 	private void init() {
 		nodeAuth.register(this);
@@ -83,13 +94,29 @@ public class NodeDataManagedBean implements Serializable, IObserver {
 	public void refreshNodeProperties(String selectedNode) {
 		this.selectedNode = selectedNode;
 		String nodePath = getSelectedNodePath();
+		String commentPath = getSelectedNodeCommentPath();
 
 		LOGGER.info("Find properties of node: [{}].", nodePath);
 
-		if (Strings.isNullOrEmpty(nodePath)) {
-			nodeProps = null;
-		} else {
-			nodeProps = nodeService.findProperties(nodePath);
+		nodeProps = null;
+		if (!Strings.isNullOrEmpty(nodePath)) {
+			List<PropertyItem> propertyItems = nodeService.findProperties(nodePath);
+			List<PropertyItem> propertyComments = nodeService.findProperties(commentPath);
+			if (propertyItems != null) {
+				Map<String, String> comments = Maps.newHashMap();
+				if (propertyComments != null) {
+					for (PropertyItem comment : propertyComments) {
+						comments.put(comment.getName(), comment.getValue());
+					}
+				}
+
+				nodeProps = Lists.newArrayList();
+				for (PropertyItem propertyItem : propertyItems) {
+					PropertyItemVO vo = new PropertyItemVO(propertyItem);
+					vo.setComment(comments.get(propertyItem.getName()));
+					nodeProps.add(vo);
+				}
+			}
 		}
 	}
 
@@ -101,7 +128,20 @@ public class NodeDataManagedBean implements Serializable, IObserver {
 	private String getSelectedNodePath() {
 		if (Strings.isNullOrEmpty(selectedNode))
 			return null;
-		return ZKPaths.makePath(nodeAuth.getAuthedNode(), selectedNode);
+		String authedNode = ZKPaths.makePath(nodeAuth.getAuthedNode(), versionMB.getSelectedVersion());
+		return ZKPaths.makePath(authedNode, selectedNode);
+	}
+
+	/**
+	 * 获取已选节点注释全路径
+	 * 
+	 * @return
+	 */
+	private String getSelectedNodeCommentPath() {
+		if (Strings.isNullOrEmpty(selectedNode))
+			return null;
+		String authedNode = ZKPaths.makePath(nodeAuth.getAuthedNode(), versionMB.getSelectedVersion() + "$");
+		return ZKPaths.makePath(authedNode, selectedNode);
 	}
 
 	/**
@@ -115,16 +155,26 @@ public class NodeDataManagedBean implements Serializable, IObserver {
 	}
 
 	/**
+	 * 获取属性注释全路径
+	 * 
+	 * @param propertyName
+	 * @return
+	 */
+	private String getPropertyCommentPath(String propertyName) {
+		return ZKPaths.makePath(getSelectedNodeCommentPath(), propertyName);
+	}
+
+	/**
 	 * 节点下的属性列表
 	 * 
 	 */
-	private List<PropertyItem> nodeProps;
+	private List<PropertyItemVO> nodeProps;
 
-	public void setNodeProps(List<PropertyItem> nodeProps) {
+	public void setNodeProps(List<PropertyItemVO> nodeProps) {
 		this.nodeProps = nodeProps;
 	}
 
-	public List<PropertyItem> getNodeProps() {
+	public List<PropertyItemVO> getNodeProps() {
 		return nodeProps;
 	}
 
@@ -138,7 +188,7 @@ public class NodeDataManagedBean implements Serializable, IObserver {
 			return;
 		}
 
-		PropertyItem selectedItem = (PropertyItem) event.getObject();
+		PropertyItemVO selectedItem = (PropertyItemVO) event.getObject();
 
 		LOGGER.info("Update property with : {}.", selectedItem);
 
@@ -146,11 +196,17 @@ public class NodeDataManagedBean implements Serializable, IObserver {
 		String oriName = selectedItem.getOriName();
 
 		boolean suc = false;
+		String fullPropPath = getPropertyNodePath(name);
+		String fullCommentPath = getPropertyCommentPath(name);
 		if (name.equals(oriName)) {
-			suc = nodeService.updateProperty(getPropertyNodePath(name), selectedItem.getValue());
+			suc = nodeService.updateProperty(fullPropPath, selectedItem.getValue());
+			nodeService.updateProperty(fullCommentPath, selectedItem.getComment());
 		} else {
 			nodeService.deleteProperty(getPropertyNodePath(oriName));
-			suc = nodeService.createProperty(getPropertyNodePath(name), selectedItem.getValue());
+			suc = nodeService.createProperty(fullPropPath, selectedItem.getValue());
+
+			nodeService.deleteProperty(fullCommentPath);
+			nodeService.createProperty(fullCommentPath, selectedItem.getComment());
 		}
 
 		if (suc) {
@@ -170,6 +226,11 @@ public class NodeDataManagedBean implements Serializable, IObserver {
 	 */
 	private InputText newPropValue;
 
+	/**
+	 * 注释值
+	 */
+	private InputText newCommentValue;
+
 	public InputText getNewPropName() {
 		return newPropName;
 	}
@@ -186,6 +247,14 @@ public class NodeDataManagedBean implements Serializable, IObserver {
 		this.newPropValue = newPropValue;
 	}
 
+	public InputText getNewCommentValue() {
+		return newCommentValue;
+	}
+
+	public void setNewCommentValue(InputText newCommentValue) {
+		this.newCommentValue = newCommentValue;
+	}
+
 	/**
 	 * 创建新属性
 	 */
@@ -196,13 +265,21 @@ public class NodeDataManagedBean implements Serializable, IObserver {
 
 		String propName = (String) newPropName.getValue();
 		String propValue = (String) newPropValue.getValue();
+		String propComment = (String) newCommentValue.getValue();
 
 		String propPath = getPropertyNodePath(propName);
 		LOGGER.info("Create property: Path[{}], Value[{}]", propPath, propValue);
 		boolean created = nodeService.createProperty(propPath, propValue);
 		if (created) {
+			if (!Strings.isNullOrEmpty(propComment)) {
+				nodeService.createProperty(getPropertyCommentPath(propName), propComment);
+			}
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Property created.", propPath));
 			refreshNodeProperties(selectedNode);
+			
+			newPropName.setValue(null);
+			newPropValue.setValue(null);
+			newCommentValue.setValue(null);
 		} else {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Property creation failed.", propPath));
 		}
@@ -222,6 +299,8 @@ public class NodeDataManagedBean implements Serializable, IObserver {
 		LOGGER.info("Delete property: Path[{}]", propPath);
 
 		nodeService.deleteProperty(propPath);
+		nodeService.deleteProperty(getPropertyCommentPath(propName));
+
 		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Property deleted.", propPath));
 		refreshNodeProperties(selectedNode);
 	}

@@ -173,7 +173,7 @@ public class PropertyGroupManagedBean implements Serializable, IObserver {
 
 		LOGGER.info("Tree item changed to {}.", selectedNode);
 
-		nodeData.refreshNodeProperties(ZKPaths.makePath(versionMB.getSelectedVersion(), selectedNode));
+		nodeData.refreshNodeProperties(selectedNode);
 	}
 
 	/**

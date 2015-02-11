@@ -50,17 +50,23 @@
 		</h:form>
 	</p:dialog>
 	<!-- Create Version -->
-	<p:dialog header="Version Creation" widgetVar="createVersion" modal="true" width="350" resizable="false" appendTo="@(body)" style="font-size:small;">
+	<p:dialog header="Version Creation" widgetVar="createVersion" modal="true" width="250" resizable="false" appendTo="@(body)" style="font-size:small;">
 		<h:form id="createVersionForm">
-			<p:inputText id="createVersion" binding="#{versionMB.versionToBeCreatedInput}" />
-			<p:commandButton actionListener="#{versionMB.createVersion}" icon="ui-icon-check" update="@(form)" oncomplete="PF('createVersion').hide()" />
+			<p:inputText id="createVersion" binding="#{versionMB.versionToBeCreatedInput}" required="true" validatorMessage="版本号只允许使用数字,字母,下划线和点">
+				<f:validateRegex pattern="^[\w\.]+" />
+			</p:inputText>
+			<p:commandButton actionListener="#{versionMB.createVersion}" icon="ui-icon-check" update="@(form)" oncomplete="PF('createVersion').hide()"
+				style="margin-left:10px;" />
 		</h:form>
 	</p:dialog>
 	<!-- Clone Version -->
-	<p:dialog header="Clone Creation" widgetVar="cloneVersion" modal="true" width="350" resizable="false" appendTo="@(body)" style="font-size:small;">
+	<p:dialog header="Clone Creation" widgetVar="cloneVersion" modal="true" width="250" resizable="false" appendTo="@(body)" style="font-size:small;">
 		<h:form id="cloneVersionForm">
-			<p:inputText id="cloneVersion" binding="#{versionMB.versionToCloneInput}" />
-			<p:commandButton actionListener="#{versionMB.cloneVersion}" icon="ui-icon-check" update="@(form)" oncomplete="PF('cloneVersion').hide()" />
+			<p:inputText id="cloneVersion" binding="#{versionMB.versionToCloneInput}" required="true" validatorMessage="版本号只允许使用数字,字母,下划线和点">
+				<f:validateRegex pattern="^[\w\.]+" />
+			</p:inputText>
+			<p:commandButton actionListener="#{versionMB.cloneVersion}" icon="ui-icon-check" update="@(form)" oncomplete="PF('cloneVersion').hide()"
+				style="margin-left:10px;" />
 		</h:form>
 	</p:dialog>
 	<p:layout fullPage="true">
@@ -104,7 +110,7 @@
 			<h:form id="authedNodeForm">
 				<p:dataTable id="propertyGroups" value="#{propertyGroupMB.propertyGroups}" var="propertyGroup" style="margin: 10px; font-size:smaller;"
 					rowKey="#{propertyGroup}" selection="#{propertyGroupMB.selectedGroup}" selectionMode="single">
-					<p:ajax event="rowSelect" update=":nodePropData:nodePropTable" listener="#{propertyGroupMB.onMenuSelected}" />
+					<p:ajax event="rowSelect" update=":nodePropData:nodePropTable,:nodePropForm:createProperty" listener="#{propertyGroupMB.onMenuSelected}" />
 					<f:facet name="header">Property Groups</f:facet>
 					<p:column headerText="Group Name">
 						#{propertyGroup}
@@ -131,14 +137,19 @@
 		</p:layoutUnit>
 		<p:layoutUnit position="center" style="border:0px;">
 			<h:form id="nodePropForm">
-				<h:outputLabel value="Key: " style="font-size:smaller; margin: 10px;" />
+				<h:outputLabel value="Key:" for="newPropName" style="font-size:smaller; margin: 10px;" />
 				<p:inputText id="newPropName" required="true" size="12" style="font-size:smaller;" binding="#{nodeDataMB.newPropName}"
-					validatorMessage="Path must start with / character">
+					validatorMessage="Key must not contains / character">
 					<f:validateRegex pattern="[^/]+" />
 				</p:inputText>
-				<h:outputLabel value="Value: " style="font-size:smaller; margin: 10px;" />
+				
+				<h:outputLabel value="Value:" for="newPropValue" style="font-size:smaller; margin: 10px;" />
 				<p:inputText id="newPropValue" required="true" size="12" style="font-size:smaller;" binding="#{nodeDataMB.newPropValue}" />
-				<p:commandButton id="createProperty" value="创建" partialSubmit="true" disabled="#{empty nodeAuthMB.authedNode}" update="@(form)"
+				
+				<h:outputLabel value="注释:" for="newCommentValue" style="font-size:smaller; margin: 10px;" />
+				<p:inputText id="newCommentValue" required="false" size="20" style="font-size:smaller;" binding="#{nodeDataMB.newCommentValue}" />
+				
+				<p:commandButton id="createProperty" value="创建" partialSubmit="true" disabled="#{empty nodeDataMB.selectedNode}" update="@(form)"
 					actionListener="#{nodeDataMB.createProperty}" style="margin: 10px; font-size:small" />
 			</h:form>
 			<h:form id="nodePropData">
@@ -172,6 +183,16 @@
 							</f:facet>
 							<f:facet name="input">
 								<p:inputText value="#{nodeProp.value}" style="width:96%" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+					<p:column headerText="Comment">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{nodeProp.comment}" style="width:96%; word-wrap: break-word; word-break: break-all;" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText value="#{nodeProp.comment}" style="width:96%" />
 							</f:facet>
 						</p:cellEditor>
 					</p:column>

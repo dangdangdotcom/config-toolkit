@@ -46,9 +46,9 @@ public class PropertyDao extends BaseDao implements IPropertyDao {
 			if (stat == null) {
 				String opResult = null;
 				if (Strings.isNullOrEmpty(value)) {
-					opResult = getClient().create().forPath(nodeName);
+					opResult = getClient().create().creatingParentsIfNeeded().forPath(nodeName);
 				} else {
-					opResult = getClient().create().forPath(nodeName, value.getBytes(Charsets.UTF_8));
+					opResult = getClient().create().creatingParentsIfNeeded().forPath(nodeName, value.getBytes(Charsets.UTF_8));
 				}
 				suc = Objects.equal(nodeName, opResult);
 			}
@@ -78,7 +78,10 @@ public class PropertyDao extends BaseDao implements IPropertyDao {
 	public void deleteProperty(String nodeName) {
 		LOGGER.debug("Delete property: [{}]", nodeName);
 		try {
-			getClient().delete().deletingChildrenIfNeeded().forPath(nodeName);
+			Stat stat = getClient().checkExists().forPath(nodeName);
+			if (stat != null) {
+				getClient().delete().deletingChildrenIfNeeded().forPath(nodeName);
+			}
 		} catch (Exception e) {
 			throw Throwables.propagate(e);
 		}
