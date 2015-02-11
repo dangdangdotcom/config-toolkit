@@ -15,8 +15,6 @@
  */
 package com.dangdang.config.service.easyzk.demo.normal;
 
-import java.io.IOException;
-
 import com.dangdang.config.service.easyzk.ConfigFactory;
 import com.dangdang.config.service.easyzk.ConfigNode;
 import com.dangdang.config.service.observer.IObserver;
@@ -37,31 +35,17 @@ public class WithoutSpring {
 		// Listen changes
 		propertyGroup1.register(new IObserver() {
 			@Override
-			public void notifiy(String data, String value) {
+			public void notified(String data, String value) {
 				// Some initialization
 			}
 		});
 
 		String stringProperty = propertyGroup1.getProperty("string_property_key");
-		Preconditions.checkState("Welcome here.".equals(stringProperty));
+		Preconditions.checkState("hello".equals(stringProperty));
 		String intProperty = propertyGroup1.getProperty("int_property_key");
 		Preconditions.checkState(1123 == Integer.parseInt(intProperty));
 
-		Object lock = new Object();
-		synchronized (lock) {
-			try {
-				lock.wait();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
-
-		try {
-			configFactory.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		propertyGroup1.destroy();
 	}
 
 }

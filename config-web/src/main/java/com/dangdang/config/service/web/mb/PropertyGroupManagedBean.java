@@ -64,7 +64,7 @@ public class PropertyGroupManagedBean implements Serializable, IObserver {
 	private static final long serialVersionUID = 1L;
 
 	@ManagedProperty(value = "#{nodeService}")
-	private INodeService nodeService;
+	private transient INodeService nodeService;
 
 	public void setNodeService(INodeService nodeService) {
 		this.nodeService = nodeService;
@@ -76,12 +76,19 @@ public class PropertyGroupManagedBean implements Serializable, IObserver {
 	public void setNodeAuth(NodeAuthManagedBean nodeAuth) {
 		this.nodeAuth = nodeAuth;
 	}
-	
+
 	@ManagedProperty(value = "#{nodeDataMB}")
 	private NodeDataManagedBean nodeData;
 
 	public final void setNodeData(NodeDataManagedBean nodeData) {
 		this.nodeData = nodeData;
+	}
+
+	@ManagedProperty(value = "#{versionMB}")
+	private VersionManagedBean versionMB;
+
+	public void setVersionMB(VersionManagedBean versionMB) {
+		this.versionMB = versionMB;
 	}
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(PropertyGroupManagedBean.class);
@@ -105,14 +112,7 @@ public class PropertyGroupManagedBean implements Serializable, IObserver {
 	@PostConstruct
 	private void init() {
 		nodeAuth.register(this);
-		refreshGroups();
-	}
-
-	/**
-	 * 初始化节点菜单
-	 */
-	public void refreshGroups() {
-		notifiy(nodeAuth.getAuthedNode(), null);
+		refreshGroup();
 	}
 
 	/**
@@ -136,14 +136,16 @@ public class PropertyGroupManagedBean implements Serializable, IObserver {
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("Create new node: {}", newPropertyGroupName);
 		}
-		boolean created = nodeService.createProperty(ZKPaths.makePath(nodeAuth.getAuthedNode(), newPropertyGroupName), null);
+		String authedNode = ZKPaths.makePath(nodeAuth.getAuthedNode(), versionMB.getSelectedVersion());
+		boolean created = nodeService.createProperty(ZKPaths.makePath(authedNode, newPropertyGroupName), null);
 		if (created) {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Property group created.", newPropertyGroupName));
-			refreshGroups();
+			refreshGroup();
 			newPropertyGroup.setValue(null);
 			nodeData.refreshNodeProperties(null);
 		} else {
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Property group creation failed.", newPropertyGroupName));
+			FacesContext.getCurrentInstance().addMessage(null,
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Property group creation failed.", newPropertyGroupName));
 		}
 	}
 
@@ -155,12 +157,12 @@ public class PropertyGroupManagedBean implements Serializable, IObserver {
 			LOGGER.info("Delete node [{}] for property group.", propertyGroup);
 		}
 
-		nodeService.deleteProperty(ZKPaths.makePath(nodeAuth.getAuthedNode(), propertyGroup));
+		String authedNode = ZKPaths.makePath(nodeAuth.getAuthedNode(), versionMB.getSelectedVersion());
+		nodeService.deleteProperty(ZKPaths.makePath(authedNode, propertyGroup));
 		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Property group deleted.", propertyGroup));
-		refreshGroups();
-		nodeData.refreshNodeProperties(null);
+		refreshGroup();
 	}
-	
+
 	/**
 	 * 选中配置组
 	 * 
@@ -171,7 +173,7 @@ public class PropertyGroupManagedBean implements Serializable, IObserver {
 
 		LOGGER.info("Tree item changed to {}.", selectedNode);
 
-		nodeData.refreshNodeProperties(selectedNode);
+		nodeData.refreshNodeProperties(ZKPaths.makePath(versionMB.getSelectedVersion(), selectedNode));
 	}
 
 	/**
@@ -206,17 +208,19 @@ public class PropertyGroupManagedBean implements Serializable, IObserver {
 		Properties properties = new Properties();
 		properties.load(reader);
 		if (!properties.isEmpty()) {
-			String groupPath = ZKPaths.makePath(nodeAuth.getAuthedNode(), group);
+			String authedNode = ZKPaths.makePath(nodeAuth.getAuthedNode(), versionMB.getSelectedVersion());
+			String groupPath = ZKPaths.makePath(authedNode, group);
 			boolean created = nodeService.createProperty(groupPath, null);
 			if (created) {
 				Map<String, String> map = Maps.fromProperties(properties);
 				for (Entry<String, String> entry : map.entrySet()) {
 					nodeService.createProperty(ZKPaths.makePath(groupPath, entry.getKey()), entry.getValue());
 				}
-				refreshGroups();
+				refreshGroup();
 				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Succesful", fileName + " is uploaded."));
 			} else {
-				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Create group with file error.", fileName));
+				FacesContext.getCurrentInstance().addMessage(null,
+						new FacesMessage(FacesMessage.SEVERITY_ERROR, "Create group with file error.", fileName));
 			}
 		} else {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "File is empty.", fileName));
@@ -254,15 +258,25 @@ public class PropertyGroupManagedBean implements Serializable, IObserver {
 	}
 
 	@Override
-	public void notifiy(String rootNode, String value) {
+	public void notified(String key, String value) {
+		refreshGroup();
+	}
+
+	public void refreshGroup() {
+		String rootNode = nodeAuth.getAuthedNode();
+		String version = versionMB.getSelectedVersion();
 		if (LOGGER.isInfoEnabled()) {
-			LOGGER.info("Initialize menu for authed node: {}", rootNode);
+			LOGGER.info("Initialize menu for authed node: {} in version {}", rootNode, version);
 		}
 
-		if (!Strings.isNullOrEmpty(rootNode)) {
-			propertyGroups = nodeService.listChildren(rootNode);
+		if (!Strings.isNullOrEmpty(rootNode) && !Strings.isNullOrEmpty(version)) {
+			propertyGroups = nodeService.listChildren(ZKPaths.makePath(rootNode, version));
+		} else {
+			propertyGroups = null;
 		}
-		
+
 		selectedGroup = null;
+		
+		nodeData.refreshNodeProperties(null);
 	}
 }

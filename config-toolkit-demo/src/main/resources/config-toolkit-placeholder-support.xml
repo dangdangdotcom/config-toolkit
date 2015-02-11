@@ -20,7 +20,7 @@
 <!-- 	</bean> -->
 
 	<!-- New version -->
-	<bean id="configFactory" class="com.dangdang.config.service.easyzk.ConfigFactory" destroy-method="close">
+	<bean id="configFactory" class="com.dangdang.config.service.easyzk.ConfigFactory">
 		<constructor-arg name="connectStr" value="zoo.host1:8181" />
 		<constructor-arg name="rootNode" value="/projectx/modulex" />
 	</bean>

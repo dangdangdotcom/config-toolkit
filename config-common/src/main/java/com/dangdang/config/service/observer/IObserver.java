@@ -29,6 +29,6 @@ public interface IObserver {
 	 * 
 	 * @param data
 	 */
-	void notifiy(String data, String value);
+	void notified(String data, String value);
 
 }

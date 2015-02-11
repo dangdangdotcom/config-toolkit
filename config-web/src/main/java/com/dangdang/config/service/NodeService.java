@@ -16,6 +16,7 @@
 package com.dangdang.config.service;
 
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +51,11 @@ public class NodeService implements INodeService, Serializable {
 
 	@Override
 	public List<String> listChildren(String node) {
-		return nodeDao.listChildren(node);
+		List<String> children = nodeDao.listChildren(node);
+		if (children != null) {
+			Collections.sort(children);
+		}
+		return children;
 	}
 
 	@Override

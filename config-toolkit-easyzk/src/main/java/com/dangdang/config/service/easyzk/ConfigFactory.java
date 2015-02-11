@@ -15,12 +15,8 @@
  */
 package com.dangdang.config.service.easyzk;
 
-import java.io.Closeable;
-import java.io.IOException;
 import java.util.Set;
 
-import org.apache.curator.framework.CuratorFramework;
-import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,13 +30,11 @@ import com.google.common.base.Preconditions;
  * @author <a href="mailto:wangyuxuan@dangdang.com">Yuxuan Wang</a>
  *
  */
-public final class ConfigFactory implements Closeable {
+public final class ConfigFactory {
 
 	private ConfigProfile configProfile;
 
 	private ConfigLocalCache configLocalCache;
-
-	private CuratorFramework client;
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ConfigFactory.class);
 
@@ -52,14 +46,16 @@ public final class ConfigFactory implements Closeable {
 		this(new ConfigProfile(connectStr, rootNode, openLocalCache));
 	}
 
+	public ConfigFactory(String connectStr, String rootNode, String version) {
+		this(new ConfigProfile(connectStr, rootNode, version));
+	}
+
 	public ConfigFactory(ConfigProfile configProfile) {
 		super();
 		this.configProfile = Preconditions.checkNotNull(configProfile);
 		if (configProfile.isOpenLocalCache()) {
-			this.configLocalCache = new ConfigLocalCache(configProfile.getRootNode());
+			this.configLocalCache = new ConfigLocalCache(configProfile.getLocalCacheFolder(), configProfile.getVersionedRootNode());
 		}
-		client = CuratorFrameworkFactory.newClient(configProfile.getConnectStr(), configProfile.getRetryPolicy());
-		client.start();
 	}
 
 	/**
@@ -86,8 +82,9 @@ public final class ConfigFactory implements Closeable {
 	 */
 	public ConfigNode getConfigNode(String node, KeyLoadingMode keyLoadingMode, Set<String> keysSpecified) {
 		LOGGER.debug("Get node[{}] with mode[{}] and keys[{}]", node, keyLoadingMode, keysSpecified);
+		LOGGER.debug("Config Profie: {}", configProfile);
 
-		final ConfigNode configNode = new OverridedConfigNode(configProfile, client, node);
+		final ConfigNode configNode = new OverridedConfigNode(configProfile, node);
 
 		// Load configurations in remote zookeeper.
 		configNode.defineKeyLoadingPattern(keyLoadingMode, keysSpecified);
@@ -96,16 +93,6 @@ public final class ConfigFactory implements Closeable {
 
 		configNode.initConfigNode();
 		return configNode;
-	}
-	
-	/* (non-Javadoc)
-	 * @see java.io.Closeable#close()
-	 */
-	@Override
-	public void close() throws IOException {
-		if (client != null) {
-			client.close();
-		}
 	}
 
 }

@@ -16,6 +16,8 @@
 package com.dangdang.config.service.zkdao;
 
 import org.apache.zookeeper.data.Stat;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Charsets;
 import com.google.common.base.Objects;
@@ -33,8 +35,11 @@ public class PropertyDao extends BaseDao implements IPropertyDao {
 	 */
 	private static final long serialVersionUID = 1L;
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(PropertyDao.class);
+
 	@Override
 	public boolean createProperty(String nodeName, String value) {
+		LOGGER.debug("Create property : [{}] = [{}]", nodeName, value);
 		boolean suc = false;
 		try {
 			Stat stat = getClient().checkExists().forPath(nodeName);
@@ -55,6 +60,7 @@ public class PropertyDao extends BaseDao implements IPropertyDao {
 
 	@Override
 	public boolean updateProperty(String nodeName, String value) {
+		LOGGER.debug("Update property: [{}] = [{}]", nodeName, value);
 		boolean suc = false;
 		try {
 			Stat stat = getClient().checkExists().forPath(nodeName);
@@ -70,6 +76,7 @@ public class PropertyDao extends BaseDao implements IPropertyDao {
 
 	@Override
 	public void deleteProperty(String nodeName) {
+		LOGGER.debug("Delete property: [{}]", nodeName);
 		try {
 			getClient().delete().deletingChildrenIfNeeded().forPath(nodeName);
 		} catch (Exception e) {

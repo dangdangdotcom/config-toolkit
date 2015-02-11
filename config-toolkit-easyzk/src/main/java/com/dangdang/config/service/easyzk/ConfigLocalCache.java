@@ -24,6 +24,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 
+import org.apache.curator.utils.ZKPaths;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,16 +41,9 @@ public class ConfigLocalCache {
 
 	private String localCachePath;
 
-	/**
-	 * 约定大于配置
-	 */
-	public ConfigLocalCache() {
-		this("/config-service");
-	}
-
-	public ConfigLocalCache(String localCachePath) {
+	public ConfigLocalCache(String localCacheFolder, String rootNode) {
 		super();
-		this.localCachePath = localCachePath;
+		this.localCachePath = ZKPaths.makePath(localCacheFolder, rootNode);
 	}
 
 	private static final String SUFFIX = ".cache";

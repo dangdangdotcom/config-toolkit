@@ -51,7 +51,7 @@ public class NodeAuthManagedBean extends AbstractSubject implements Serializable
 	private String authedNode;
 
 	@ManagedProperty(value = "#{authService}")
-	private IAuthService authService;
+	private transient IAuthService authService;
 
 	@ManagedProperty(value = "#{rootNodeRecorder}")
 	private IRootNodeRecorder rootNodeRecorder;

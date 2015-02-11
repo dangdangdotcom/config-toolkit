@@ -20,6 +20,8 @@ import java.util.List;
 import org.apache.curator.framework.api.GetChildrenBuilder;
 import org.apache.curator.framework.api.GetDataBuilder;
 import org.apache.curator.utils.ZKPaths;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.dangdang.config.service.entity.PropertyItem;
 import com.google.common.base.Charsets;
@@ -36,9 +38,12 @@ public class NodeDao extends BaseDao implements INodeDao {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(NodeDao.class);
 
 	@Override
 	public List<PropertyItem> findProperties(String node) {
+		LOGGER.debug("Find properties in node: [{}]", node);
 		List<PropertyItem> properties = Lists.newArrayList();
 		try {
 			GetChildrenBuilder childrenBuilder = getClient().getChildren();
@@ -60,6 +65,7 @@ public class NodeDao extends BaseDao implements INodeDao {
 
 	@Override
 	public List<String> listChildren(String node) {
+		LOGGER.debug("Find children of node: [{}]", node);
 		List<String> children = Lists.newArrayList();
 		try {
 			GetChildrenBuilder childrenBuilder = getClient().getChildren();

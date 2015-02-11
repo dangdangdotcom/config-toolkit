@@ -45,7 +45,7 @@ public abstract class AbstractSubject implements ISubject {
 				
 				@Override
 				public void run() {
-					watcher.notifiy(key, value);
+					watcher.notified(key, value);
 				}
 			}).start();
 		}

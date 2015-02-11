@@ -40,6 +40,7 @@ public class AuthDao extends BaseDao implements IAuthDao {
 
 	@Override
 	public boolean checkAuth(String nodeName, String password) {
+		LOGGER.debug("Check auth: [{}]", nodeName);
 		String hash = sha1Digest(password);
 		boolean isPass = false;
 		try {

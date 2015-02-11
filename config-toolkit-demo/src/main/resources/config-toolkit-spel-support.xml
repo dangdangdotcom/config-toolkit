@@ -10,19 +10,15 @@
 	<context:component-scan base-package="com.dangdang.config.service.easyzk.demo" />
 
 	<!-- Old version -->
-<!-- 	<util:properties id="propertyGroup1" location="classpath:property-group1.properties" /> -->
+	<!-- <util:properties id="propertyGroup1" location="classpath:property-group1.properties" /> -->
 
 	<!-- New version -->
-	<bean id="configFactory" class="com.dangdang.config.service.easyzk.ConfigFactory" destroy-method="close">
+	<bean id="configFactory" class="com.dangdang.config.service.easyzk.ConfigFactory">
 		<constructor-arg name="connectStr" value="zoo.host1:8181" />
 		<constructor-arg name="rootNode" value="/projectx/modulex" />
 	</bean>
 
-	<bean name="propertyGroup1" class="com.dangdang.config.service.easyzk.support.spring.ConfigNodeIndexer">
-		<constructor-arg name="configNode">
-			<bean class="com.dangdang.config.service.easyzk.ConfigNode" factory-bean="configFactory" factory-method="getConfigNode">
-				<constructor-arg name="node" value="property-group1" />
-			</bean>
-		</constructor-arg>
+	<bean id="propertyGroup1" class="com.dangdang.config.service.easyzk.ConfigNode" factory-bean="configFactory" factory-method="getConfigNode">
+		<constructor-arg name="node" value="property-group1" />
 	</bean>
 </beans>

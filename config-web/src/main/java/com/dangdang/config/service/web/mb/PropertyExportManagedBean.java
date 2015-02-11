@@ -50,7 +50,7 @@ import com.google.common.base.Strings;
 public class PropertyExportManagedBean {
 
 	@ManagedProperty(value = "#{nodeService}")
-	private INodeService nodeService;
+	private transient INodeService nodeService;
 
 	public void setNodeService(INodeService nodeService) {
 		this.nodeService = nodeService;
@@ -62,6 +62,13 @@ public class PropertyExportManagedBean {
 	public void setNodeAuth(NodeAuthManagedBean nodeAuth) {
 		this.nodeAuth = nodeAuth;
 	}
+	
+	@ManagedProperty(value = "#{versionMB}")
+	private VersionManagedBean versionMB;
+
+	public void setVersionMB(VersionManagedBean versionMB) {
+		this.versionMB = versionMB;
+	}
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(PropertyExportManagedBean.class);
 
@@ -70,7 +77,8 @@ public class PropertyExportManagedBean {
 
 		StreamedContent file = null;
 		if (!Strings.isNullOrEmpty(groupName)) {
-			String groupPath = ZKPaths.makePath(nodeAuth.getAuthedNode(), groupName);
+			String authedNode = ZKPaths.makePath(nodeAuth.getAuthedNode(), versionMB.getSelectedVersion());
+			String groupPath = ZKPaths.makePath(authedNode, groupName);
 			Properties properties = childrenToProperties(groupPath);
 			if (!properties.isEmpty()) {
 				ByteArrayOutputStream out = null;
@@ -112,7 +120,7 @@ public class PropertyExportManagedBean {
 		LOGGER.info("Export all config group");
 		StreamedContent file = null;
 
-		String authedNode = nodeAuth.getAuthedNode();
+		String authedNode = ZKPaths.makePath(nodeAuth.getAuthedNode(), versionMB.getSelectedVersion());
 		List<String> children = nodeService.listChildren(authedNode);
 		if (children != null && !children.isEmpty()) {
 			try {

@@ -17,6 +17,7 @@ package com.dangdang.config.service.easyzk;
 
 import org.apache.curator.RetryPolicy;
 import org.apache.curator.retry.ExponentialBackoffRetry;
+import org.apache.curator.utils.ZKPaths;
 
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
@@ -40,11 +41,24 @@ public class ConfigProfile {
 	private final String rootNode;
 
 	/**
+	 * 项目配置版本
+	 */
+	private final String version;
+
+	/**
 	 * 重试策略
 	 */
 	private final RetryPolicy retryPolicy;
 
+	/**
+	 * 是否打开本地文件缓存
+	 */
 	private final boolean openLocalCache;
+
+	/**
+	 * 本地缓存文件目录
+	 */
+	private String localCacheFolder = "/config-service";
 
 	/**
 	 * 一致性检查, 主动检查本地数据与zk中心数据的一致性, 防止出现因连接中断而丢失更新消息, 默认开启
@@ -55,15 +69,21 @@ public class ConfigProfile {
 	 * 检查频率, in milliseconds
 	 */
 	private long consistencyCheckRate = 60 * 1000;
-	
+
 	public ConfigProfile(final String connectStr, final String rootNode, final boolean openLocalCache) {
-		this(connectStr, rootNode, openLocalCache, new ExponentialBackoffRetry(100, 2));
+		this(connectStr, rootNode, null, openLocalCache, new ExponentialBackoffRetry(100, 2));
 	}
 
-	public ConfigProfile(final String connectStr, final String rootNode, final boolean openLocalCache, final RetryPolicy retryPolicy) {
+	public ConfigProfile(final String connectStr, final String rootNode, final String version) {
+		this(connectStr, rootNode, version, false, new ExponentialBackoffRetry(100, 2));
+	}
+
+	public ConfigProfile(final String connectStr, final String rootNode, final String version, final boolean openLocalCache,
+			final RetryPolicy retryPolicy) {
 		super();
 		this.connectStr = Preconditions.checkNotNull(connectStr);
 		this.rootNode = Preconditions.checkNotNull(rootNode);
+		this.version = Objects.firstNonNull(version, "default");
 		this.openLocalCache = openLocalCache;
 		this.retryPolicy = Preconditions.checkNotNull(retryPolicy);
 	}
@@ -100,10 +120,27 @@ public class ConfigProfile {
 		return openLocalCache;
 	}
 
+	public final String getLocalCacheFolder() {
+		return localCacheFolder;
+	}
+
+	public final void setLocalCacheFolder(String localCacheFolder) {
+		this.localCacheFolder = localCacheFolder;
+	}
+
+	public final String getVersion() {
+		return version;
+	}
+
+	public String getVersionedRootNode() {
+		return ZKPaths.makePath(rootNode, version);
+	}
+
 	@Override
 	public String toString() {
-		return Objects.toStringHelper(this).add("connectStr", connectStr).add("rootNode", rootNode).add("retryPolicy", retryPolicy)
-				.add("consistencyCheck", consistencyCheck).add("consistencyCheckRate", consistencyCheckRate).add("openLocalCache", openLocalCache)
-				.toString();
+		return "ConfigProfile [connectStr=" + connectStr + ", rootNode=" + rootNode + ", version=" + version + ", retryPolicy=" + retryPolicy
+				+ ", openLocalCache=" + openLocalCache + ", localCacheFolder=" + localCacheFolder + ", consistencyCheck=" + consistencyCheck
+				+ ", consistencyCheckRate=" + consistencyCheckRate + "]";
 	}
+
 }

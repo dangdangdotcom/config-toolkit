@@ -15,6 +15,7 @@
  */
 package com.dangdang.config.service.easyzk;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -26,6 +27,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import javax.annotation.PreDestroy;
 
 import org.apache.curator.framework.CuratorFramework;
+import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.apache.curator.framework.api.CuratorListener;
 import org.apache.curator.framework.api.GetChildrenBuilder;
 import org.apache.curator.framework.api.GetDataBuilder;
@@ -33,7 +35,8 @@ import org.apache.curator.utils.ZKPaths;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.dangdang.config.service.observer.AbstractSubject;
+import com.dangdang.config.service.observer.IObserver;
+import com.dangdang.config.service.observer.ISubject;
 import com.google.common.base.Charsets;
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
@@ -43,12 +46,14 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
 /**
- * 节点
+ * 配置组节点
  * 
  * @author <a href="mailto:wangyuxuan@dangdang.com">Yuxuan Wang</a>
  *
  */
-public class ConfigNode extends AbstractSubject {
+public class ConfigNode extends HashMap<String, String> implements ISubject {
+
+	private static final long serialVersionUID = 1L;
 
 	private ConfigProfile configProfile;
 
@@ -72,17 +77,11 @@ public class ConfigNode extends AbstractSubject {
 		this.configLocalCache = configLocalCache;
 	}
 
-	/**
-	 * 节点的下属性映射
-	 */
-	private final Map<String, String> properties = Maps.newConcurrentMap();
-
 	static final Logger LOGGER = LoggerFactory.getLogger(ConfigNode.class);
 
-	protected ConfigNode(ConfigProfile configProfile, CuratorFramework client, String node) {
+	protected ConfigNode(ConfigProfile configProfile, String node) {
 		super();
 		this.configProfile = configProfile;
-		this.client = client;
 		this.node = node;
 	}
 
@@ -99,6 +98,8 @@ public class ConfigNode extends AbstractSubject {
 	 * 初始化节点
 	 */
 	protected void initConfigNode() {
+		client = CuratorFrameworkFactory.newClient(configProfile.getConnectStr(), configProfile.getRetryPolicy());
+		client.start();
 		client.getCuratorListenable().addListener(listener);
 
 		loadNode();
@@ -118,7 +119,7 @@ public class ConfigNode extends AbstractSubject {
 					LOGGER.debug("Do consistency check for node: {}", node);
 					consistencyCheck();
 				}
-			}, 0L, configProfile.getConsistencyCheckRate());
+			}, 60000L, configProfile.getConsistencyCheckRate());
 		}
 	}
 
@@ -128,7 +129,7 @@ public class ConfigNode extends AbstractSubject {
 	 * 加载节点并监听节点变化
 	 */
 	void loadNode() {
-		final String nodePath = ZKPaths.makePath(configProfile.getRootNode(), node);
+		final String nodePath = ZKPaths.makePath(configProfile.getVersionedRootNode(), node);
 		LOGGER.debug("Loading properties for node: {}, with loading mode: {} and keys specified: {}", nodePath, keyLoadingMode, keysSpecified);
 
 		GetChildrenBuilder childrenBuilder = client.getChildren();
@@ -138,7 +139,7 @@ public class ConfigNode extends AbstractSubject {
 			if (children != null) {
 				lock.writeLock().lock();
 				try {
-					properties.clear();
+					this.clear();
 					for (String child : children) {
 						loadKey(ZKPaths.makePath(nodePath, child));
 					}
@@ -155,16 +156,16 @@ public class ConfigNode extends AbstractSubject {
 	 * 一致性检查
 	 */
 	void consistencyCheck() {
-		final String nodePath = ZKPaths.makePath(configProfile.getRootNode(), node);
+		final String nodePath = ZKPaths.makePath(configProfile.getVersionedRootNode(), node);
 		GetChildrenBuilder childrenBuilder = client.getChildren();
 		try {
 			List<String> children = childrenBuilder.watched().forPath(nodePath);
 			if (children != null) {
-				List<String> redundances = Lists.newArrayList(properties.keySet());
+				List<String> redundances = Lists.newArrayList(this.keySet());
 				redundances.removeAll(children);
 				if (!redundances.isEmpty()) {
 					for (String redundance : redundances) {
-						properties.remove(redundance);
+						this.remove(redundance);
 					}
 				}
 				// 由于一致性检查可能比较频繁,所以做与loadNode()的隔离即可,所以使用读锁
@@ -211,11 +212,11 @@ public class ConfigNode extends AbstractSubject {
 		GetDataBuilder data = client.getData();
 		String childValue = new String(data.watched().forPath(nodePath), Charsets.UTF_8);
 
-		if (Objects.equal(childValue, properties.get(nodeName))) {
+		if (Objects.equal(childValue, this.get(nodeName))) {
 			LOGGER.trace("Key data not change, ignore: key[{}]", nodeName);
 		} else {
 			LOGGER.debug("Loading data: key[{}] - value[{}]", nodeName, childValue);
-			properties.put(nodeName, childValue);
+			this.put(nodeName, childValue);
 
 			// 通知注册者
 			notify(nodeName, childValue);
@@ -231,7 +232,7 @@ public class ConfigNode extends AbstractSubject {
 	public String getProperty(String key) {
 		lock.readLock().lock();
 		try {
-			return properties.get(key);
+			return this.get(key);
 		} finally {
 			lock.readLock().unlock();
 		}
@@ -251,7 +252,7 @@ public class ConfigNode extends AbstractSubject {
 	 * @return
 	 */
 	public Map<String, String> exportProperties() {
-		return Maps.newHashMap(properties);
+		return Maps.newHashMap(this);
 	}
 
 	/**
@@ -276,17 +277,38 @@ public class ConfigNode extends AbstractSubject {
 	}
 
 	@PreDestroy
-	private void destroy() {
+	public void destroy() {
 		if (timer != null) {
 			timer.cancel();
 		}
-		client.getCuratorListenable().removeListener(listener);
+		if (client != null) {
+			client.getCuratorListenable().removeListener(listener);
+			client.close();
+		}
+
+	}
+
+	/**
+	 * 观察者列表
+	 */
+	private final List<IObserver> watchers = Lists.newArrayList();
+
+	@Override
+	public void register(final IObserver watcher) {
+		watchers.add(Preconditions.checkNotNull(watcher));
 	}
 
 	@Override
-	public String toString() {
-		return Objects.toStringHelper(this).add("configProfile", configProfile).add("node", node).add("keyLoadingMode", keyLoadingMode)
-				.add("keysSpecified", keysSpecified).add("properties", properties).toString();
+	public void notify(final String key, final String value) {
+		for (final IObserver watcher : watchers) {
+			new Thread(new Runnable() {
+
+				@Override
+				public void run() {
+					watcher.notified(key, value);
+				}
+			}).start();
+		}
 	}
 
 }

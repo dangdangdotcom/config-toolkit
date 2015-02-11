@@ -8,7 +8,7 @@
              http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
 
 	<!-- Config Factory -->
-	<bean id="configFactory" class="com.dangdang.config.service.easyzk.ConfigFactory" destroy-method="close">
+	<bean id="configFactory" class="com.dangdang.config.service.easyzk.ConfigFactory">
 		<!-- Your zookeeper nodes -->
 		<constructor-arg name="connectStr" value="zoo.host1:8181" />
 		<!-- Your module node in zookeeper -->
@@ -18,6 +18,9 @@
 	<!-- Config Node -->
 	<bean id="someGroup" class="com.dangdang.config.service.easyzk.ConfigNode" factory-bean="configFactory" factory-method="getConfigNode">
 		<constructor-arg name="node" value="property-group1" />
+	</bean>
+	<bean id="someGroup2" class="com.dangdang.config.service.easyzk.ConfigNode" factory-bean="configFactory" factory-method="getConfigNode">
+		<constructor-arg name="node" value="property-group2" />
 	</bean>
 	
 	<!-- Service bean -->
