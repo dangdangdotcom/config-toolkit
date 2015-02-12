@@ -217,7 +217,9 @@ public class PropertyGroupManagedBean implements Serializable, IObserver {
 			if (created) {
 				for (PropertyItemVO item : items) {
 					nodeService.createProperty(ZKPaths.makePath(groupFullPath, item.getName()), item.getValue());
-					nodeService.createProperty(ZKPaths.makePath(commentFullPath, item.getName()), item.getComment());
+					if (!Strings.isNullOrEmpty(item.getComment())) {
+						nodeService.createProperty(ZKPaths.makePath(commentFullPath, item.getName()), item.getComment());
+					}
 				}
 				refreshGroup();
 				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Succesful", fileName + " is uploaded."));

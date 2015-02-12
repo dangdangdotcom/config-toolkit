@@ -55,7 +55,7 @@
 			<p:inputText id="createVersion" binding="#{versionMB.versionToBeCreatedInput}" required="true" validatorMessage="版本号只允许使用数字,字母,下划线和点">
 				<f:validateRegex pattern="^[\w\.]+" />
 			</p:inputText>
-			<p:commandButton actionListener="#{versionMB.createVersion}" icon="ui-icon-check" update="@(form)" oncomplete="PF('createVersion').hide()"
+			<p:commandButton actionListener="#{versionMB.createVersion}" icon="ui-icon-check" update="@(form)" oncomplete="#{propertyGroupMB.refreshGroup()};PF('createVersion').hide()"
 				style="margin-left:10px;" />
 		</h:form>
 	</p:dialog>
