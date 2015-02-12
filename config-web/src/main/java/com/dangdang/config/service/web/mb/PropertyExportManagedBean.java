@@ -20,7 +20,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
-import java.util.Properties;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -28,16 +27,19 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.curator.utils.ZKPaths;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.dangdang.config.business.INodeBusiness;
 import com.dangdang.config.service.INodeService;
-import com.dangdang.config.service.entity.PropertyItem;
+import com.dangdang.config.service.entity.PropertyItemVO;
 import com.google.common.base.Charsets;
 import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
 
 /**
  * Properties export
@@ -56,13 +58,20 @@ public class PropertyExportManagedBean {
 		this.nodeService = nodeService;
 	}
 
+	@ManagedProperty(value = "#{nodeBusiness}")
+	private INodeBusiness nodeBusiness;
+
+	public void setNodeBusiness(INodeBusiness nodeBusiness) {
+		this.nodeBusiness = nodeBusiness;
+	}
+
 	@ManagedProperty(value = "#{nodeAuthMB}")
 	private NodeAuthManagedBean nodeAuth;
 
 	public void setNodeAuth(NodeAuthManagedBean nodeAuth) {
 		this.nodeAuth = nodeAuth;
 	}
-	
+
 	@ManagedProperty(value = "#{versionMB}")
 	private VersionManagedBean versionMB;
 
@@ -72,22 +81,28 @@ public class PropertyExportManagedBean {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(PropertyExportManagedBean.class);
 
+	/**
+	 * 下载单个配置组，格式为properties文件
+	 * 
+	 * @param groupName
+	 * @return
+	 */
 	public StreamedContent generateFile(String groupName) {
 		LOGGER.info("Export config group: {}", groupName);
 
 		StreamedContent file = null;
 		if (!Strings.isNullOrEmpty(groupName)) {
-			String authedNode = ZKPaths.makePath(nodeAuth.getAuthedNode(), versionMB.getSelectedVersion());
-			String groupPath = ZKPaths.makePath(authedNode, groupName);
-			Properties properties = childrenToProperties(groupPath);
-			if (!properties.isEmpty()) {
+			List<PropertyItemVO> items = nodeBusiness.findPropertyItems(nodeAuth.getAuthedNode(), versionMB.getSelectedVersion(), groupName);
+
+			if (!items.isEmpty()) {
 				ByteArrayOutputStream out = null;
 				try {
 					out = new ByteArrayOutputStream();
-					properties.store(out, String.format("Export from zookeeper configuration group: [%s].", groupName));
+					List<String> lines = formatPropertyLines(groupName, items);
+					IOUtils.writeLines(lines, "\r\n", out, Charsets.UTF_8.displayName());
 					InputStream in = new ByteArrayInputStream(out.toByteArray());
 
-					String fileName = ZKPaths.getNodeFromPath(groupPath) + ".properties";
+					String fileName = groupName + ".properties";
 					file = new DefaultStreamedContent(in, "text/plain", fileName, Charsets.UTF_8.name());
 				} catch (IOException e) {
 					LOGGER.error(e.getMessage(), e);
@@ -105,17 +120,24 @@ public class PropertyExportManagedBean {
 		return file;
 	}
 
-	private Properties childrenToProperties(String path) {
-		Properties properties = new Properties();
-		List<PropertyItem> propertyItems = nodeService.findProperties(path);
-		if (propertyItems != null && !propertyItems.isEmpty()) {
-			for (PropertyItem propertyItem : propertyItems) {
-				properties.put(propertyItem.getName(), propertyItem.getValue());
+	private List<String> formatPropertyLines(String groupName, List<PropertyItemVO> items) {
+		List<String> lines = Lists.newArrayList();
+		lines.add(String.format("# Export from zookeeper configuration group: [%s] - [%s] - [%s].", nodeAuth.getAuthedNode(),
+				versionMB.getSelectedVersion(), groupName));
+		for (PropertyItemVO item : items) {
+			if (!Strings.isNullOrEmpty(item.getComment())) {
+				lines.add("# " + item.getComment());
 			}
+			lines.add(item.getName() + "=" + item.getValue());
 		}
-		return properties;
+		return lines;
 	}
 
+	/**
+	 * 下载所有配置组，格式为ZIP
+	 * 
+	 * @return
+	 */
 	public StreamedContent generateFileAll() {
 		LOGGER.info("Export all config group");
 		StreamedContent file = null;
@@ -126,15 +148,16 @@ public class PropertyExportManagedBean {
 			try {
 				ByteArrayOutputStream out = new ByteArrayOutputStream();
 				ZipOutputStream zipOutputStream = new ZipOutputStream(out);
-				for (String child : children) {
-					String groupPath = ZKPaths.makePath(authedNode, child);
+				for (String groupName : children) {
+					String groupPath = ZKPaths.makePath(authedNode, groupName);
 					String fileName = ZKPaths.getNodeFromPath(groupPath) + ".properties";
 
-					Properties properties = childrenToProperties(groupPath);
-					if (!properties.isEmpty()) {
+					List<PropertyItemVO> items = nodeBusiness.findPropertyItems(nodeAuth.getAuthedNode(), versionMB.getSelectedVersion(), groupName);
+					List<String> lines = formatPropertyLines(groupName, items);
+					if (!lines.isEmpty()) {
 						ZipEntry zipEntry = new ZipEntry(fileName);
 						zipOutputStream.putNextEntry(zipEntry);
-						properties.store(zipOutputStream, String.format("Export from zookeeper configuration group: [%s].", groupPath));
+						IOUtils.writeLines(lines, "\r\n", zipOutputStream, Charsets.UTF_8.displayName());
 						zipOutputStream.closeEntry();
 					}
 				}

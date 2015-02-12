@@ -17,13 +17,8 @@ package com.dangdang.config.service.web.mb;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
 import java.io.Serializable;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Properties;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -34,18 +29,23 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.curator.utils.ZKPaths;
 import org.primefaces.component.inputtext.InputText;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.SelectEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.StringUtils;
 
 import com.dangdang.config.service.INodeService;
+import com.dangdang.config.service.entity.PropertyItemVO;
 import com.dangdang.config.service.observer.IObserver;
 import com.google.common.base.Charsets;
+import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
-import com.google.common.collect.Maps;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import com.google.common.io.Files;
 
 /**
@@ -157,8 +157,12 @@ public class PropertyGroupManagedBean implements Serializable, IObserver {
 			LOGGER.info("Delete node [{}] for property group.", propertyGroup);
 		}
 
-		String authedNode = ZKPaths.makePath(nodeAuth.getAuthedNode(), versionMB.getSelectedVersion());
-		nodeService.deleteProperty(ZKPaths.makePath(authedNode, propertyGroup));
+		String versionedRoot = ZKPaths.makePath(nodeAuth.getAuthedNode(), versionMB.getSelectedVersion());
+		String versionedRootComment = ZKPaths.makePath(nodeAuth.getAuthedNode(), versionMB.getSelectedVersion() + "$");
+
+		nodeService.deleteProperty(ZKPaths.makePath(versionedRoot, propertyGroup));
+		nodeService.deleteProperty(ZKPaths.makePath(versionedRootComment, propertyGroup));
+
 		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Property group deleted.", propertyGroup));
 		refreshGroup();
 	}
@@ -204,17 +208,16 @@ public class PropertyGroupManagedBean implements Serializable, IObserver {
 	}
 
 	private void savePropertyGroup(String fileName, String group, InputStream inputstream) throws IOException {
-		Reader reader = new InputStreamReader(inputstream, Charsets.UTF_8);
-		Properties properties = new Properties();
-		properties.load(reader);
-		if (!properties.isEmpty()) {
-			String authedNode = ZKPaths.makePath(nodeAuth.getAuthedNode(), versionMB.getSelectedVersion());
-			String groupPath = ZKPaths.makePath(authedNode, group);
-			boolean created = nodeService.createProperty(groupPath, null);
+		List<PropertyItemVO> items = parseInputFile(inputstream);
+		if (!items.isEmpty()) {
+			String groupFullPath = ZKPaths.makePath(ZKPaths.makePath(nodeAuth.getAuthedNode(), versionMB.getSelectedVersion()), group);
+			String commentFullPath = ZKPaths.makePath(ZKPaths.makePath(nodeAuth.getAuthedNode(), versionMB.getSelectedVersion() + "$"), group);
+
+			boolean created = nodeService.createProperty(groupFullPath, null);
 			if (created) {
-				Map<String, String> map = Maps.fromProperties(properties);
-				for (Entry<String, String> entry : map.entrySet()) {
-					nodeService.createProperty(ZKPaths.makePath(groupPath, entry.getKey()), entry.getValue());
+				for (PropertyItemVO item : items) {
+					nodeService.createProperty(ZKPaths.makePath(groupFullPath, item.getName()), item.getValue());
+					nodeService.createProperty(ZKPaths.makePath(commentFullPath, item.getName()), item.getComment());
 				}
 				refreshGroup();
 				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Succesful", fileName + " is uploaded."));
@@ -225,6 +228,35 @@ public class PropertyGroupManagedBean implements Serializable, IObserver {
 		} else {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "File is empty.", fileName));
 		}
+	}
+
+	private Splitter PROPERTY_SPLITTER = Splitter.on('=').limit(2);
+
+	/**
+	 * @param inputstream
+	 * @return
+	 * @throws IOException
+	 */
+	private List<PropertyItemVO> parseInputFile(InputStream inputstream) throws IOException {
+		List<String> lines = IOUtils.readLines(inputstream, Charsets.UTF_8.name());
+		List<PropertyItemVO> items = Lists.newArrayList();
+		String previousLine = null;
+		for (int i = 1; i < lines.size(); i++) {
+			String line = lines.get(i);
+			if (!line.startsWith("#")) {
+				Iterable<String> parts = PROPERTY_SPLITTER.split(line);
+				if (Iterables.size(parts) == 2) {
+					PropertyItemVO item = new PropertyItemVO(Iterables.getFirst(parts, null), Iterables.getLast(parts));
+					if (previousLine != null && previousLine.startsWith("#")) {
+						item.setComment(StringUtils.trimLeadingCharacter(previousLine, '#').trim());
+					}
+					items.add(item);
+				}
+			}
+
+			previousLine = line;
+		}
+		return items;
 	}
 
 	/**
@@ -276,7 +308,7 @@ public class PropertyGroupManagedBean implements Serializable, IObserver {
 		}
 
 		selectedGroup = null;
-		
+
 		nodeData.refreshNodeProperties(null);
 	}
 }

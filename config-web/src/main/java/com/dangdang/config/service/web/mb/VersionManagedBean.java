@@ -97,37 +97,32 @@ public class VersionManagedBean implements IObserver, Serializable {
 			if (LOGGER.isInfoEnabled()) {
 				LOGGER.info("Clone version [{}] from version [{}].", versionToClone, selectedVersion);
 			}
-
-			String sourceVersionPath = ZKPaths.makePath(nodeAuth.getAuthedNode(), selectedVersion);
-			String destinationVersionPath = ZKPaths.makePath(nodeAuth.getAuthedNode(), versionToClone);
-			boolean suc = nodeService.createProperty(destinationVersionPath, null);
-			if (!suc) {
-				FacesContext.getCurrentInstance().addMessage(null,
-						new FacesMessage(FacesMessage.SEVERITY_ERROR, "Version clone failed.", versionToClone));
-				return;
-			}
-
-			List<String> sourceGroups = nodeService.listChildren(sourceVersionPath);
-			if (sourceGroups != null) {
-				for (String sourceGroup : sourceGroups) {
-					String sourceGroupFullPath = ZKPaths.makePath(sourceVersionPath, sourceGroup);
-					String destinationGroupFullPath = ZKPaths.makePath(destinationVersionPath, sourceGroup);
-
-					nodeService.createProperty(destinationGroupFullPath, null);
-					List<PropertyItem> sourceProperties = nodeService.findProperties(sourceGroupFullPath);
-					if (sourceProperties != null) {
-						for (PropertyItem sourceProperty : sourceProperties) {
-							nodeService.createProperty(ZKPaths.makePath(destinationGroupFullPath, sourceProperty.getName()),
-									sourceProperty.getValue());
-						}
-					}
-				}
-			}
+			cloneTree(ZKPaths.makePath(nodeAuth.getAuthedNode(), selectedVersion), ZKPaths.makePath(nodeAuth.getAuthedNode(), versionToClone));
+			cloneTree(ZKPaths.makePath(nodeAuth.getAuthedNode(), selectedVersion + "$"),
+					ZKPaths.makePath(nodeAuth.getAuthedNode(), versionToClone + "$"));
 
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Version cloned.", versionToClone));
 			refresh();
 			selectedVersion = versionToClone;
 			versionToCloneInput.setValue("");
+		}
+	}
+
+	private void cloneTree(String sourceVersionPath, String destinationVersionPath) {
+		List<String> sourceGroups = nodeService.listChildren(sourceVersionPath);
+		if (sourceGroups != null) {
+			for (String sourceGroup : sourceGroups) {
+				String sourceGroupFullPath = ZKPaths.makePath(sourceVersionPath, sourceGroup);
+				String destinationGroupFullPath = ZKPaths.makePath(destinationVersionPath, sourceGroup);
+
+				nodeService.createProperty(destinationGroupFullPath, null);
+				List<PropertyItem> sourceProperties = nodeService.findProperties(sourceGroupFullPath);
+				if (sourceProperties != null) {
+					for (PropertyItem sourceProperty : sourceProperties) {
+						nodeService.createProperty(ZKPaths.makePath(destinationGroupFullPath, sourceProperty.getName()), sourceProperty.getValue());
+					}
+				}
+			}
 		}
 	}
 

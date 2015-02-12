@@ -17,7 +17,6 @@ package com.dangdang.config.service.web.mb;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -32,13 +31,11 @@ import org.primefaces.event.RowEditEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.dangdang.config.business.INodeBusiness;
 import com.dangdang.config.service.INodeService;
-import com.dangdang.config.service.entity.PropertyItem;
 import com.dangdang.config.service.entity.PropertyItemVO;
 import com.dangdang.config.service.observer.IObserver;
 import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 
 /**
  * @author <a href="mailto:wangyuxuan@dangdang.com">Yuxuan Wang</a>
@@ -55,6 +52,13 @@ public class NodeDataManagedBean implements Serializable, IObserver {
 
 	public void setNodeService(INodeService nodeService) {
 		this.nodeService = nodeService;
+	}
+
+	@ManagedProperty(value = "#{nodeBusiness}")
+	private INodeBusiness nodeBusiness;
+
+	public void setNodeBusiness(INodeBusiness nodeBusiness) {
+		this.nodeBusiness = nodeBusiness;
 	}
 
 	@ManagedProperty(value = "#{nodeAuthMB}")
@@ -93,31 +97,9 @@ public class NodeDataManagedBean implements Serializable, IObserver {
 	 */
 	public void refreshNodeProperties(String selectedNode) {
 		this.selectedNode = selectedNode;
-		String nodePath = getSelectedNodePath();
-		String commentPath = getSelectedNodeCommentPath();
+		LOGGER.info("Find properties of node: [{}].", selectedNode);
 
-		LOGGER.info("Find properties of node: [{}].", nodePath);
-
-		nodeProps = null;
-		if (!Strings.isNullOrEmpty(nodePath)) {
-			List<PropertyItem> propertyItems = nodeService.findProperties(nodePath);
-			List<PropertyItem> propertyComments = nodeService.findProperties(commentPath);
-			if (propertyItems != null) {
-				Map<String, String> comments = Maps.newHashMap();
-				if (propertyComments != null) {
-					for (PropertyItem comment : propertyComments) {
-						comments.put(comment.getName(), comment.getValue());
-					}
-				}
-
-				nodeProps = Lists.newArrayList();
-				for (PropertyItem propertyItem : propertyItems) {
-					PropertyItemVO vo = new PropertyItemVO(propertyItem);
-					vo.setComment(comments.get(propertyItem.getName()));
-					nodeProps.add(vo);
-				}
-			}
-		}
+		nodeProps = nodeBusiness.findPropertyItems(nodeAuth.getAuthedNode(), versionMB.getSelectedVersion(), selectedNode);
 	}
 
 	/**
@@ -276,7 +258,7 @@ public class NodeDataManagedBean implements Serializable, IObserver {
 			}
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Property created.", propPath));
 			refreshNodeProperties(selectedNode);
-			
+
 			newPropName.setValue(null);
 			newPropValue.setValue(null);
 			newCommentValue.setValue(null);

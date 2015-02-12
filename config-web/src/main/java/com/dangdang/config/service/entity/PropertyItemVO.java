@@ -21,7 +21,7 @@ import java.io.Serializable;
  * @author <a href="mailto:wangyuxuan@dangdang.com">Yuxuan Wang</a>
  *
  */
-public class PropertyItemVO implements Serializable {
+public class PropertyItemVO implements Serializable, Comparable<PropertyItemVO> {
 
 	/**
 	 * 
@@ -35,7 +35,7 @@ public class PropertyItemVO implements Serializable {
 	public PropertyItemVO() {
 		super();
 	}
-	
+
 	public PropertyItemVO(PropertyItem propertyItem) {
 		super();
 		this.name = propertyItem.getName();
@@ -83,7 +83,15 @@ public class PropertyItemVO implements Serializable {
 
 	@Override
 	public String toString() {
-		return "PropertyItem [oriName=" + oriName + ", name=" + name + ", value=" + value + "]";
+		return "PropertyItemVO [oriName=" + oriName + ", name=" + name + ", value=" + value + ", comment=" + comment + "]";
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Comparable#compareTo(java.lang.Object)
+	 */
+	@Override
+	public int compareTo(PropertyItemVO o) {
+		return this.name.compareTo(o.getName());
 	}
 
 }

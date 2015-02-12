@@ -67,6 +67,9 @@ public class PropertyDao extends BaseDao implements IPropertyDao {
 			if (stat != null) {
 				Stat opResult = getClient().setData().forPath(nodeName, value.getBytes(Charsets.UTF_8));
 				suc = opResult != null;
+			} else {
+				String opResult = getClient().create().creatingParentsIfNeeded().forPath(nodeName, value.getBytes(Charsets.UTF_8));
+				suc = Objects.equal(nodeName, opResult);
 			}
 		} catch (Exception e) {
 			throw Throwables.propagate(e);
