@@ -139,7 +139,7 @@ public class ConfigNode extends HashMap<String, String> implements ISubject {
 			if (children != null) {
 				lock.writeLock().lock();
 				try {
-					this.clear();
+					super.clear();
 					for (String child : children) {
 						loadKey(ZKPaths.makePath(nodePath, child));
 					}
@@ -161,11 +161,11 @@ public class ConfigNode extends HashMap<String, String> implements ISubject {
 		try {
 			List<String> children = childrenBuilder.watched().forPath(nodePath);
 			if (children != null) {
-				List<String> redundances = Lists.newArrayList(this.keySet());
+				List<String> redundances = Lists.newArrayList(super.keySet());
 				redundances.removeAll(children);
 				if (!redundances.isEmpty()) {
 					for (String redundance : redundances) {
-						this.remove(redundance);
+						super.remove(redundance);
 					}
 				}
 				// 由于一致性检查可能比较频繁,所以做与loadNode()的隔离即可,所以使用读锁
@@ -212,11 +212,11 @@ public class ConfigNode extends HashMap<String, String> implements ISubject {
 		GetDataBuilder data = client.getData();
 		String childValue = new String(data.watched().forPath(nodePath), Charsets.UTF_8);
 
-		if (Objects.equal(childValue, this.get(nodeName))) {
+		if (Objects.equal(childValue, super.get(nodeName))) {
 			LOGGER.trace("Key data not change, ignore: key[{}]", nodeName);
 		} else {
 			LOGGER.debug("Loading data: key[{}] - value[{}]", nodeName, childValue);
-			this.put(nodeName, childValue);
+			super.put(nodeName, childValue);
 
 			// 通知注册者
 			notify(nodeName, childValue);
@@ -232,7 +232,7 @@ public class ConfigNode extends HashMap<String, String> implements ISubject {
 	public String getProperty(String key) {
 		lock.readLock().lock();
 		try {
-			return this.get(key);
+			return super.get(key);
 		} finally {
 			lock.readLock().unlock();
 		}
@@ -309,6 +309,26 @@ public class ConfigNode extends HashMap<String, String> implements ISubject {
 				}
 			}).start();
 		}
+	}
+
+	@Override
+	public String put(String key, String value) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public void putAll(Map<? extends String, ? extends String> m) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public String remove(Object key) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public void clear() {
+		throw new UnsupportedOperationException();
 	}
 
 }
