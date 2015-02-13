@@ -17,8 +17,13 @@ package com.dangdang.config.service.web.mb;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Properties;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -46,6 +51,7 @@ import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.google.common.io.Files;
 
 /**
@@ -288,6 +294,62 @@ public class PropertyGroupManagedBean implements Serializable, IObserver {
 					// DO NOTHING
 				}
 			}
+		}
+	}
+	
+	/**
+	 * 上传配置(Old)
+	 * 
+	 * @param event
+	 */
+	@Deprecated
+	public void propertyZipUploadOld(FileUploadEvent event) {
+		String fileName = event.getFile().getFileName();
+		LOGGER.info("Deal uploaded file: {}", fileName);
+		ZipInputStream zipInputStream = null;
+		try {
+			zipInputStream = new ZipInputStream(event.getFile().getInputstream());
+			ZipEntry nextEntry = null;
+			while ((nextEntry = zipInputStream.getNextEntry()) != null) {
+				String entryName = nextEntry.getName();
+				savePropertyGroupOld(entryName, Files.getNameWithoutExtension(entryName), zipInputStream);
+			}
+		} catch (IOException e) {
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Upload File error.", fileName));
+			LOGGER.error("Upload File Exception.", e);
+		} finally {
+			if (zipInputStream != null) {
+				try {
+					zipInputStream.close();
+				} catch (IOException e) {
+					// DO NOTHING
+				}
+			}
+		}
+	}
+	
+	@Deprecated
+	private void savePropertyGroupOld(String fileName, String group, InputStream inputstream) throws IOException {
+		Reader reader = new InputStreamReader(inputstream, Charsets.UTF_8);
+		Properties properties = new Properties();
+		properties.load(reader);
+		if (!properties.isEmpty()) {
+			String authedNode = ZKPaths.makePath(nodeAuth.getAuthedNode(), versionMB.getSelectedVersion());
+			String groupPath = ZKPaths.makePath(authedNode, group);
+			boolean created = nodeService.createProperty(groupPath, null);
+			if (created) {
+				Map<String, String> map = Maps.fromProperties(properties);
+				for (Entry<String, String> entry : map.entrySet()) {
+					nodeService.createProperty(ZKPaths.makePath(groupPath, entry.getKey()), entry.getValue());
+				}
+				refreshGroup();
+				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Succesful", fileName + " is uploaded."));
+			} else {
+				FacesContext.getCurrentInstance().addMessage(null,
+						new FacesMessage(FacesMessage.SEVERITY_ERROR, "Create group with file error.", fileName));
+			}
+		} else {
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "File is empty.", fileName));
 		}
 	}
 
