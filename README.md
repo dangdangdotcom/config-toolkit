@@ -18,6 +18,11 @@
 * Spring集成
 * 本地配置覆盖
 * 配置管理web界面
+* 版本控制，支持灰度发布
+* 支持为配置项添加注释
+
+#### RELEASE NOTES
+[https://github.com/dangdangdotcom/config-toolkit/wiki/release-notes](https://github.com/dangdangdotcom/config-toolkit/wiki/release-notes "Release Notes")
 
 #### 词典
 * ConfigFactory - 配置工厂，用于定义zookeeper地址及配置根目录
@@ -29,7 +34,7 @@
     &lt;dependency&gt;
       &lt;groupId&gt;com.dangdang&lt;/groupId&gt;
       &lt;artifactId&gt;config-toolkit-easyzk&lt;/artifactId&gt;
-      &lt;version&gt;1.4.2-RELEASE&lt;/version&gt;
+      &lt;version&gt;2.0.0-RELEASE&lt;/version&gt;
     &lt;/dependency&gt;
 </code></pre>
 - 直接使用
@@ -75,13 +80,9 @@
 </code></pre>
 Config-toolkit支持：
 <pre><code>
-	&lt;bean name="configToolkitCommon" class="com.dangdang.config.service.easyzk.support.spring.ConfigNodeIndexer">
-		&lt;constructor-arg name="configNode"&gt;
-			&lt;bean class="com.dangdang.config.service.easyzk.ConfigNode" 
-				factory-bean="configFactory" factory-method="getConfigNode"&gt;
-				&lt;constructor-arg name="node" value="config-toolkit" /&gt;
-			&lt;/bean&gt;
-		&lt;/constructor-arg&gt;
+	&lt;bean id="configToolkitCommon" class="com.dangdang.config.service.easyzk.ConfigNode" 
+		factory-bean="configFactory" factory-method="getConfigNode"&gt;
+		&lt;constructor-arg name="node" value="config-toolkit" /&gt;
 	&lt;/bean&gt;
 </code></pre>
 
@@ -116,4 +117,4 @@ Config-toolkit支持：
 > 
 > `echo "set /aaa/bbb a9993e364706816aba3e25717850c26c9cd0d89d" |./zkCli.sh -server localhost:2181`
 
-![Config Web Snapshot](http://crnlmchina.github.io/config-web.jpg)
+![Config Web Snapshot](http://crnlmchina.github.io/config-web2.jpg)
