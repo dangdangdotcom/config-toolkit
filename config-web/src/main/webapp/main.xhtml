@@ -64,8 +64,8 @@
 			<p:inputText id="createVersion" binding="#{versionMB.versionToBeCreatedInput}" required="true" validatorMessage="版本号只允许使用数字,字母,下划线和点">
 				<f:validateRegex pattern="^[\w\.]+" />
 			</p:inputText>
-			<p:commandButton actionListener="#{versionMB.createVersion}" icon="ui-icon-check" update="@(form)" oncomplete="#{propertyGroupMB.refreshGroup()};PF('createVersion').hide()"
-				style="margin-left:10px;" />
+			<p:commandButton actionListener="#{versionMB.createVersion}" icon="ui-icon-check" update="@(form)"
+				oncomplete="#{propertyGroupMB.refreshGroup()};PF('createVersion').hide()" style="margin-left:10px;" />
 		</h:form>
 	</p:dialog>
 	<!-- Clone Version -->
@@ -154,14 +154,15 @@
 					validatorMessage="Key must not contains / character">
 					<f:validateRegex pattern="[^/]+" />
 				</p:inputText>
-				
+
 				<h:outputLabel value="Value:" for="newPropValue" style="font-size:smaller; margin: 10px;" />
 				<p:inputText id="newPropValue" required="true" size="12" style="font-size:smaller;" binding="#{nodeDataMB.newPropValue}" />
-				
+
 				<h:outputLabel value="注释:" for="newCommentValue" style="font-size:smaller; margin: 10px;" />
 				<p:inputText id="newCommentValue" required="false" size="20" style="font-size:smaller;" binding="#{nodeDataMB.newCommentValue}" />
-				
-				<p:commandButton id="createProperty" value="创建" partialSubmit="true" disabled="#{empty nodeDataMB.selectedNode}" update="@(form)"
+
+				<p:commandButton id="createProperty" value="创建" partialSubmit="true" disabled="#{empty nodeDataMB.selectedNode}"
+					update=":messageBox:messages,:nodePropData:nodePropTable,:nodePropForm:newPropName,:nodePropForm:newPropValue,:nodePropForm:newCommentValue"
 					actionListener="#{nodeDataMB.createProperty}" style="margin: 10px; font-size:small" />
 			</h:form>
 			<h:form id="nodePropData">
