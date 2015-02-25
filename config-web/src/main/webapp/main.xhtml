@@ -88,8 +88,8 @@
 						<p:outputLabel id="authedNodeView" value="#{nodeAuthMB.authedNode}" style="margin-left:10px;" />
 					</p:toolbarGroup>
 					<p:toolbarGroup align="right" style="vertical-align:middle;">
-						<p:outputLabel for="versionSelector" value="版本:" style="margin-right: 6px;" />
-						<p:selectOneMenu id="versionSelector" value="#{versionMB.selectedVersion}" disabled="#{empty nodeAuthMB.authedNode}" style="font-size:small;">
+						<p:outputLabel for="versionSelector" value="版本:" style="margin-right: 6px;font-size: medium;" />
+						<p:selectOneMenu id="versionSelector" value="#{versionMB.selectedVersion}" disabled="#{empty nodeAuthMB.authedNode}" style="font-size:small;vertical-align:middle;">
 							<p:ajax listener="#{propertyGroupMB.refreshGroup}" event="change" update="@(form)" />
 							<f:selectItem itemLabel="Select Version..." />
 							<f:selectItems value="#{versionMB.versions}" />
