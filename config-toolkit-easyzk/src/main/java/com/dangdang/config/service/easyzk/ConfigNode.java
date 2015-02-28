@@ -48,6 +48,7 @@ import com.google.common.collect.Sets;
 /**
  * 配置组节点
  * 
+ * @threadsafe
  * @author <a href="mailto:wangyuxuan@dangdang.com">Yuxuan Wang</a>
  *
  */

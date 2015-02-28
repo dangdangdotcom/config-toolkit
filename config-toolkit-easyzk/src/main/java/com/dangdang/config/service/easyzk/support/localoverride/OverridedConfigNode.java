@@ -27,6 +27,7 @@ import com.google.common.collect.Maps;
 /**
  * ConfigNode with local configurations overrided
  * 
+ * @threadsafe
  * @author <a href="mailto:wangyuxuan@dangdang.com">Yuxuan Wang</a>
  *
  */
