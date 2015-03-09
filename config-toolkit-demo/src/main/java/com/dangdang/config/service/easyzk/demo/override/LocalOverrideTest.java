@@ -27,7 +27,7 @@ import com.google.common.base.Preconditions;
 public class LocalOverrideTest {
 
 	public static void main(String[] args) {
-		ConfigFactory configFactory = new ConfigFactory("zoo.host1:8181", "/projectx/modulex");
+		ConfigFactory configFactory = new ConfigFactory("zoo.host1:8181", "/projectx/modulex", "1.0.0");
 
 		ConfigNode propertyGroup1 = configFactory.getConfigNode("property-group1");
 		System.out.println(propertyGroup1);
@@ -43,6 +43,7 @@ public class LocalOverrideTest {
 		String stringProperty = propertyGroup1.getProperty("string_property_key");
 		System.out.println(stringProperty);
 		Preconditions.checkState("Welcome here.".equals(stringProperty));
+		Preconditions.checkState("Welcome here.".equals(propertyGroup1.get("string_property_key")));
 		
 		String intProperty = propertyGroup1.getProperty("int_property_key");
 		System.out.println(intProperty);

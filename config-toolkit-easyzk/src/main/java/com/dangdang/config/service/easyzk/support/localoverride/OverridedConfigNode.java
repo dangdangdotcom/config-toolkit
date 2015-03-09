@@ -58,6 +58,11 @@ public class OverridedConfigNode extends ConfigNode {
 	}
 
 	@Override
+	public String get(Object key) {
+		return this.getProperty((String) key);
+	}
+
+	@Override
 	public Map<String, String> exportProperties() {
 		Map<String, String> properties = super.exportProperties();
 		if (localProperties != null) {
