@@ -17,6 +17,7 @@ package com.dangdang.config.service.easyzk.support.spring;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.util.UUID;
 
 import javax.annotation.PreDestroy;
 
@@ -26,13 +27,14 @@ import com.dangdang.config.service.easyzk.ConfigNode;
 
 /**
  * Spring Property Sources support
+ * 
  * @author <a href="mailto:wangyuxuan@dangdang.com">Yuxuan Wang</a>
  *
  */
 public class ZookeeperResource extends PropertySource<ConfigNode> implements Closeable {
-	
+
 	public ZookeeperResource(ConfigNode configNode) {
-		super(configNode.getNode(), configNode);
+		super(configNode.getNode() + "@" + UUID.randomUUID(), configNode);
 	}
 
 	@Override
@@ -40,7 +42,9 @@ public class ZookeeperResource extends PropertySource<ConfigNode> implements Clo
 		return super.getSource().getProperty(name);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.io.Closeable#close()
 	 */
 	@Override
@@ -48,6 +52,5 @@ public class ZookeeperResource extends PropertySource<ConfigNode> implements Clo
 	public void close() throws IOException {
 		super.getSource().destroy();
 	}
-
 
 }
