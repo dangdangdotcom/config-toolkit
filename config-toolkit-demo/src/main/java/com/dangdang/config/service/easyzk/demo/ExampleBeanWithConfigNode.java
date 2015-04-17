@@ -3,7 +3,7 @@
  */
 package com.dangdang.config.service.easyzk.demo;
 
-import java.util.Map;
+import com.dangdang.config.service.easyzk.ConfigNode;
 
 /**
  * @author <a href="mailto:wangyuxuan@dangdang.com">Yuxuan Wang</a>
@@ -11,13 +11,13 @@ import java.util.Map;
  */
 public class ExampleBeanWithConfigNode {
 
-	private Map<String, String> propertyGroup1;
+	private ConfigNode propertyGroup1;
 
 	public void someMethod() {
 		System.out.println(propertyGroup1.get("string_property_key"));
 	}
 
-	public void setPropertyGroup1(Map<String, String> propertyGroup1) {
+	public void setPropertyGroup1(ConfigNode propertyGroup1) {
 		this.propertyGroup1 = propertyGroup1;
 	}
 
