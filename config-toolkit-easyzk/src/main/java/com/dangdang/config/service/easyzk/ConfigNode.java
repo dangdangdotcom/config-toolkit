@@ -117,7 +117,7 @@ public class ConfigNode extends HashMap<String, String> implements ISubject {
 
 				@Override
 				public void run() {
-					LOGGER.debug("Do consistency check for node: {}", node);
+					LOGGER.trace("Do consistency check for node: {}", node);
 					consistencyCheck();
 				}
 			}, 60000L, configProfile.getConsistencyCheckRate());
