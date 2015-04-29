@@ -40,6 +40,8 @@ public abstract class ClasspathFileConfigGroup extends GeneralConfigGroup {
 
 	private WatchService watcher;
 
+	private Path watchedFile;
+
 	static final Logger LOGGER = LoggerFactory.getLogger(ClasspathFileConfigGroup.class);
 
 	protected ClasspathFileConfigGroup(ConfigGroup internalConfigGroup, ClasspathFileConfigProfile configProfile, String file) {
@@ -49,19 +51,19 @@ public abstract class ClasspathFileConfigGroup extends GeneralConfigGroup {
 		initConfigs();
 	}
 
-	private void initConfigs() {
+	protected void initConfigs() {
 		String filePath = getVersionedFile();
 		LOGGER.debug("Loading classpath file: {}", filePath);
 		try {
 			URL fileUrl = Resources.getResource(filePath);
-			Path path = Paths.get(fileUrl.toURI());
+			watchedFile = Paths.get(fileUrl.toURI());
 
-			Preconditions.checkArgument(Files.isReadable(path), "The file is not readable.");
-			loadConfigs(Files.readAllBytes(path), Objects.firstNonNull(configProfile.getFileEncoding(), Charsets.UTF_8.name()));
+			Preconditions.checkArgument(Files.isReadable(watchedFile), "The file is not readable.");
+			loadConfigs(Files.readAllBytes(watchedFile), Objects.firstNonNull(configProfile.getFileEncoding(), Charsets.UTF_8.name()));
 
 			// Register file change listener
 			watcher = FileSystems.getDefault().newWatchService();
-			path.getParent().register(watcher, StandardWatchEventKinds.ENTRY_MODIFY);
+			watchedFile.getParent().register(watcher, StandardWatchEventKinds.ENTRY_MODIFY);
 			new Thread(new FileChangeEventListener(watcher, this)).start();
 		} catch (URISyntaxException e) {
 			throw Throwables.propagate(e);
@@ -77,7 +79,6 @@ public abstract class ClasspathFileConfigGroup extends GeneralConfigGroup {
 		return FilenameUtils.concat(configProfile.getVersion(), file);
 	}
 
-
 	protected abstract void loadConfigs(byte[] fileData, String fileEncoding) throws UnsupportedEncodingException, IOException;
 
 	@Override
@@ -88,6 +89,10 @@ public abstract class ClasspathFileConfigGroup extends GeneralConfigGroup {
 			} catch (IOException e) {
 			}
 		}
+	}
+
+	Path getWatchedFile() {
+		return watchedFile;
 	}
 
 }

@@ -38,7 +38,7 @@ public abstract class GeneralConfigGroup extends HashMap<String, String> impleme
 	private static final Logger LOGGER = LoggerFactory.getLogger(GeneralConfigGroup.class);
 
 	@Override
-	public String get(String key) {
+	public final String get(String key) {
 		String val = null;
 		lock.readLock().lock();
 		try {
@@ -53,7 +53,7 @@ public abstract class GeneralConfigGroup extends HashMap<String, String> impleme
 	}
 
 	@Override
-	public void putAll(Map<? extends String, ? extends String> configs) {
+	public final void putAll(Map<? extends String, ? extends String> configs) {
 		if (configs != null && configs.size() > 0) {
 			// clear
 			if (this.size() > 0) {
@@ -79,7 +79,7 @@ public abstract class GeneralConfigGroup extends HashMap<String, String> impleme
 	}
 
 	@Override
-	public String put(String key, String value) {
+	public final String put(String key, String value) {
 		String preValue = super.get(key);
 		if (!Objects.equal(preValue, value)) {
 			LOGGER.debug("Key {} change from {} to {}", key, preValue, value);
