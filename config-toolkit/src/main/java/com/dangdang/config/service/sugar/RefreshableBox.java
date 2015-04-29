@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dangdang.config.service.easyzk.sugar;
+package com.dangdang.config.service.sugar;
 
 import java.util.List;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-import com.dangdang.config.service.easyzk.ConfigNode;
+import com.dangdang.config.service.GeneralConfigGroup;
 import com.dangdang.config.service.observer.IObserver;
 import com.google.common.base.Preconditions;
 
@@ -40,18 +40,18 @@ public abstract class RefreshableBox<T> implements IObserver {
 	 */
 	private List<String> propertyKeysCare;
 
-	private ConfigNode node;
+	private GeneralConfigGroup node;
 
 	private ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
 
-	public RefreshableBox(ConfigNode node, List<String> propertyKeysCare) {
+	public RefreshableBox(GeneralConfigGroup node, List<String> propertyKeysCare) {
 		this.node = Preconditions.checkNotNull(node);
 		this.propertyKeysCare = propertyKeysCare;
 		node.register(this);
 		init();
 	}
 
-	public RefreshableBox(ConfigNode node) {
+	public RefreshableBox(GeneralConfigGroup node) {
 		this(node, null);
 	}
 
@@ -64,7 +64,7 @@ public abstract class RefreshableBox<T> implements IObserver {
 		}
 	}
 
-	protected abstract T doInit(ConfigNode node);
+	protected abstract T doInit(GeneralConfigGroup node);
 
 	public T getObj() {
 		lock.readLock().lock();

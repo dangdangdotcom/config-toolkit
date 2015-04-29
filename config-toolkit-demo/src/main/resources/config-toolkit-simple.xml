@@ -7,25 +7,25 @@
              http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd
              http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
 
-	<!-- Config Factory -->
-	<bean id="configFactory" class="com.dangdang.config.service.easyzk.ConfigFactory">
-		<!-- Your zookeeper nodes -->
-		<constructor-arg name="connectStr" value="zoo.host1:8181" />
-		<!-- Your module node in zookeeper -->
+	<!-- Config Profile -->
+	<bean id="configProfile" class="com.dangdang.config.service.zookeeper.ZookeeperConfigProfile">
+		<constructor-arg name="connectStr" value="zoo.host1:8181,zoo.host2:8181,zoo.host3:8181" />
 		<constructor-arg name="rootNode" value="/projectx/modulex" />
-		<constructor-arg name="version" value="1.1" />
+		<constructor-arg name="version" value="1.0.0" />
 	</bean>
 	
 	<!-- Config Node -->
-	<bean id="someGroup" class="com.dangdang.config.service.easyzk.ConfigNode" factory-bean="configFactory" factory-method="getConfigNode">
+	<bean id="someGroup" class="com.dangdang.config.service.zookeeper.ZookeeperConfigGroup">
+		<constructor-arg name="configProfile" ref="configProfile" />
 		<constructor-arg name="node" value="property-group1" />
 	</bean>
-	<bean id="someGroup2" class="com.dangdang.config.service.easyzk.ConfigNode" factory-bean="configFactory" factory-method="getConfigNode">
+	<bean id="someGroup2" class="com.dangdang.config.service.zookeeper.ZookeeperConfigGroup">
+		<constructor-arg name="configProfile" ref="configProfile" />
 		<constructor-arg name="node" value="property-group2" />
 	</bean>
 	
 	<!-- Service bean -->
-	<bean class="com.dangdang.config.service.easyzk.demo.ExampleBeanWithConfigNode">
+	<bean class="com.dangdang.config.service.zookeeper.demo.ExampleBeanWithConfigNode">
 		<property name="propertyGroup1" ref="someGroup"></property>
 	</bean>
 

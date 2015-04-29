@@ -18,8 +18,8 @@ package com.dangdang.config.service.easyzk.demo.spring.annotation;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.dangdang.config.service.easyzk.ConfigFactory;
-import com.dangdang.config.service.easyzk.ConfigNode;
+import com.dangdang.config.service.zookeeper.ZookeeperConfigGroup;
+import com.dangdang.config.service.zookeeper.ZookeeperConfigProfile;
 
 /**
  * Example with spring annotation
@@ -30,13 +30,13 @@ import com.dangdang.config.service.easyzk.ConfigNode;
 @Configuration
 public class ConfigCenter {
 
-	@Bean(destroyMethod = "close")
-	public ConfigFactory getConfigFactory() {
-		return new ConfigFactory("zoo.host1:8181,zoo.host2:8181,zoo.host3:8181", "/projectx/modulex");
+	@Bean
+	public ZookeeperConfigProfile getConfigProfile() {
+		return new ZookeeperConfigProfile("zoo.host1:8181,zoo.host2:8181,zoo.host3:8181", "/projectx/modulex", "1.0.0");
 	}
 
 	@Bean(name = "propertyGroup1")
-	public ConfigNode getPropertyGroup1(ConfigFactory configFactory) {
-		return configFactory.getConfigNode("property-group1");
+	public ZookeeperConfigGroup getPropertyGroup1(ZookeeperConfigProfile zookeeperConfigProfile) {
+		return new ZookeeperConfigGroup(zookeeperConfigProfile, "property-group1");
 	}
 }

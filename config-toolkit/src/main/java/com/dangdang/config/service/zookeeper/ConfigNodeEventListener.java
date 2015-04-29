@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dangdang.config.service.easyzk;
+package com.dangdang.config.service.zookeeper;
 
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.api.CuratorEvent;
@@ -35,9 +35,9 @@ public final class ConfigNodeEventListener implements CuratorListener {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ConfigNodeEventListener.class);
 
-	private final ConfigNode configNode;
+	private final ZookeeperConfigGroup configNode;
 
-	public ConfigNodeEventListener(ConfigNode configNode) {
+	public ConfigNodeEventListener(ZookeeperConfigGroup configNode) {
 		super();
 		this.configNode = Preconditions.checkNotNull(configNode);
 	}
@@ -60,7 +60,7 @@ public final class ConfigNodeEventListener implements CuratorListener {
 					someChange = true;
 					break;
 				case NodeDataChanged:
-					configNode.loadKey(watchedEvent.getPath());
+					configNode.reloadKey(watchedEvent.getPath());
 					someChange = true;
 					break;
 				default:

@@ -22,7 +22,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<spring.bom.version>3.2.9.RELEASE</spring.bom.version>
+		<spring.io.platform.version>1.1.2.RELEASE</spring.io.platform.version>
 		<apache.commons-collections.version>4.0</apache.commons-collections.version>
 		<druid.version>1.0.7</druid.version>
 		<curator.version>2.6.0</curator.version>
@@ -35,7 +35,6 @@
 		<log4j_version>1.2.16</log4j_version>
 		<logback_version>1.0.6</logback_version>
 		<jcl_over_slf4j_version>1.7.7</jcl_over_slf4j_version>
-		<guava_version>16.0.1</guava_version>
 	</properties>
 
 	<dependencyManagement>
@@ -43,13 +42,13 @@
 			<dependency>
 				<groupId>com.dangdang</groupId>
 				<artifactId>config-common</artifactId>
-				<version>2.0.0-RELEASE</version>
+				<version>3.0.0-RELEASE</version>
 			</dependency>
 
 			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-framework-bom</artifactId>
-				<version>${spring.bom.version}</version>
+				<groupId>io.spring.platform</groupId>
+				<artifactId>platform-bom</artifactId>
+				<version>${spring.io.platform.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
@@ -110,12 +109,6 @@
 				<groupId>org.slf4j</groupId>
 				<artifactId>jcl-over-slf4j</artifactId>
 				<version>${jcl_over_slf4j_version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>com.google.guava</groupId>
-				<artifactId>guava</artifactId>
-				<version>${guava_version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

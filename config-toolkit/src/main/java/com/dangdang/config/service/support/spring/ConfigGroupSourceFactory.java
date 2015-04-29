@@ -13,41 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dangdang.config.service.easyzk.support.spring;
+package com.dangdang.config.service.support.spring;
 
 import org.springframework.core.env.MutablePropertySources;
 import org.springframework.core.env.PropertySources;
 
-import com.dangdang.config.service.easyzk.ConfigFactory;
-import com.dangdang.config.service.easyzk.ConfigNode;
+import com.dangdang.config.service.ConfigGroup;
 import com.google.common.base.Preconditions;
 
 /**
- * Factory to create PropertySource for zookeeper
+ * Factory to create PropertySource for configuration group
  * 
  * @author Wang Yuxuan
  *
  */
-public class ZookeeperSourceFactory {
+public class ConfigGroupSourceFactory {
 
-	public static PropertySources create(ConfigNode... configNodes) {
-		Preconditions.checkNotNull(configNodes);
+	public static PropertySources create(ConfigGroup... configGroups) {
+		Preconditions.checkNotNull(configGroups);
 		final MutablePropertySources sources = new MutablePropertySources();
-		for (ConfigNode configNode : configNodes) {
-			sources.addLast(new ZookeeperResource(configNode));
+		for (ConfigGroup configGroup : configGroups) {
+			sources.addLast(new ConfigGroupResource(configGroup));
 		}
 		return sources;
-	}
-
-	public static PropertySources create(ConfigFactory configFactory, String... nodes) {
-		Preconditions.checkNotNull(configFactory);
-		Preconditions.checkNotNull(nodes);
-		ConfigNode[] configNodes = new ConfigNode[nodes.length];
-		for (int i = 0; i < nodes.length; i++) {
-			configNodes[i] = configFactory.getConfigNode(nodes[i]);
-		}
-
-		return create(configNodes);
 	}
 
 }

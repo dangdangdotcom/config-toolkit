@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dangdang.config.service.easyzk;
+package com.dangdang.config.service.zookeeper;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -56,7 +56,7 @@ public class ConfigLocalCache {
 	 * @param configNode
 	 * @param node
 	 */
-	public void saveLocalCache(ConfigNode configNode, String node) {
+	public void saveLocalCache(ZookeeperConfigGroup configNode, String node) {
 		String localFilePath = genCacheFilePath(node);
 		LOGGER.debug("Saving cache to file: {}", localFilePath);
 

@@ -13,14 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dangdang.config.service.easyzk;
+package com.dangdang.config.service.zookeeper;
 
 import org.apache.curator.RetryPolicy;
 import org.apache.curator.retry.ExponentialBackoffRetry;
 import org.apache.curator.utils.ZKPaths;
 
-import com.google.common.base.Objects;
+import com.dangdang.config.service.ConfigProfile;
 import com.google.common.base.Preconditions;
+import com.google.common.base.Strings;
 
 /**
  * 基本配置
@@ -28,7 +29,7 @@ import com.google.common.base.Preconditions;
  * @author <a href="mailto:wangyuxuan@dangdang.com">Yuxuan Wang</a>
  *
  */
-public class ConfigProfile {
+public class ZookeeperConfigProfile extends ConfigProfile {
 
 	/**
 	 * zookeeper地址
@@ -39,11 +40,6 @@ public class ConfigProfile {
 	 * 项目配置根目录
 	 */
 	private final String rootNode;
-
-	/**
-	 * 项目配置版本
-	 */
-	private final String version;
 
 	/**
 	 * 重试策略
@@ -70,20 +66,19 @@ public class ConfigProfile {
 	 */
 	private long consistencyCheckRate = 60 * 1000;
 
-	public ConfigProfile(final String connectStr, final String rootNode, final boolean openLocalCache) {
+	public ZookeeperConfigProfile(final String connectStr, final String rootNode, final boolean openLocalCache) {
 		this(connectStr, rootNode, null, openLocalCache, new ExponentialBackoffRetry(100, 2));
 	}
 
-	public ConfigProfile(final String connectStr, final String rootNode, final String version) {
+	public ZookeeperConfigProfile(final String connectStr, final String rootNode, final String version) {
 		this(connectStr, rootNode, version, false, new ExponentialBackoffRetry(100, 2));
 	}
 
-	public ConfigProfile(final String connectStr, final String rootNode, final String version, final boolean openLocalCache,
+	public ZookeeperConfigProfile(final String connectStr, final String rootNode, final String version, final boolean openLocalCache,
 			final RetryPolicy retryPolicy) {
-		super();
+		super(version);
 		this.connectStr = Preconditions.checkNotNull(connectStr);
 		this.rootNode = Preconditions.checkNotNull(rootNode);
-		this.version = Objects.firstNonNull(version, "default");
 		this.openLocalCache = openLocalCache;
 		this.retryPolicy = Preconditions.checkNotNull(retryPolicy);
 	}
@@ -128,11 +123,10 @@ public class ConfigProfile {
 		this.localCacheFolder = localCacheFolder;
 	}
 
-	public final String getVersion() {
-		return version;
-	}
-
 	public String getVersionedRootNode() {
+		if(Strings.isNullOrEmpty(version)){
+			return rootNode;
+		}
 		return ZKPaths.makePath(rootNode, version);
 	}
 
