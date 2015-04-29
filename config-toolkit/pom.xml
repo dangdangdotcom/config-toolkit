@@ -2,14 +2,14 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<artifactId>config-toolkit-easyzk</artifactId>
-	<version>2.0.4-RELEASE</version>
+	<artifactId>config-toolkit</artifactId>
+	<version>3.0.0-RELEASE</version>
 	<packaging>jar</packaging>
 	<parent>
 		<groupId>com.dangdang</groupId>
 		<artifactId>config-toolkit-parent</artifactId>
 		<relativePath>../config-toolkit-parent</relativePath>
-		<version>2.0.0-RELEASE</version>
+		<version>3.0.0-RELEASE</version>
 	</parent>
 
 	<name>config-toolkit-easyzk</name>

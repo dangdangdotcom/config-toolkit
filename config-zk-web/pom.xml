@@ -1,13 +1,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>config-web</artifactId>
+	<artifactId>config-zk-web</artifactId>
 	<packaging>war</packaging>
-	<version>2.0.0-RELEASE</version>
+	<version>3.0.0-RELEASE</version>
 	<parent>
 		<groupId>com.dangdang</groupId>
 		<artifactId>config-toolkit-parent</artifactId>
 		<relativePath>../config-toolkit-parent</relativePath>
-		<version>2.0.0-RELEASE</version>
+		<version>3.0.0-RELEASE</version>
 	</parent>
 	<name>config-web Maven Webapp</name>
 
