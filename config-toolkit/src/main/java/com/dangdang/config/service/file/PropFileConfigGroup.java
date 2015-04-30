@@ -1,4 +1,4 @@
-package com.dangdang.config.service.classpathfile;
+package com.dangdang.config.service.file;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -12,21 +12,21 @@ import com.dangdang.config.service.ConfigGroup;
 import com.google.common.collect.Maps;
 
 /**
- * Configuration group loaded from classpath property file
+ * Configuration group loaded from property file
  * 
  * @author <a href="mailto:wangyuxuan@dangdang.com">Yuxuan Wang</a>
  *
  */
-public class ClasspathPropConfigGroup extends ClasspathFileConfigGroup {
+public class PropFileConfigGroup extends URIConfigGroup {
 
 	private static final long serialVersionUID = 1L;
 
-	public ClasspathPropConfigGroup(ClasspathFileConfigProfile configProfile, String file) {
-		this(null, configProfile, file);
+	public PropFileConfigGroup(FileConfigProfile configProfile, String location) {
+		this(null, configProfile, location);
 	}
 
-	public ClasspathPropConfigGroup(ConfigGroup internalConfigGroup, ClasspathFileConfigProfile configProfile, String file) {
-		super(internalConfigGroup, configProfile, file);
+	public PropFileConfigGroup(ConfigGroup internalConfigGroup, FileConfigProfile configProfile, String location) {
+		super(internalConfigGroup, configProfile, location);
 	}
 
 	@Override

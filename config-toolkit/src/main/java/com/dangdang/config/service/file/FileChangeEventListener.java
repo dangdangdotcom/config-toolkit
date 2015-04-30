@@ -1,4 +1,4 @@
-package com.dangdang.config.service.classpathfile;
+package com.dangdang.config.service.file;
 
 import java.nio.file.Path;
 import java.nio.file.StandardWatchEventKinds;
@@ -19,9 +19,9 @@ public class FileChangeEventListener implements Runnable {
 
 	private WatchService watcher;
 
-	private ClasspathFileConfigGroup configGroup;
+	private URIConfigGroup configGroup;
 
-	public FileChangeEventListener(WatchService watcher, ClasspathFileConfigGroup configGroup) {
+	public FileChangeEventListener(WatchService watcher, URIConfigGroup configGroup) {
 		super();
 		this.watcher = watcher;
 		this.configGroup = configGroup;

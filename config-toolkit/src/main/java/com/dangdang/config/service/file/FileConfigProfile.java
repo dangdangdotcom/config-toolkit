@@ -1,22 +1,22 @@
-package com.dangdang.config.service.classpathfile;
+package com.dangdang.config.service.file;
 
 import com.dangdang.config.service.ConfigProfile;
 
 /**
- * Classpath file configuration profile
+ * File configuration profile
  * 
  * @author <a href="mailto:wangyuxuan@dangdang.com">Yuxuan Wang</a>
  *
  */
-public class ClasspathFileConfigProfile extends ConfigProfile {
+public class FileConfigProfile extends ConfigProfile {
 
 	private String fileEncoding;
 
-	public ClasspathFileConfigProfile() {
+	public FileConfigProfile() {
 		this(null);
 	}
 
-	public ClasspathFileConfigProfile(String version) {
+	public FileConfigProfile(String version) {
 		super(version);
 	}
 

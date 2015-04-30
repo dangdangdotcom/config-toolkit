@@ -1,4 +1,4 @@
-package com.dangdang.config.service.classpathfile;
+package com.dangdang.config.service.file;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -12,51 +12,65 @@ import java.nio.file.StandardWatchEventKinds;
 import java.nio.file.WatchService;
 
 import org.apache.commons.io.Charsets;
-import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.dangdang.config.service.ConfigGroup;
 import com.dangdang.config.service.GeneralConfigGroup;
+import com.dangdang.config.service.file.FileLocation.Protocol;
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
-import com.google.common.base.Strings;
 import com.google.common.base.Throwables;
 import com.google.common.io.Resources;
 
 /**
- * Configuration group loaded from classpath files
+ * Configuration group loaded from URI location.<br>
+ * <br>
+ * Supported location formats:<br>
+ * 
+ * <ul>
+ * <li>classpath:config.properties</li>
+ * <li>classpath:config.xml</li>
+ * <li>file:/your/path/config.properties</li>
+ * <li>file:/your/path/config.xml</li>
+ * <li>http://www.yoursite.com/config.properties</li>
+ * <li>http://www.yoursite.com/config.xml</li>
+ * <ul>
  * 
  * @author <a href="mailto:wangyuxuan@dangdang.com">Yuxuan Wang</a>
  *
  */
-public abstract class ClasspathFileConfigGroup extends GeneralConfigGroup {
+public abstract class URIConfigGroup extends GeneralConfigGroup {
 
 	private static final long serialVersionUID = 1L;
 
-	private ClasspathFileConfigProfile configProfile;
+	private FileConfigProfile configProfile;
 
-	private String file;
+	private FileLocation location;
 
 	private WatchService watcher;
 
 	private Path watchedFile;
 
-	static final Logger LOGGER = LoggerFactory.getLogger(ClasspathFileConfigGroup.class);
+	static final Logger LOGGER = LoggerFactory.getLogger(URIConfigGroup.class);
 
-	protected ClasspathFileConfigGroup(ConfigGroup internalConfigGroup, ClasspathFileConfigProfile configProfile, String file) {
+	protected URIConfigGroup(ConfigGroup internalConfigGroup, FileConfigProfile configProfile, String location) {
 		super(internalConfigGroup);
 		this.configProfile = configProfile;
-		this.file = file;
+		this.location = FileLocation.fromLocation(Preconditions.checkNotNull(location, "Location cannot be null."));
 		initConfigs();
 	}
 
 	protected void initConfigs() {
-		String filePath = getVersionedFile();
-		LOGGER.debug("Loading classpath file: {}", filePath);
+		String filePath = location.getFile();
+		LOGGER.debug("Loading file: {}", filePath);
 		try {
-			URL fileUrl = Resources.getResource(filePath);
-			watchedFile = Paths.get(fileUrl.toURI());
+			if (location.getProtocol() == Protocol.classpath) {
+				URL fileUrl = Resources.getResource(filePath);
+				watchedFile = Paths.get(fileUrl.toURI());
+			} else if (location.getProtocol() == Protocol.file) {
+				watchedFile = Paths.get(filePath);
+			}
 
 			Preconditions.checkArgument(Files.isReadable(watchedFile), "The file is not readable.");
 			loadConfigs(Files.readAllBytes(watchedFile), Objects.firstNonNull(configProfile.getFileEncoding(), Charsets.UTF_8.name()));
@@ -70,13 +84,6 @@ public abstract class ClasspathFileConfigGroup extends GeneralConfigGroup {
 		} catch (IOException e) {
 			throw Throwables.propagate(e);
 		}
-	}
-
-	private String getVersionedFile() {
-		if (Strings.isNullOrEmpty(configProfile.getVersion())) {
-			return file;
-		}
-		return FilenameUtils.concat(configProfile.getVersion(), file);
 	}
 
 	protected abstract void loadConfigs(byte[] fileData, String fileEncoding) throws UnsupportedEncodingException, IOException;
