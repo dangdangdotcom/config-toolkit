@@ -8,7 +8,7 @@ import java.util.Properties;
 
 import jline.internal.InputStreamReader;
 
-import com.dangdang.config.service.exception.InvalidFileException;
+import com.dangdang.config.service.exception.InvalidPathException;
 import com.google.common.collect.Maps;
 
 /**
@@ -18,12 +18,12 @@ import com.google.common.collect.Maps;
 public class PropertiesContentType implements ContentType {
 
 	@Override
-	public Map<String, String> resolve(byte[] data, String encoding) throws InvalidFileException {
+	public Map<String, String> resolve(byte[] data, String encoding) throws InvalidPathException {
 		Properties props = new Properties();
 		try (Reader reader = new InputStreamReader(new ByteArrayInputStream(data), encoding)) {
 			props.load(reader);
 		} catch (IOException e) {
-			throw new InvalidFileException(e);
+			throw new InvalidPathException(e);
 		}
 
 		return Maps.fromProperties(props);

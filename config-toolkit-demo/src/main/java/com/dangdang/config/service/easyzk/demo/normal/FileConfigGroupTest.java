@@ -4,11 +4,12 @@ import com.dangdang.config.service.ConfigGroup;
 import com.dangdang.config.service.file.FileConfigGroup;
 import com.dangdang.config.service.file.FileConfigProfile;
 
-public class ClasspathPropConfigGroupTest {
+public class FileConfigGroupTest {
 	
 	public static void main(String[] args) {
 		FileConfigProfile configProfile = new FileConfigProfile("UTF8", "properties");
-		ConfigGroup configGroup = new FileConfigGroup(configProfile, "file:/Users/yuxuanwang/Work/git/config-toolkit/config-toolkit-demo/src/main/resources/property-group1.properties");
+//		ConfigGroup configGroup = new FileConfigGroup(configProfile, "file:/Users/yuxuanwang/Work/git/config-toolkit/config-toolkit-demo/src/main/resources/property-group1.properties");
+		ConfigGroup configGroup = new FileConfigGroup(configProfile, "http://crnlmchina.github.io/config-group.properties");
 		
 		while(true) {
 			System.out.println(configGroup.get("int_property_key"));

@@ -6,7 +6,7 @@ import java.io.InputStream;
 import java.util.Map;
 import java.util.Properties;
 
-import com.dangdang.config.service.exception.InvalidFileException;
+import com.dangdang.config.service.exception.InvalidPathException;
 import com.google.common.collect.Maps;
 
 /**
@@ -25,12 +25,12 @@ import com.google.common.collect.Maps;
 public class XmlContentType implements ContentType {
 
 	@Override
-	public Map<String, String> resolve(byte[] data, String encoding) throws InvalidFileException {
+	public Map<String, String> resolve(byte[] data, String encoding) throws InvalidPathException {
 		Properties props = new Properties();
 		try (InputStream in = new ByteArrayInputStream(data)) {
 			props.loadFromXML(in);
 		} catch (IOException e) {
-			throw new InvalidFileException(e);
+			throw new InvalidPathException(e);
 		}
 
 		return Maps.fromProperties(props);

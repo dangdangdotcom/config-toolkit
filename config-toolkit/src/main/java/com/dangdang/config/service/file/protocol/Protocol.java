@@ -2,7 +2,7 @@ package com.dangdang.config.service.file.protocol;
 
 import java.io.Closeable;
 
-import com.dangdang.config.service.exception.InvalidFileException;
+import com.dangdang.config.service.exception.InvalidPathException;
 import com.dangdang.config.service.file.FileLocation;
 import com.dangdang.config.service.file.FileConfigGroup;
 
@@ -19,7 +19,7 @@ public interface Protocol extends Closeable {
 	 * @param location
 	 * @return
 	 */
-	byte[] read(FileLocation location) throws InvalidFileException;
+	byte[] read(FileLocation location) throws InvalidPathException;
 
 	/**
 	 * Register watcher for the file
@@ -27,6 +27,6 @@ public interface Protocol extends Closeable {
 	 * @param location
 	 * @param fileConfigGroup
 	 */
-	void watch(FileLocation location, FileConfigGroup fileConfigGroup) throws InvalidFileException;
+	void watch(FileLocation location, FileConfigGroup fileConfigGroup) throws InvalidPathException;
 
 }

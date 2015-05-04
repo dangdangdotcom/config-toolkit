@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import com.dangdang.config.service.ConfigGroup;
 import com.dangdang.config.service.GeneralConfigGroup;
-import com.dangdang.config.service.exception.InvalidFileException;
+import com.dangdang.config.service.exception.InvalidPathException;
 import com.dangdang.config.service.file.contenttype.ContentType;
 import com.dangdang.config.service.file.contenttype.ContentTypes;
 import com.dangdang.config.service.file.protocol.Protocol;
@@ -55,7 +55,7 @@ public class FileConfigGroup extends GeneralConfigGroup {
 		initConfigs();
 		try {
 			protocolBean.watch(this.location, this);
-		} catch (InvalidFileException e) {
+		} catch (InvalidPathException e) {
 			throw Throwables.propagate(e);
 		}
 	}
@@ -67,7 +67,7 @@ public class FileConfigGroup extends GeneralConfigGroup {
 
 			ContentType contentTypeBean = ContentTypes.getInstance().get(configProfile.getContentType()).newInstance();
 			putAll(contentTypeBean.resolve(protocolBean.read(location), configProfile.getFileEncoding()));
-		} catch (InvalidFileException e) {
+		} catch (InvalidPathException e) {
 			throw Throwables.propagate(e);
 		} catch (InstantiationException e) {
 			throw Throwables.propagate(e);

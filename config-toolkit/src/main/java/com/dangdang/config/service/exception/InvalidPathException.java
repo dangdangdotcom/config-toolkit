@@ -6,23 +6,23 @@ package com.dangdang.config.service.exception;
  * @author <a href="mailto:wangyuxuan@dangdang.com">Yuxuan Wang</a>
  *
  */
-public class InvalidFileException extends ConfigToolkitException {
+public class InvalidPathException extends ConfigToolkitException {
 
 	private static final long serialVersionUID = 1L;
 
-	public InvalidFileException() {
+	public InvalidPathException() {
 		super();
 	}
 
-	public InvalidFileException(String message, Throwable cause) {
+	public InvalidPathException(String message, Throwable cause) {
 		super(message, cause);
 	}
 
-	public InvalidFileException(String message) {
+	public InvalidPathException(String message) {
 		super(message);
 	}
 
-	public InvalidFileException(Throwable cause) {
+	public InvalidPathException(Throwable cause) {
 		super(cause);
 	}
 
