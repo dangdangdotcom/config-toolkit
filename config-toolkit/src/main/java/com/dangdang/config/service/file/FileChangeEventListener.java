@@ -19,19 +19,22 @@ public class FileChangeEventListener implements Runnable {
 
 	private WatchService watcher;
 
-	private URIConfigGroup configGroup;
+	private FileConfigGroup configGroup;
 
-	public FileChangeEventListener(WatchService watcher, URIConfigGroup configGroup) {
+	private Path watchedFile;
+
+	public FileChangeEventListener(WatchService watcher, FileConfigGroup configGroup, Path watchedFile) {
 		super();
 		this.watcher = watcher;
 		this.configGroup = configGroup;
+		this.watchedFile = watchedFile;
 	}
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(FileChangeEventListener.class);
 
 	@Override
 	public void run() {
-		for (;;) {
+		while (true) {
 			// wait for key to be signaled
 			WatchKey key;
 			try {
@@ -55,10 +58,15 @@ public class FileChangeEventListener implements Runnable {
 
 				LOGGER.debug("File {} changed.", filename);
 
-				if (isSameFile(filename, configGroup.getWatchedFile())) {
+				if (isSameFile(filename, watchedFile)) {
 					configGroup.initConfigs();
 				}
 
+			}
+			
+			boolean status = key.reset();
+			if(!status) {
+				break;
 			}
 		}
 	}

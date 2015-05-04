@@ -50,7 +50,7 @@ public class ConfigGroupResource extends PropertySource<ConfigGroup> implements 
 	@Override
 	@PreDestroy
 	public void close() throws IOException {
-		super.getSource().destroy();
+		super.getSource().close();
 	}
 
 }

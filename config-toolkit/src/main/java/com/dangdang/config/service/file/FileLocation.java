@@ -1,8 +1,6 @@
 package com.dangdang.config.service.file;
 
-import com.google.common.base.Enums;
-import com.google.common.base.Optional;
-import com.google.common.base.Preconditions;
+import com.dangdang.config.service.file.protocol.ProtocolNames;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Iterables;
 
@@ -14,9 +12,9 @@ public class FileLocation {
 
 	private String file;
 
-	private Protocol protocol;
+	private String protocol;
 
-	public FileLocation(String file, Protocol protocol) {
+	public FileLocation(String file, String protocol) {
 		super();
 		this.file = file;
 		this.protocol = protocol;
@@ -28,35 +26,23 @@ public class FileLocation {
 		Iterable<String> parts = SPLITTER.split(location);
 		// default as file
 		if (Iterables.size(parts) == 1) {
-			return new FileLocation(location, Protocol.file);
+			return new FileLocation(location, ProtocolNames.FILE);
 		}
 
-		Optional<Protocol> protocol = Enums.getIfPresent(Protocol.class, Iterables.getFirst(parts, null));
-
-		Preconditions.checkArgument(protocol.isPresent(), "Invalid location: %s", location);
-
-		switch (protocol.get()) {
-		case file:
-			return new FileLocation(Iterables.getLast(parts), protocol.get());
-		case classpath:
-			return new FileLocation(Iterables.getLast(parts), protocol.get());
-		case http:
-			return new FileLocation(location, protocol.get());
-		default:
-			return null;
-		}
+		return new FileLocation(Iterables.getLast(parts), Iterables.getFirst(parts, null).toLowerCase());
 	}
 
 	public String getFile() {
 		return file;
 	}
 
-	public Protocol getProtocol() {
+	public String getProtocol() {
 		return protocol;
 	}
 
-	public enum Protocol {
-		file, classpath, http;
+	@Override
+	public String toString() {
+		return "FileLocation [file=" + file + ", protocol=" + protocol + "]";
 	}
 
 }

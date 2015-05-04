@@ -1,0 +1,2 @@
+properties=com.dangdang.config.service.file.contenttype.PropertiesContentType
+xml=com.dangdang.config.service.file.contenttype.XmlContentType

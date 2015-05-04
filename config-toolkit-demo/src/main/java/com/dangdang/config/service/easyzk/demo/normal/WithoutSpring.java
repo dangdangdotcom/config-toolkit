@@ -44,7 +44,7 @@ public class WithoutSpring {
 		String intProperty = propertyGroup1.get("int_property_key");
 		Preconditions.checkState(1123 == Integer.parseInt(intProperty));
 
-		propertyGroup1.destroy();
+		propertyGroup1.close();
 	}
 
 }

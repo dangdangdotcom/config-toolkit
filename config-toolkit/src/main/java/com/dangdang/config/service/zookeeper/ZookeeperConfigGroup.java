@@ -193,7 +193,7 @@ public class ZookeeperConfigGroup extends GeneralConfigGroup {
 
 	@PreDestroy
 	@Override
-	public void destroy() {
+	public void close() {
 		if (timer != null) {
 			timer.cancel();
 		}

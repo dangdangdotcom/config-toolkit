@@ -1,0 +1,2 @@
+classpath=com.dangdang.config.service.file.protocol.ClasspathProtocol
+file=com.dangdang.config.service.file.protocol.FileProtocol
