@@ -1,6 +1,7 @@
 package com.dangdang.config.service;
 
 import java.io.Closeable;
+import java.util.Map;
 
 /**
  * Configuration Group
@@ -8,7 +9,7 @@ import java.io.Closeable;
  * @author <a href="mailto:wangyuxuan@dangdang.com">Yuxuan Wang</a>
  *
  */
-public interface ConfigGroup extends Closeable {
+public interface ConfigGroup extends Map<String, String>, Closeable {
 	
 	String get(String key);
 	

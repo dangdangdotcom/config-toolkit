@@ -15,6 +15,9 @@
  */
 package com.dangdang.config.service.easyzk.demo.normal;
 
+import java.io.IOException;
+
+import com.dangdang.config.service.GeneralConfigGroup;
 import com.dangdang.config.service.observer.IObserver;
 import com.dangdang.config.service.zookeeper.ZookeeperConfigGroup;
 import com.dangdang.config.service.zookeeper.ZookeeperConfigProfile;
@@ -28,7 +31,7 @@ public class WithoutSpring {
 
 	public static void main(String[] args) {
 		ZookeeperConfigProfile configProfile = new ZookeeperConfigProfile("zoo.host1:8181", "/projectx/modulex", "1.0.0");
-		ZookeeperConfigGroup propertyGroup1 = new ZookeeperConfigGroup(configProfile, "property-group1");
+		GeneralConfigGroup propertyGroup1 = new ZookeeperConfigGroup(configProfile, "property-group1");
 		System.out.println(propertyGroup1);
 
 		// Listen changes
@@ -44,7 +47,10 @@ public class WithoutSpring {
 		String intProperty = propertyGroup1.get("int_property_key");
 		Preconditions.checkState(1123 == Integer.parseInt(intProperty));
 
-		propertyGroup1.close();
+		try {
+			propertyGroup1.close();
+		} catch (IOException e) {
+		}
 	}
 
 }
