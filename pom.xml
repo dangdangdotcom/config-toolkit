@@ -2,15 +2,15 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.dangdang</groupId>
-	<artifactId>config-toolkit</artifactId>
+	<artifactId>config-toolkit-package</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<modules>
 		<module>config-toolkit-parent</module>
 		<module>config-common</module>
-		<module>config-toolkit-easyzk</module>
-		<module>config-web</module>
+		<module>config-toolkit</module>
+		<module>config-zk-web</module>
         <module>config-toolkit-demo</module>
 	</modules>
 </project>

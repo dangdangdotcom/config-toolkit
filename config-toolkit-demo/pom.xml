@@ -6,18 +6,18 @@
 		<groupId>com.dangdang</groupId>
 		<artifactId>config-toolkit-parent</artifactId>
 		<relativePath>../config-toolkit-parent</relativePath>
-		<version>2.0.0-RELEASE</version>
+		<version>3.0.0-RELEASE</version>
 	</parent>
 
 	<properties>
-		<config-toolkit-easyzk.version>2.0.3-RELEASE</config-toolkit-easyzk.version>
+		<config-toolkit-easyzk.version>3.0.0-RELEASE</config-toolkit-easyzk.version>
 		<zookeeper.version>3.4.6</zookeeper.version>
 	</properties>
 
 	<dependencies>
 		<dependency>
 			<groupId>com.dangdang</groupId>
-			<artifactId>config-toolkit-easyzk</artifactId>
+			<artifactId>config-toolkit</artifactId>
 			<version>${config-toolkit-easyzk.version}</version>
 		</dependency>
 		<dependency>

@@ -20,17 +20,17 @@
 <!-- 	</bean> -->
 
 	<!-- New version -->
-	<bean id="configFactory" class="com.dangdang.config.service.easyzk.ConfigFactory">
+	<bean id="configProfile" class="com.dangdang.config.service.zookeeper.ZookeeperConfigProfile">
 		<constructor-arg name="connectStr" value="zoo.host1:8181" />
 		<constructor-arg name="rootNode" value="/projectx/modulex" />
+		<constructor-arg name="version" value="1.0.0" />
 	</bean>
 
-	<bean id="zookeeperSources" class="com.dangdang.config.service.easyzk.support.spring.ZookeeperSourceFactory" factory-method="create">
-		<constructor-arg name="configFactory" ref="configFactory" />
-		<constructor-arg name="nodes">
+	<bean id="zookeeperSources" class="com.dangdang.config.service.support.spring.ConfigGroupSourceFactory" factory-method="create">
+		<constructor-arg name="configGroups">
 			<list>
-				<value>property-group1</value>
-				<value>property-group2</value>
+				<bean class="com.dangdang.config.service.zookeeper.ZookeeperConfigGroup" c:configProfile-ref="configProfile" c:node="property-group1" />
+				<bean class="com.dangdang.config.service.zookeeper.ZookeeperConfigGroup" c:configProfile-ref="configProfile" c:node="property-group2" />
 			</list>
 		</constructor-arg>
 	</bean>
@@ -42,7 +42,7 @@
 	</bean>
 
 	<!-- Inject property with used spring style -->
-	<bean class="com.dangdang.config.service.easyzk.demo.ExampleBean" c:stringProperty="${string_property_key}" c:intProperty="${int_property_key}">
+	<bean class="com.dangdang.config.service.zookeeper.demo.ExampleBean" c:stringProperty="${string_property_key}" c:intProperty="${int_property_key}">
 		<property name="cool" value="${cool}" />
 	</bean>
 

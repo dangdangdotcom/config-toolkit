@@ -1,9 +1,10 @@
 package com.dangdang.config.service.easyzk.demo.normal;
 
-import com.dangdang.config.service.easyzk.ConfigFactory;
-import com.dangdang.config.service.easyzk.ConfigNode;
+import com.dangdang.config.service.GeneralConfigGroup;
 import com.dangdang.config.service.easyzk.demo.ExampleBean;
-import com.dangdang.config.service.easyzk.sugar.RefreshableBox;
+import com.dangdang.config.service.sugar.RefreshableBox;
+import com.dangdang.config.service.zookeeper.ZookeeperConfigGroup;
+import com.dangdang.config.service.zookeeper.ZookeeperConfigProfile;
 
 /**
  * @author <a href="mailto:wangyuxuan@dangdang.com">Yuxuan Wang</a>
@@ -12,11 +13,13 @@ import com.dangdang.config.service.easyzk.sugar.RefreshableBox;
 public class RefreshableBoxUseCase {
 
 	public static void main(String[] args) {
-		ConfigNode node = new ConfigFactory("zoo.host1:8181", "/projectx/modulex", "1.0.0").getConfigNode("property-group1");
+		ZookeeperConfigProfile configProfile = new ZookeeperConfigProfile("zoo.host1:8181", "/projectx/modulex", "1.0.0");
+		GeneralConfigGroup node = new ZookeeperConfigGroup(configProfile, "property-group1");
+		
 		RefreshableBox<ExampleBean> box = new RefreshableBox<ExampleBean>(node) {
 
 			@Override
-			protected ExampleBean doInit(ConfigNode node) {
+			protected ExampleBean doInit(GeneralConfigGroup node) {
 				ExampleBean bean = new ExampleBean(node.get("string_property_key"), Integer.parseInt(node.get("int_property_key")));
 				bean.setCool(Boolean.parseBoolean(node.get("cool")));
 				return bean;
