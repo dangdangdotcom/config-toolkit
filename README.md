@@ -10,6 +10,11 @@
 * JAVA 7+
 * TOMCAT 7+ for ConfigWeb
 
+### RELEASES
+Release notes: [https://github.com/dangdangdotcom/config-toolkit/wiki/release-notes](https://github.com/dangdangdotcom/config-toolkit/wiki/release-notes "Release Notes")
+
+Old doc: [V2.x document](https://github.com/dangdangdotcom/config-toolkit/wiki/v2doc "V2.x document")
+
 ### 模块
 * Config Toolkit - 封装应用属性配置的获取及更新
 * ConfigWeb - 提供web界面维护属性配置，提供配置导入导出功能
@@ -54,9 +59,6 @@
     FileConfigProfile configProfile = new FileConfigProfile("UTF8", "properties");
     ConfigGroup configGroup = new FileConfigGroup(configProfile, "http://crnlmchina.github.io/config-group.properties");
 </code></pre>
-
-### RELEASE NOTES
-[https://github.com/dangdangdotcom/config-toolkit/wiki/release-notes](https://github.com/dangdangdotcom/config-toolkit/wiki/release-notes "Release Notes")
 
 ### 词典
 * ConfigProfile - 配置参数,根据不同的资源类型加载配置组
