@@ -25,7 +25,7 @@
 	</bean>
 	
 	<!-- Service bean -->
-	<bean class="com.dangdang.config.service.zookeeper.demo.ExampleBeanWithConfigNode">
+	<bean class="com.dangdang.config.service.easyzk.demo.ExampleBeanWithConfigNode">
 		<property name="propertyGroup1" ref="someGroup"></property>
 	</bean>
 

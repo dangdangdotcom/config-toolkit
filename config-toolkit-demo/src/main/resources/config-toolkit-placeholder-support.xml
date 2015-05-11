@@ -42,7 +42,7 @@
 	</bean>
 
 	<!-- Inject property with used spring style -->
-	<bean class="com.dangdang.config.service.zookeeper.demo.ExampleBean" c:stringProperty="${string_property_key}" c:intProperty="${int_property_key}">
+	<bean class="com.dangdang.config.service.easyzk.demo.ExampleBean" c:stringProperty="${string_property_key}" c:intProperty="${int_property_key}">
 		<property name="cool" value="${cool}" />
 	</bean>
 

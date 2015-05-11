@@ -57,16 +57,27 @@ public abstract class GeneralConfigGroup extends HashMap<String, String> impleme
 		if (configs != null && configs.size() > 0) {
 			// clear
 			if (this.size() > 0) {
-				final Set<String> newKeys = Sets.newHashSet(this.keySet());
-				Iterable<String> redundances = Iterables.filter(Sets.newHashSet(this.keySet()), new Predicate<String>() {
+				lock.readLock().lock();
+				final Set<String> newKeys = Sets.newHashSet();
+				try {
+					newKeys.addAll(this.keySet());
+				} finally {
+					lock.readLock().unlock();
+				}
+				final Iterable<String> redundances = Iterables.filter(Sets.newHashSet(this.keySet()), new Predicate<String>() {
 
 					@Override
 					public boolean apply(String input) {
 						return !newKeys.contains(input);
 					}
 				});
-				for (String redundance : redundances) {
-					this.remove(redundance);
+				lock.writeLock().lock();
+				try {
+					for (String redundance : redundances) {
+						this.remove(redundance);
+					}
+				} finally {
+					lock.writeLock().unlock();
 				}
 			}
 
@@ -80,10 +91,10 @@ public abstract class GeneralConfigGroup extends HashMap<String, String> impleme
 
 	@Override
 	public final String put(String key, String value) {
-		String preValue = super.get(key);
+		String preValue = this.get(key);
 		if (!Objects.equal(preValue, value)) {
 			LOGGER.debug("Key {} change from {} to {}", key, preValue, value);
-			
+
 			lock.writeLock().lock();
 			try {
 				super.put(key, value);
@@ -121,7 +132,7 @@ public abstract class GeneralConfigGroup extends HashMap<String, String> impleme
 			}).start();
 		}
 	}
-	
+
 	@Override
 	public String remove(Object key) {
 		throw new UnsupportedOperationException();
