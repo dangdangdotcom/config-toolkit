@@ -26,7 +26,9 @@ import javax.faces.context.FacesContext;
 
 import com.dangdang.config.service.IAuthService;
 import com.dangdang.config.service.IRootNodeRecorder;
-import com.dangdang.config.service.observer.AbstractSubject;
+import com.dangdang.config.service.observer.IObserver;
+import com.dangdang.config.service.observer.ISubject;
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 
 /**
@@ -37,7 +39,7 @@ import com.google.common.collect.Lists;
  */
 @ManagedBean(name = "nodeAuthMB")
 @SessionScoped
-public class NodeAuthManagedBean extends AbstractSubject implements Serializable {
+public class NodeAuthManagedBean implements Serializable, ISubject {
 
 	/**
 	 * 
@@ -112,6 +114,23 @@ public class NodeAuthManagedBean extends AbstractSubject implements Serializable
 
 	public void setAuthedNode(String authedNode) {
 		this.authedNode = authedNode;
+	}
+
+	/**
+	 * 观察者列表
+	 */
+	private final List<IObserver> watchers = Lists.newArrayList();
+
+	@Override
+	public void register(final IObserver watcher) {
+		watchers.add(Preconditions.checkNotNull(watcher));
+	}
+
+	@Override
+	public void notify(final String key, final String value) {
+		for (final IObserver watcher : watchers) {
+			watcher.notified(key, value);
+		}
 	}
 
 }
