@@ -1,11 +1,9 @@
 package com.dangdang.config.service;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.locks.ReadWriteLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +21,7 @@ import com.google.common.collect.Sets;
  * @author <a href="mailto:wangyuxuan@dangdang.com">Yuxuan Wang</a>
  *
  */
-public abstract class GeneralConfigGroup extends HashMap<String, String> implements ConfigGroup, ISubject {
+public abstract class GeneralConfigGroup extends ConcurrentHashMap<String, String> implements ConfigGroup, ISubject {
 
 	private static final long serialVersionUID = 1L;
 
@@ -33,19 +31,11 @@ public abstract class GeneralConfigGroup extends HashMap<String, String> impleme
 		this.internalConfigGroup = internalConfigGroup;
 	}
 
-	private ReadWriteLock lock = new ReentrantReadWriteLock();
-
 	private static final Logger LOGGER = LoggerFactory.getLogger(GeneralConfigGroup.class);
 
 	@Override
 	public final String get(String key) {
-		String val = null;
-		lock.readLock().lock();
-		try {
-			val = super.get(key);
-		} finally {
-			lock.readLock().unlock();
-		}
+		String val = super.get(key);
 		if (val == null && internalConfigGroup != null) {
 			val = internalConfigGroup.get(key);
 		}
@@ -57,13 +47,8 @@ public abstract class GeneralConfigGroup extends HashMap<String, String> impleme
 		if (configs != null && configs.size() > 0) {
 			// clear
 			if (this.size() > 0) {
-				lock.readLock().lock();
 				final Set<String> newKeys = Sets.newHashSet();
-				try {
-					newKeys.addAll(this.keySet());
-				} finally {
-					lock.readLock().unlock();
-				}
+				newKeys.addAll(this.keySet());
 				final Iterable<String> redundances = Iterables.filter(Sets.newHashSet(this.keySet()), new Predicate<String>() {
 
 					@Override
@@ -71,13 +56,8 @@ public abstract class GeneralConfigGroup extends HashMap<String, String> impleme
 						return !newKeys.contains(input);
 					}
 				});
-				lock.writeLock().lock();
-				try {
-					for (String redundance : redundances) {
-						this.remove(redundance);
-					}
-				} finally {
-					lock.writeLock().unlock();
+				for (String redundance : redundances) {
+					this.remove(redundance);
 				}
 			}
 
@@ -94,13 +74,7 @@ public abstract class GeneralConfigGroup extends HashMap<String, String> impleme
 		String preValue = this.get(key);
 		if (!Objects.equal(preValue, value)) {
 			LOGGER.debug("Key {} change from {} to {}", key, preValue, value);
-
-			lock.writeLock().lock();
-			try {
-				super.put(key, value);
-			} finally {
-				lock.writeLock().unlock();
-			}
+			super.put(key, value);
 
 			// If value change, notify
 			if (preValue != null) {
