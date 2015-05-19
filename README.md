@@ -91,7 +91,7 @@ Spring的使用者一般使用PlaceHolder加载properties文件，Config Toolkit
 并不是所有的配置都有必要实现热更新，比如数据库的连接池，重新初始化的成本比较高；比较适合使用热更新的场景是一些需要在线调整的业务参数.
 <pre><code>
     &lt;bean id="configProfile" class="com.dangdang.config.service.zookeeper.ZookeeperConfigProfile"&gt;
-		&lt;constructor-arg name="connectStr" value="zoo.host1:8181,zoo.host2:8181,zoo.host3:8181" /&gt;
+    	&lt;constructor-arg name="connectStr" value="zoo.host1:8181,zoo.host2:8181,zoo.host3:8181" /&gt;
 		&lt;constructor-arg name="rootNode" value="/projectx/modulex" /&gt;
         &lt;constructor-arg name="version" value="1.0.0" /&gt;
 	&lt;/bean&gt;
@@ -128,6 +128,17 @@ Config-toolkit支持：
         &lt;constructor-arg name="configProfile" ref="configProfile" /&gt;
 		&lt;constructor-arg name="node" value="config-toolkit" /&gt;
 	&lt;/bean&gt;
+</code></pre>
+
+由于spring的限制，如果你需要将`ConfigGroup`以`Map<String, String>`的方式注入到业务bean中时，也需要使用SPEL或@Resource
+<pre><code>
+@Resource
+private Map&lt;String, String&gt; configGroup;
+
+or
+
+@Value('#{configGroup}')
+private Map&lt;String, String&gt; configGroup;
 </code></pre>
 
 #### 配置覆盖
