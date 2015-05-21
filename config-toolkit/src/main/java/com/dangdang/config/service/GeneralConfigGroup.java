@@ -43,6 +43,11 @@ public abstract class GeneralConfigGroup extends ConcurrentHashMap<String, Strin
 	}
 
 	@Override
+	public final String get(Object key) {
+		return get(key.toString());
+	}
+
+	@Override
 	public final void putAll(Map<? extends String, ? extends String> configs) {
 		if (configs != null && configs.size() > 0) {
 			// clear

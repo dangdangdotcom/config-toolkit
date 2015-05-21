@@ -16,7 +16,8 @@ public class FileConfigGroupTest {
 //		ConfigGroup configGroup = new FileConfigGroup(configProfile, "file:/Users/yuxuanwang/Work/git/config-toolkit/config-toolkit-demo/src/main/resources/property-group1.properties");
 		
 		while(true) {
-			System.out.println(configGroup.get("int_property_key"));
+			Object obj  = "int_property_key";
+			System.out.println(configGroup.get(obj));
 			try {
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {
