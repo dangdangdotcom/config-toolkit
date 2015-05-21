@@ -209,7 +209,18 @@
 			</exclusions>
 		</dependency>
 	</dependencies>
-
+	<distributionManagement>
+		<repository>
+			<id>nexus-releases</id>
+			<name>Internal Releases</name>
+			<url>http://maven.dangdang.com/nexus/content/repositories/releases</url>
+		</repository>
+		<snapshotRepository>
+			<id>nexus-snapshots</id>
+			<name>Internal Snapshots</name>
+			<url>http://maven.dangdang.com/nexus/content/repositories/snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>
 	<scm>
 		<url>https://github.com/dangdangdotcom/config-toolkit</url>
 		<connection>scm:git:https://github.com/dangdangdotcom/config-toolkit</connection>

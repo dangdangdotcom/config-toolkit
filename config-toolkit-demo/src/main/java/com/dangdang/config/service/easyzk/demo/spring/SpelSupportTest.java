@@ -13,7 +13,7 @@ public class SpelSupportTest {
 	public static void main(String[] args) {
 		ClassPathXmlApplicationContext context = null;
 		try {
-			context = new ClassPathXmlApplicationContext("classpath:config-toolkit-spel-support.xml");
+			context = new ClassPathXmlApplicationContext("classpath:config-toolkit-java-config.xml");
 			context.registerShutdownHook();
 			context.start();
 

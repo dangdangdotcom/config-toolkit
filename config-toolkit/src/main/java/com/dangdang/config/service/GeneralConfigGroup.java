@@ -71,7 +71,7 @@ public abstract class GeneralConfigGroup extends ConcurrentHashMap<String, Strin
 
 	@Override
 	public final String put(String key, String value) {
-		String preValue = this.get(key);
+		String preValue = super.get(key);
 		if (!Objects.equal(preValue, value)) {
 			LOGGER.debug("Key {} change from {} to {}", key, preValue, value);
 			super.put(key, value);

@@ -18,6 +18,9 @@ package com.dangdang.config.service.easyzk.demo.spring.annotation;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.dangdang.config.service.ConfigGroup;
+import com.dangdang.config.service.file.FileConfigGroup;
+import com.dangdang.config.service.file.FileConfigProfile;
 import com.dangdang.config.service.zookeeper.ZookeeperConfigGroup;
 import com.dangdang.config.service.zookeeper.ZookeeperConfigProfile;
 
@@ -36,7 +39,8 @@ public class ConfigCenter {
 	}
 
 	@Bean(name = "propertyGroup1")
-	public ZookeeperConfigGroup getPropertyGroup1(ZookeeperConfigProfile zookeeperConfigProfile) {
-		return new ZookeeperConfigGroup(zookeeperConfigProfile, "property-group1");
+	public ConfigGroup getPropertyGroup1(ZookeeperConfigProfile zookeeperConfigProfile) {
+		ZookeeperConfigGroup zkGroup = new ZookeeperConfigGroup(zookeeperConfigProfile, "property-group1");
+		return new FileConfigGroup(zkGroup, new FileConfigProfile("UTF8", "properties"), "classpath:property-group1.properties");
 	}
 }

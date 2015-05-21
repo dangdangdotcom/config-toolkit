@@ -12,7 +12,7 @@ public class FileConfigGroupTest {
 		ZookeeperConfigProfile configProfile = new ZookeeperConfigProfile("zoo.host1:8181", "/projectx/modulex", "1.0.0");
 		ConfigGroup zkConfigGroup = new ZookeeperConfigGroup(configProfile , "property-group1");
 		FileConfigProfile fileConfigProfile = new FileConfigProfile("UTF8", "properties");
-		ConfigGroup configGroup = new FileConfigGroup(zkConfigGroup, fileConfigProfile, "http://crnlmchina.github.io/config-group.properties");
+		ConfigGroup configGroup = new FileConfigGroup(zkConfigGroup, fileConfigProfile, "classpath:property-group1.properties");
 //		ConfigGroup configGroup = new FileConfigGroup(configProfile, "file:/Users/yuxuanwang/Work/git/config-toolkit/config-toolkit-demo/src/main/resources/property-group1.properties");
 		
 		while(true) {
