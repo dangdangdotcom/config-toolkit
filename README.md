@@ -70,7 +70,7 @@ Old doc: [V2.x document](https://github.com/dangdangdotcom/config-toolkit/wiki/v
     &lt;dependency&gt;
       &lt;groupId&gt;com.dangdang&lt;/groupId&gt;
       &lt;artifactId&gt;config-toolkit&lt;/artifactId&gt;
-      &lt;version&gt;3.0.2-RELEASE&lt;/version&gt;
+      &lt;version&gt;3.0.4-RELEASE&lt;/version&gt;
     &lt;/dependency&gt;
 </code></pre>
 

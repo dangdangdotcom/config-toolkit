@@ -2,9 +2,6 @@ package com.dangdang.config.service.file.protocol;
 
 import java.io.InputStream;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Enumeration;
 import java.util.Map;
 import java.util.Properties;
@@ -36,8 +33,7 @@ public final class Protocols {
 			URL registerFile = null;
 			while (registerFiles.hasMoreElements()) {
 				registerFile = registerFiles.nextElement();
-				Path path = Paths.get(registerFile.toURI());
-				try (InputStream in = Files.newInputStream(path)) {
+				try (InputStream in = registerFile.openStream()) {
 					props.load(in);
 				}
 			}

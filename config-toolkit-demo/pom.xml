@@ -10,7 +10,7 @@
 	</parent>
 
 	<properties>
-		<config-toolkit-easyzk.version>3.0.2-RELEASE</config-toolkit-easyzk.version>
+		<config-toolkit-easyzk.version>3.0.4-RELEASE</config-toolkit-easyzk.version>
 		<zookeeper.version>3.4.6</zookeeper.version>
 	</properties>
 
