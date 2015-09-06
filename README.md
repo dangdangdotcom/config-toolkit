@@ -6,6 +6,9 @@
 
 <hr>
 
+### 社区
+* QQ群: 457997852
+
 ### 依赖
 * JAVA 7+
 * TOMCAT 7+ for ConfigWeb
