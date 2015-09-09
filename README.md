@@ -1,10 +1,17 @@
 # 分布配置工具包
 
-<h1>Config Toolkit V3.1.0 RELEASED</h1>
+<h1>Config Toolkit V3.1.1 RELEASED</h1>
 
 ### 在大型集群和分布式应用中，配置不宜分散到节点中，应该集中管理.
 
 <hr>
+
+### 贡献者
+
+* 王宇轩 5142035@qq.com
+* 沈理 shen-li@163.com
+* 刘卫东 daxueshi07@aliyun.com
+* 梁承祝 12459385@qq.com
 
 ### 社区
 * QQ群: 457997852
