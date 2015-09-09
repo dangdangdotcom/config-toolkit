@@ -27,7 +27,7 @@ import com.google.common.base.Throwables;
  * <li>file:/your/path/config.xml</li>
  * <li>http://www.yoursite.com/config.properties</li>
  * <li>http://www.yoursite.com/config.xml</li>
- * <ul>
+ * </ul>
  * 
  * @author <a href="mailto:wangyuxuan@dangdang.com">Yuxuan Wang</a>
  *
