@@ -53,7 +53,7 @@ public abstract class GeneralConfigGroup extends ConcurrentHashMap<String, Strin
 			// clear
 			if (this.size() > 0) {
 				final Set<String> newKeys = Sets.newHashSet();
-				newKeys.addAll(this.keySet());
+				newKeys.addAll(configs.keySet());
 				final Iterable<String> redundances = Iterables.filter(Sets.newHashSet(this.keySet()), new Predicate<String>() {
 
 					@Override
