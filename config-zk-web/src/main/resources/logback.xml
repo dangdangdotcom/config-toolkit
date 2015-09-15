@@ -8,7 +8,7 @@
 <!-- http://www.qos.ch/shop/products/professionalSupport -->
 <!-- -->
 <configuration>
-	<property name="logBase" value="/usr/local/tomcat/logs" />
+	<property name="logBase" value="/var/www/logs/config-web" />
 
 	<appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
 		<encoder>
