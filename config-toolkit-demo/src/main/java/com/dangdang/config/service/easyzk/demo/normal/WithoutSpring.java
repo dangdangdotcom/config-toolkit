@@ -30,7 +30,7 @@ import com.google.common.base.Preconditions;
 public class WithoutSpring {
 
 	public static void main(String[] args) {
-		ZookeeperConfigProfile configProfile = new ZookeeperConfigProfile("zoo.host1:8181", "/projectx/modulex", "1.0.0");
+		ZookeeperConfigProfile configProfile = new ZookeeperConfigProfile("config-toolkit.mabaoshan.com:8011", "/projectx/modulex", "1.0.0");
 		GeneralConfigGroup propertyGroup1 = new ZookeeperConfigGroup(configProfile, "property-group1");
 		System.out.println(propertyGroup1);
 

@@ -15,7 +15,7 @@
 	<!-- New version -->
 	<!-- Config Profile -->
 	<bean id="configProfile" class="com.dangdang.config.service.zookeeper.ZookeeperConfigProfile">
-		<constructor-arg name="connectStr" value="zoo.host1:8181,zoo.host2:8181,zoo.host3:8181" />
+		<constructor-arg name="connectStr" value="config-toolkit.mabaoshan.com:8011" />
 		<constructor-arg name="rootNode" value="/projectx/modulex" />
 		<constructor-arg name="version" value="1.0.0" />
 	</bean>

@@ -15,6 +15,9 @@
  */
 package com.dangdang.config.service.easyzk.demo.override;
 
+import com.dangdang.config.service.ConfigGroup;
+import com.dangdang.config.service.file.FileConfigGroup;
+import com.dangdang.config.service.file.FileConfigProfile;
 import com.dangdang.config.service.observer.IObserver;
 import com.dangdang.config.service.zookeeper.ZookeeperConfigGroup;
 import com.dangdang.config.service.zookeeper.ZookeeperConfigProfile;
@@ -27,26 +30,20 @@ import com.google.common.base.Preconditions;
 public class LocalOverrideTest {
 
 	public static void main(String[] args) {
-		ZookeeperConfigProfile configProfile = new ZookeeperConfigProfile("zoo.host1:8181", "/projectx/modulex", "1.0.0");
+		ZookeeperConfigProfile configProfile = new ZookeeperConfigProfile("config-toolkit.mabaoshan.com:8011", "/projectx/modulex", "1.0.0");
 		ZookeeperConfigGroup propertyGroup1 = new ZookeeperConfigGroup(configProfile, "property-group1");
-
-		System.out.println(propertyGroup1);
 		
-		// Listen changes
-		propertyGroup1.register(new IObserver() {
-			@Override
-			public void notified(String data, String value) {
-				// Some initialization
-			}
-		});
+		ConfigGroup group = new FileConfigGroup(propertyGroup1, new FileConfigProfile("UTF-8", "properties"), "classpath:property-group1.properties");
 
-		String stringProperty = propertyGroup1.get("string_property_key");
+		System.out.println(group);
+		
+		String stringProperty = group.get("string_property_key");
 		System.out.println(stringProperty);
 		Preconditions.checkState("Config-Toolkit".equals(stringProperty));
 		
-		String intProperty = propertyGroup1.get("int_property_key");
+		String intProperty = group.get("int_property_key");
 		System.out.println(intProperty);
-		Preconditions.checkState(1123 == Integer.parseInt(intProperty));
+		Preconditions.checkState(123456789 == Integer.parseInt(intProperty));
 	}
 
 }

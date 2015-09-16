@@ -35,7 +35,7 @@ public class ConfigCenter {
 
 	@Bean
 	public ZookeeperConfigProfile getConfigProfile() {
-		return new ZookeeperConfigProfile("zoo.host1:8181,zoo.host2:8181,zoo.host3:8181", "/projectx/modulex", "1.0.0");
+		return new ZookeeperConfigProfile("config-toolkit.mabaoshan.com:8011", "/projectx/modulex", "1.0.0");
 	}
 
 	@Bean(name = "propertyGroup1")

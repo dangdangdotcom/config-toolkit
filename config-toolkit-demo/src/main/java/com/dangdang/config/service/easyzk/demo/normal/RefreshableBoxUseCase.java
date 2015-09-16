@@ -13,7 +13,7 @@ import com.dangdang.config.service.zookeeper.ZookeeperConfigProfile;
 public class RefreshableBoxUseCase {
 
 	public static void main(String[] args) {
-		ZookeeperConfigProfile configProfile = new ZookeeperConfigProfile("zoo.host1:8181", "/projectx/modulex", "1.0.0");
+		ZookeeperConfigProfile configProfile = new ZookeeperConfigProfile("config-toolkit.mabaoshan.com:8011", "/projectx/modulex", "1.0.0");
 		GeneralConfigGroup node = new ZookeeperConfigGroup(configProfile, "property-group1");
 		
 		RefreshableBox<ExampleBean> box = new RefreshableBox<ExampleBean>(node) {
