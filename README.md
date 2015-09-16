@@ -12,6 +12,7 @@
 * 沈理 shen-li@163.com
 * 刘卫东 daxueshi07@aliyun.com
 * 梁承祝 12459385@qq.com
+* 马宝山 mabaoshan@dangdang.com
 
 ### 社区
 * QQ群: 457997852
@@ -215,5 +216,7 @@ Config Web 提供界面方便管理zookeeper中的配置数据.
 > `# a9993e364706816aba3e25717850c26c9cd0d89d`
 > 
 > `echo "set /aaa/bbb a9993e364706816aba3e25717850c26c9cd0d89d" |./zkCli.sh -server localhost:2181`
+
+Try It: [Playground](http://config-toolkit.mabaoshan.com:8010 "Playground") /projectx/modulex 123
 
 ![Config Web Snapshot](http://crnlmchina.github.io/config-web2.jpg)
