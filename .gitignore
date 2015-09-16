@@ -1,3 +1,10 @@
 .project
 *.classpath
 .settings
+_Store
+target/
+out/
+*.class
+.DS_Store
+*.iml
+.idea/*
