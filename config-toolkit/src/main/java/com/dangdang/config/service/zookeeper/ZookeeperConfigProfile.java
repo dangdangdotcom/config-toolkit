@@ -47,16 +47,6 @@ public class ZookeeperConfigProfile extends ConfigProfile {
 	private final RetryPolicy retryPolicy;
 
 	/**
-	 * 是否打开本地文件缓存
-	 */
-	private final boolean openLocalCache;
-
-	/**
-	 * 本地缓存文件目录
-	 */
-	private String localCacheFolder = "/config-service";
-
-	/**
 	 * 一致性检查, 主动检查本地数据与zk中心数据的一致性, 防止出现因连接中断而丢失更新消息, 默认开启
 	 */
 	private boolean consistencyCheck = true;
@@ -79,7 +69,6 @@ public class ZookeeperConfigProfile extends ConfigProfile {
 		super(version);
 		this.connectStr = Preconditions.checkNotNull(connectStr);
 		this.rootNode = Preconditions.checkNotNull(rootNode);
-		this.openLocalCache = openLocalCache;
 		this.retryPolicy = Preconditions.checkNotNull(retryPolicy);
 	}
 
@@ -111,20 +100,8 @@ public class ZookeeperConfigProfile extends ConfigProfile {
 		this.consistencyCheckRate = consistencyCheckRate;
 	}
 
-	public final boolean isOpenLocalCache() {
-		return openLocalCache;
-	}
-
-	public final String getLocalCacheFolder() {
-		return localCacheFolder;
-	}
-
-	public final void setLocalCacheFolder(String localCacheFolder) {
-		this.localCacheFolder = localCacheFolder;
-	}
-
 	public String getVersionedRootNode() {
-		if(Strings.isNullOrEmpty(version)){
+		if (Strings.isNullOrEmpty(version)) {
 			return rootNode;
 		}
 		return ZKPaths.makePath(rootNode, version);
@@ -132,9 +109,8 @@ public class ZookeeperConfigProfile extends ConfigProfile {
 
 	@Override
 	public String toString() {
-		return "ConfigProfile [connectStr=" + connectStr + ", rootNode=" + rootNode + ", version=" + version + ", retryPolicy=" + retryPolicy
-				+ ", openLocalCache=" + openLocalCache + ", localCacheFolder=" + localCacheFolder + ", consistencyCheck=" + consistencyCheck
-				+ ", consistencyCheckRate=" + consistencyCheckRate + "]";
+		return "ZookeeperConfigProfile [connectStr=" + connectStr + ", rootNode=" + rootNode + ", retryPolicy=" + retryPolicy + ", consistencyCheck="
+				+ consistencyCheck + ", consistencyCheckRate=" + consistencyCheckRate + "]";
 	}
 
 }
