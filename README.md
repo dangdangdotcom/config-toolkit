@@ -215,7 +215,7 @@ Config Web 提供界面方便管理zookeeper中的配置数据.
 > 
 > `# a9993e364706816aba3e25717850c26c9cd0d89d`
 > 
-> `echo "set /aaa/bbb a9993e364706816aba3e25717850c26c9cd0d89d" |./zkCli.sh -server localhost:2181`
+> `echo "create /aaa/bbb a9993e364706816aba3e25717850c26c9cd0d89d" |./zkCli.sh -server localhost:2181`
 
 Try It: [Playground](http://config-toolkit.mabaoshan.com:8010 "Playground") /projectx/modulex 123
 
