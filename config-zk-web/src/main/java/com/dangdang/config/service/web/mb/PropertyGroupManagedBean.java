@@ -254,7 +254,7 @@ public class PropertyGroupManagedBean implements Serializable, IObserver {
 			if (!line.startsWith("#")) {
 				Iterable<String> parts = PROPERTY_SPLITTER.split(line);
 				if (Iterables.size(parts) == 2) {
-					PropertyItemVO item = new PropertyItemVO(Iterables.getFirst(parts, null), Iterables.getLast(parts));
+					PropertyItemVO item = new PropertyItemVO(Iterables.getFirst(parts, null).trim(), Iterables.getLast(parts).trim());
 					if (previousLine != null && previousLine.startsWith("#")) {
 						item.setComment(StringUtils.trimLeadingCharacter(previousLine, '#').trim());
 					}
