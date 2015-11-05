@@ -2,7 +2,7 @@
 
 <h1>Config Toolkit V3.1.2 RELEASED</h1>
 
-### 在大型集群和分布式应用中，配置不宜分散到节点中，应该集中管理.
+### ${rootNode}/${version}/${group}/${keyValues}
 
 <hr>
 
@@ -48,6 +48,7 @@ Old doc: [V2.x document](https://github.com/dangdangdotcom/config-toolkit/wiki/v
 由上到下API侵入性依次变强
 
 ### Quick Start
+
 #### load properties from zookeeper
 <pre><code>
     ZookeeperConfigProfile configProfile = new ZookeeperConfigProfile("zoo.host1:8181", "/projectx/modulex", "1.0.0");
@@ -109,7 +110,7 @@ Spring的使用者一般使用PlaceHolder加载properties文件，Config Toolkit
 并不是所有的配置都有必要实现热更新，比如数据库的连接池，重新初始化的成本比较高；比较适合使用热更新的场景是一些需要在线调整的业务参数.
 <pre><code>
     &lt;bean id="configProfile" class="com.dangdang.config.service.zookeeper.ZookeeperConfigProfile"&gt;
-    	&lt;constructor-arg name="connectStr" value="zoo.host1:8181,zoo.host2:8181,zoo.host3:8181" /&gt;
+        &lt;constructor-arg name="connectStr" value="zoo.host1:8181,zoo.host2:8181,zoo.host3:8181" /&gt;
 		&lt;constructor-arg name="rootNode" value="/projectx/modulex" /&gt;
         &lt;constructor-arg name="version" value="1.0.0" /&gt;
 	&lt;/bean&gt;
@@ -227,3 +228,4 @@ Config Web 提供界面方便管理zookeeper中的配置数据.
 Try It: [Playground](http://config-toolkit.mabaoshan.com:8010 "Playground") /projectx/modulex 123
 
 ![Config Web Snapshot](http://crnlmchina.github.io/config-web2.jpg)
+
