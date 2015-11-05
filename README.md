@@ -40,6 +40,13 @@ Old doc: [V2.x document](https://github.com/dangdangdotcom/config-toolkit/wiki/v
 * 版本控制，支持灰度发布
 * 支持为配置项添加注释
 
+### 使用场景建议
+* 如果只需要统一管理的配置，不需要热更新，直接用placeholder或SPEL
+* 需要热更新，不需要初始化的，将ConfigGroup以Map的方式注入bean，每次在Map中拿配置
+* 需要热更新，需要初始化的，使用RefreshableBox
+
+由上到下API侵入性依次变强
+
 ### Quick Start
 #### load properties from zookeeper
 <pre><code>
