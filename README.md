@@ -1,8 +1,6 @@
 # 分布配置工具包
 
-<h1>Config Toolkit V3.1.2 RELEASED</h1>
-
-### ${rootNode}/${version}/${group}/${keyValues}
+<h2>${rootNode}/${version}/${group}/${keyValues}</h2>
 
 <hr>
 
