@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.dangdang.config.service.easyzk.demo;
+package com.dangdang.config.service.easyzk.demo.simple;
 
 import java.util.Map;
 

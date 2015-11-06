@@ -17,7 +17,7 @@ package com.dangdang.config.service.easyzk.demo.spring;
 
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import com.dangdang.config.service.easyzk.demo.ExampleBeanWithConfigNode;
+import com.dangdang.config.service.easyzk.demo.simple.ExampleBeanWithConfigNode;
 
 /**
  * Load spring, and validation the property

@@ -1,4 +1,4 @@
-package com.dangdang.config.service.easyzk.demo;
+package com.dangdang.config.service.easyzk.demo.simple;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;

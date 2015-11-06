@@ -7,6 +7,8 @@
              http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd
              http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
 
+	<context:component-scan base-package="com.dangdang.config.service.easyzk.demo.simple" />
+
 	<!-- Config Profile -->
 	<bean id="configProfile" class="com.dangdang.config.service.zookeeper.ZookeeperConfigProfile">
 		<constructor-arg name="connectStr" value="config-toolkit.mabaoshan.com:8011" />
@@ -15,19 +17,12 @@
 	</bean>
 	
 	<!-- Config Node -->
-	<bean id="someGroup" class="com.dangdang.config.service.zookeeper.ZookeeperConfigGroup">
+	<bean id="propertyGroup1" class="com.dangdang.config.service.zookeeper.ZookeeperConfigGroup">
 		<constructor-arg name="configProfile" ref="configProfile" />
 		<constructor-arg name="node" value="property-group1" />
 	</bean>
-	<bean id="someGroup2" class="com.dangdang.config.service.zookeeper.ZookeeperConfigGroup">
+	<bean id="propertyGroup2" class="com.dangdang.config.service.zookeeper.ZookeeperConfigGroup">
 		<constructor-arg name="configProfile" ref="configProfile" />
 		<constructor-arg name="node" value="property-group2" />
 	</bean>
-	
-	<!-- Service bean -->
-	<bean class="com.dangdang.config.service.easyzk.demo.ExampleBeanWithConfigNode">
-		<property name="propertyGroup1" ref="someGroup"></property>
-	</bean>
-
-
 </beans>

@@ -1,7 +1,7 @@
 package com.dangdang.config.service.easyzk.demo.normal;
 
 import com.dangdang.config.service.GeneralConfigGroup;
-import com.dangdang.config.service.easyzk.demo.ExampleBean;
+import com.dangdang.config.service.easyzk.demo.simple.ExampleBean;
 import com.dangdang.config.service.sugar.RefreshableBox;
 import com.dangdang.config.service.zookeeper.ZookeeperConfigGroup;
 import com.dangdang.config.service.zookeeper.ZookeeperConfigProfile;

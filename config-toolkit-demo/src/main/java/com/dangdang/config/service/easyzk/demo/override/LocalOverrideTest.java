@@ -18,7 +18,6 @@ package com.dangdang.config.service.easyzk.demo.override;
 import com.dangdang.config.service.ConfigGroup;
 import com.dangdang.config.service.file.FileConfigGroup;
 import com.dangdang.config.service.file.FileConfigProfile;
-import com.dangdang.config.service.observer.IObserver;
 import com.dangdang.config.service.zookeeper.ZookeeperConfigGroup;
 import com.dangdang.config.service.zookeeper.ZookeeperConfigProfile;
 import com.google.common.base.Preconditions;

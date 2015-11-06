@@ -2,7 +2,7 @@ package com.dangdang.config.service.easyzk.demo.spring;
 
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import com.dangdang.config.service.easyzk.demo.ExampleBean;
+import com.dangdang.config.service.easyzk.demo.simple.ExampleBean;
 
 /**
  * @author <a href="mailto:wangyuxuan@dangdang.com">Yuxuan Wang</a>

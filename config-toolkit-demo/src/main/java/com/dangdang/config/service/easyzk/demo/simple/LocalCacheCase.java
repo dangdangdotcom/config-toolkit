@@ -1,4 +1,4 @@
-package com.dangdang.config.service.easyzk.demo;
+package com.dangdang.config.service.easyzk.demo.simple;
 
 import com.dangdang.config.service.ConfigGroup;
 import com.dangdang.config.service.zookeeper.ZookeeperConfigGroup;
