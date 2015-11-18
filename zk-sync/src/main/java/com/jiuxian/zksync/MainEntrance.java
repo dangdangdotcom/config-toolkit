@@ -15,10 +15,10 @@ public class MainEntrance {
 	 * Sync zk data
 	 * 
 	 * [例1] 同步数据不覆盖，遇到已存在节点跳过<br>
-	 * java -jar zk-sync.jar zk1-host:2181 zk2-host:2181<br>
+	 * java -jar zk-sync.jar zk1-host:2181 zk2-host:2181 /aaa/bbb<br>
 	 * 
 	 * [例2] 同步数据并覆盖已存在节点<br>
-	 * java -jar zk-sync.jar zk1-host:2181 zk2-host:2181 1
+	 * java -jar zk-sync.jar zk1-host:2181 zk2-host:2181 /aaa/bbb 1
 	 * 
 	 * @param args
 	 */
