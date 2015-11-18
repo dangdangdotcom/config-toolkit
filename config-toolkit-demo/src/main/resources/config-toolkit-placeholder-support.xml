@@ -20,10 +20,13 @@
 <!-- 	</bean> -->
 
 	<!-- New version -->
+	<util:properties id="configToolkitConfigs" location="classpath:config-toolkit.properties" />
+
+	<!-- Config Profile -->
 	<bean id="configProfile" class="com.dangdang.config.service.zookeeper.ZookeeperConfigProfile">
-		<constructor-arg name="connectStr" value="config-toolkit.mabaoshan.com:8011" />
+		<constructor-arg name="connectStr" value="#{configToolkitConfigs['zk.address']}" />
 		<constructor-arg name="rootNode" value="/projectx/modulex" />
-		<constructor-arg name="version" value="1.0.0" />
+		<constructor-arg name="version" value="#{configToolkitConfigs['zk.configs.version']}" />
 	</bean>
 
 	<bean id="zookeeperSources" class="com.dangdang.config.service.support.spring.ConfigGroupSourceFactory" factory-method="create">
