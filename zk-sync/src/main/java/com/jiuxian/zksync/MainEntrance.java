@@ -23,7 +23,7 @@ public class MainEntrance {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		if (args == null || args.length < 4) {
+		if (args == null || args.length < 3) {
 			System.out.println("Invalid params: " + Arrays.toString(args));
 			System.out.println("Valid format: source:port target:port /root/node [overwrite(0/1)]");
 			System.exit(1);
