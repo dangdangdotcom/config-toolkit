@@ -249,7 +249,7 @@ public class PropertyGroupManagedBean implements Serializable, IObserver {
 		List<String> lines = IOUtils.readLines(inputstream, Charsets.UTF_8.name());
 		List<PropertyItemVO> items = Lists.newArrayList();
 		String previousLine = null;
-		for (int i = 1; i < lines.size(); i++) {
+		for (int i = 0; i < lines.size(); i++) {
 			String line = lines.get(i);
 			if (!line.startsWith("#")) {
 				Iterable<String> parts = PROPERTY_SPLITTER.split(line);
