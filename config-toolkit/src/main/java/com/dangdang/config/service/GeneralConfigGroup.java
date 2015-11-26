@@ -62,7 +62,7 @@ public abstract class GeneralConfigGroup extends ConcurrentHashMap<String, Strin
 					}
 				});
 				for (String redundance : redundances) {
-					this.remove(redundance);
+					super.remove(redundance);
 				}
 			}
 
