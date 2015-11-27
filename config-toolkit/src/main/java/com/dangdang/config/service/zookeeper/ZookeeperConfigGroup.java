@@ -18,9 +18,9 @@ package com.dangdang.config.service.zookeeper;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Timer;
-import java.util.TimerTask;
-
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import javax.annotation.PreDestroy;
 
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -78,7 +78,7 @@ public class ZookeeperConfigGroup extends GeneralConfigGroup {
 		initConfigs();
 	}
 
-	private Timer timer;
+	private ScheduledExecutorService scheduler;
 
 	private CuratorListener listener = new ConfigNodeEventListener(this);
 
@@ -101,15 +101,14 @@ public class ZookeeperConfigGroup extends GeneralConfigGroup {
 
 		// Consistency check
 		if (configProfile.isConsistencyCheck()) {
-			timer = new Timer();
-			timer.scheduleAtFixedRate(new TimerTask() {
-
+		        scheduler = Executors.newScheduledThreadPool(1);
+			scheduler.scheduleAtFixedRate(new Runnable() {
 				@Override
 				public void run() {
 					LOGGER.trace("Do consistency check for node: {}", node);
 					loadNode();
 				}
-			}, 60000L, configProfile.getConsistencyCheckRate());
+			}, 60000L, configProfile.getConsistencyCheckRate(), TimeUnit.MILLISECONDS);
 		}
 	}
 
@@ -194,8 +193,8 @@ public class ZookeeperConfigGroup extends GeneralConfigGroup {
 	@PreDestroy
 	@Override
 	public void close() {
-		if (timer != null) {
-			timer.cancel();
+		if (scheduler != null) {
+			scheduler.shutdown();
 		}
 		if (client != null) {
 			client.getCuratorListenable().removeListener(listener);
