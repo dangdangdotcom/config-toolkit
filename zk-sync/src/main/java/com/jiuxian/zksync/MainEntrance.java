@@ -32,7 +32,7 @@ public class MainEntrance {
 		String source = args[0];
 		String target = args[1];
 		String rootNode = args[2];
-		String overwrite = args[3];
+		String overwrite = args.length > 3 ? args[3] : "0";
 
 		try (CuratorFramework sourceClient = CuratorFrameworkFactory.newClient(source, new RetryOneTime(1))) {
 			sourceClient.start();
