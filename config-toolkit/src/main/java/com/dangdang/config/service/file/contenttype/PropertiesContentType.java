@@ -2,11 +2,10 @@ package com.dangdang.config.service.file.contenttype;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.Map;
 import java.util.Properties;
-
-import jline.internal.InputStreamReader;
 
 import com.dangdang.config.service.exception.InvalidPathException;
 import com.google.common.collect.Maps;
