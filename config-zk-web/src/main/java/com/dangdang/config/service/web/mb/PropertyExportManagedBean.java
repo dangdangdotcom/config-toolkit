@@ -85,7 +85,7 @@ public class PropertyExportManagedBean {
 	 * 下载单个配置组，格式为properties文件
 	 * 
 	 * @param groupName
-	 * @return
+	 * @return 配置组流对象
 	 */
 	public StreamedContent generateFile(String groupName) {
 		LOGGER.info("Export config group: {}", groupName);
@@ -136,7 +136,7 @@ public class PropertyExportManagedBean {
 	/**
 	 * 下载所有配置组，格式为ZIP
 	 * 
-	 * @return
+	 * @return 所有配置组流对象
 	 */
 	public StreamedContent generateFileAll() {
 		LOGGER.info("Export all config group");

@@ -105,7 +105,7 @@ public class NodeDataManagedBean implements Serializable, IObserver {
 	/**
 	 * 获取已选节点全路径
 	 * 
-	 * @return
+	 * @return selected node path
 	 */
 	private String getSelectedNodePath() {
 		if (Strings.isNullOrEmpty(selectedNode))
@@ -117,7 +117,7 @@ public class NodeDataManagedBean implements Serializable, IObserver {
 	/**
 	 * 获取已选节点注释全路径
 	 * 
-	 * @return
+	 * @return selected node
 	 */
 	private String getSelectedNodeCommentPath() {
 		if (Strings.isNullOrEmpty(selectedNode))
@@ -130,7 +130,7 @@ public class NodeDataManagedBean implements Serializable, IObserver {
 	 * 获取属性全路径
 	 * 
 	 * @param propertyName
-	 * @return
+	 * @return property node path
 	 */
 	private String getPropertyNodePath(String propertyName) {
 		return ZKPaths.makePath(getSelectedNodePath(), propertyName);
@@ -140,7 +140,7 @@ public class NodeDataManagedBean implements Serializable, IObserver {
 	 * 获取属性注释全路径
 	 * 
 	 * @param propertyName
-	 * @return
+	 * @return property comment path
 	 */
 	private String getPropertyCommentPath(String propertyName) {
 		return ZKPaths.makePath(getSelectedNodeCommentPath(), propertyName);
@@ -163,7 +163,6 @@ public class NodeDataManagedBean implements Serializable, IObserver {
 	/**
 	 * 更新数据
 	 * 
-	 * @param event
 	 */
 	public void onPropertyEdit(RowEditEvent event) {
 		if (!checkPropertyGroupCheckedStatus()) {
@@ -270,7 +269,6 @@ public class NodeDataManagedBean implements Serializable, IObserver {
 	/**
 	 * 删除原有属性
 	 * 
-	 * @param propName
 	 */
 	public void deleteProperty(String propName) {
 		if (!checkPropertyGroupCheckedStatus()) {

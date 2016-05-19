@@ -28,7 +28,7 @@ public interface IAuthDao {
 	 * 
 	 * @param nodeName
 	 * @param password
-	 * @return
+	 * @return true: 授权成功; false: 节点已被授权
 	 */
 	boolean checkAuth(String nodeName, String password);
 

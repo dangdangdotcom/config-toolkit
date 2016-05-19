@@ -240,7 +240,7 @@ public class PropertyGroupManagedBean implements Serializable, IObserver {
 
 	/**
 	 * @param inputstream
-	 * @return
+	 * @return property item vo list
 	 * @throws IOException
 	 */
 	private List<PropertyItemVO> parseInputFile(InputStream inputstream) throws IOException {

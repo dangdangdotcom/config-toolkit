@@ -31,7 +31,7 @@ public interface INodeDao {
 	 * 查找子属性
 	 * 
 	 * @param node
-	 * @return
+	 * @return property item list
 	 */
 	List<PropertyItem> findProperties(String node);
 
@@ -39,7 +39,7 @@ public interface INodeDao {
 	 * 查找子结点
 	 * 
 	 * @param node
-	 * @return
+	 * @return string list
 	 */
 	List<String> listChildren(String node);
 }
