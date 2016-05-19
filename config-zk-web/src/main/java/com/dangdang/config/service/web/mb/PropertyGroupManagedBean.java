@@ -176,7 +176,6 @@ public class PropertyGroupManagedBean implements Serializable, IObserver {
 	/**
 	 * 选中配置组
 	 * 
-	 * @return
 	 */
 	public void onMenuSelected(SelectEvent event) {
 		String selectedNode = (String) event.getObject();
@@ -189,7 +188,6 @@ public class PropertyGroupManagedBean implements Serializable, IObserver {
 	/**
 	 * 上传配置
 	 * 
-	 * @param event
 	 */
 	public void propertyGroupUpload(FileUploadEvent event) {
 		String fileName = event.getFile().getFileName();
@@ -270,7 +268,6 @@ public class PropertyGroupManagedBean implements Serializable, IObserver {
 	/**
 	 * 上传配置
 	 * 
-	 * @param event
 	 */
 	public void propertyZipUpload(FileUploadEvent event) {
 		String fileName = event.getFile().getFileName();
@@ -296,11 +293,10 @@ public class PropertyGroupManagedBean implements Serializable, IObserver {
 			}
 		}
 	}
-	
+
 	/**
 	 * 上传配置(Old)
 	 * 
-	 * @param event
 	 */
 	@Deprecated
 	public void propertyZipUploadOld(FileUploadEvent event) {
@@ -327,7 +323,7 @@ public class PropertyGroupManagedBean implements Serializable, IObserver {
 			}
 		}
 	}
-	
+
 	@Deprecated
 	private void savePropertyGroupOld(String fileName, String group, InputStream inputstream) throws IOException {
 		Reader reader = new InputStreamReader(inputstream, Charsets.UTF_8);
