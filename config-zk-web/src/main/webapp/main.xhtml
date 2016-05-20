@@ -4,6 +4,13 @@
 	xmlns:p="http://primefaces.org/ui" xmlns:ui="http://java.sun.com/jsf/facelets">
 <h:head>
 	<title>配置管理面板</title>
+	<script type="text/javascript">
+	$(document).on("keydown", ".ui-cell-editor-input input", function(event) {
+	    if (event.keyCode == 13) {
+	        $(this).closest("tr").find(".ui-row-editor .ui-icon-check").click();
+	    }
+	});
+	</script>
 </h:head>
 <h:body style="padding:10px;">
 	<h:form id="messageBox">
