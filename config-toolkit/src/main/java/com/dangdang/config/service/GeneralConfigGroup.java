@@ -26,13 +26,17 @@ public abstract class GeneralConfigGroup extends ConcurrentHashMap<String, Strin
 	private static final long serialVersionUID = 1L;
 
 	private ConfigGroup internalConfigGroup;
-
+        
 	protected GeneralConfigGroup(ConfigGroup internalConfigGroup) {
 		this.internalConfigGroup = internalConfigGroup;
 	}
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(GeneralConfigGroup.class);
-
+	
+	private long lastmodify;
+	public long getLastmodify(){
+		return lastmodify;
+	}
 	@Override
 	public final String get(String key) {
 		String val = super.get(key);
@@ -49,6 +53,7 @@ public abstract class GeneralConfigGroup extends ConcurrentHashMap<String, Strin
 
 	@Override
 	public final void putAll(Map<? extends String, ? extends String> configs) {
+		lastmodify= System.currentTimeMillis();
 		if (configs != null && configs.size() > 0) {
 			// clear
 			if (this.size() > 0) {
