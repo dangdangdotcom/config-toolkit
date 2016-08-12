@@ -24,8 +24,8 @@ public abstract class LocalFileProtocol implements Protocol {
 	public final byte[] read(FileLocation location) throws InvalidPathException {
 		try {
 			Path path = getPath(location);
-			if (!Files.isReadable(path)) {
-				throw new InvalidPathException("The file is not readable.");
+			if (!Files.exists(path)) {
+				throw new InvalidPathException("The file is not exists.");
 			}
 			return Files.readAllBytes(path);
 		} catch (IOException e) {
