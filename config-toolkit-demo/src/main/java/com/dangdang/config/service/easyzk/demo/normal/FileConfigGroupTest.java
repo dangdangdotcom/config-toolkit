@@ -17,8 +17,9 @@ public class FileConfigGroupTest {
 		ConfigGroup zkConfigGroup = new ZookeeperConfigGroup(configProfile, "property-group1");
 		FileConfigProfile fileConfigProfile = new FileConfigProfile("UTF8", "properties");
 		ConfigGroup configGroup = new FileConfigGroup(zkConfigGroup, fileConfigProfile, "classpath:property-group1.properties");
-		// ConfigGroup configGroup = new FileConfigGroup(configProfile,
-		// "file:/Users/yuxuanwang/Work/git/config-toolkit/config-toolkit-demo/src/main/resources/property-group1.properties");
+		// ConfigGroup configGroup = new FileConfigGroup(zkConfigGroup,
+		// fileConfigProfile,
+		// "file:/Users/yuxuanwang/Work/git2/config-toolkit/config-toolkit-demo/src/main/resources/property-group1.properties");
 
 		while (true) {
 			Object obj = "int_property_key";

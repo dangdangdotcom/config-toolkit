@@ -38,7 +38,7 @@ public abstract class LocalFileProtocol implements Protocol {
 		// Register file change listener
 		try {
 			watcher = FileSystems.getDefault().newWatchService();
-			Path path = getPath(location);
+			Path path = getPath(location).toAbsolutePath();
 
 			path.getParent().register(watcher, StandardWatchEventKinds.ENTRY_MODIFY);
 			new Thread(new FileChangeEventListener(watcher, fileConfigGroup, path)).start();
