@@ -130,7 +130,7 @@ public class ZookeeperConfigGroup extends GeneralConfigGroup {
 						configs.put(keyValue.getKey(), keyValue.getValue());
 					}
 				}
-				super.putAll(configs);
+				cleanAndputAll(configs);
 			}
 		} catch (Exception e) {
 			throw Throwables.propagate(e);

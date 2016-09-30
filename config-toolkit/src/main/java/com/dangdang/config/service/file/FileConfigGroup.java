@@ -66,7 +66,7 @@ public class FileConfigGroup extends GeneralConfigGroup {
 			protocolBean = Protocols.getInstance().get(location.getProtocol()).newInstance();
 
 			ContentType contentTypeBean = ContentTypes.getInstance().get(configProfile.getContentType()).newInstance();
-			putAll(contentTypeBean.resolve(protocolBean.read(location), configProfile.getFileEncoding()));
+			cleanAndputAll(contentTypeBean.resolve(protocolBean.read(location), configProfile.getFileEncoding()));
 		} catch (InvalidPathException e) {
 			throw Throwables.propagate(e);
 		} catch (InstantiationException e) {

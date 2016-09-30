@@ -13,8 +13,8 @@ import com.dangdang.config.service.zookeeper.ZookeeperConfigProfile;
 public class FileConfigGroupTest {
 
 	public static void main(String[] args) {
-		ZookeeperConfigProfile configProfile = new ZookeeperConfigProfile("config-toolkit.mabaoshan.com:8011", "/projectx/modulex", "1.0.0");
-		ConfigGroup zkConfigGroup = new ZookeeperConfigGroup(configProfile, "property-group1");
+		ZookeeperConfigProfile configProfile = new ZookeeperConfigProfile("192.168.5.99", "/projectx/modulex", "1.0.0");
+		ConfigGroup zkConfigGroup = new ZookeeperConfigGroup(configProfile, "property-group3");
 		FileConfigProfile fileConfigProfile = new FileConfigProfile("UTF8", "properties");
 		ConfigGroup configGroup = new FileConfigGroup(zkConfigGroup, fileConfigProfile, "classpath:property-group1.properties");
 		// ConfigGroup configGroup = new FileConfigGroup(zkConfigGroup,

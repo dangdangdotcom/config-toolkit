@@ -56,8 +56,8 @@ public abstract class GeneralConfigGroup extends ConcurrentHashMap<String, Strin
 		return get(key.toString());
 	}
 
-	@Override
-	public final void putAll(Map<? extends String, ? extends String> configs) {
+	public final void cleanAndputAll(Map<? extends String, ? extends String> configs) { // TODO
+																						// CONFIG.SIZE==0
 		lastLoadTime = System.currentTimeMillis();
 		if (configs != null && configs.size() > 0) {
 			// clear
@@ -81,6 +81,9 @@ public abstract class GeneralConfigGroup extends ConcurrentHashMap<String, Strin
 				this.put(entry.getKey(), entry.getValue());
 			}
 
+		} else {
+			LOGGER.debug("Config group has none keys, clear.");
+			super.clear();
 		}
 	}
 
