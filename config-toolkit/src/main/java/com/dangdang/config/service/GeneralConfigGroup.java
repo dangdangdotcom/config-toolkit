@@ -9,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.dangdang.config.service.observer.IObserver;
-import com.dangdang.config.service.observer.ISubject;
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Predicate;
@@ -21,7 +20,7 @@ import com.google.common.collect.Sets;
  * @author <a href="mailto:wangyuxuan@dangdang.com">Yuxuan Wang</a>
  *
  */
-public abstract class GeneralConfigGroup extends ConcurrentHashMap<String, String> implements ConfigGroup, ISubject {
+public abstract class GeneralConfigGroup extends ConcurrentHashMap<String, String> implements ConfigGroup {
 
 	private static final long serialVersionUID = 1L;
 

@@ -6,7 +6,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.dangdang</groupId>
 	<artifactId>config-toolkit-parent</artifactId>
-	<version>3.0.0-RELEASE</version>
+	<version>3.1.0-RELEASE</version>
 	<packaging>pom</packaging>
 	<name>config-toolkit-parent</name>
 	<description>Parent defination of config toolkit</description>
@@ -22,7 +22,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<spring.io.platform.version>1.1.2.RELEASE</spring.io.platform.version>
+		<spring.io.platform.version>Athens-RELEASE</spring.io.platform.version>
 		<apache.commons-collections.version>4.1</apache.commons-collections.version>
 		<druid.version>1.0.7</druid.version>
 		<curator.version>2.6.0</curator.version>
@@ -33,7 +33,7 @@
 		<slf4j_version>1.7.2</slf4j_version>
 		<jcl_version>1.1</jcl_version>
 		<log4j_version>1.2.16</log4j_version>
-		<logback_version>1.0.6</logback_version>
+		<logback_version>1.1.7</logback_version>
 		<jcl_over_slf4j_version>1.7.7</jcl_over_slf4j_version>
 	</properties>
 

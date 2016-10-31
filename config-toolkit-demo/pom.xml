@@ -6,11 +6,11 @@
 		<groupId>com.dangdang</groupId>
 		<artifactId>config-toolkit-parent</artifactId>
 		<relativePath>../config-toolkit-parent</relativePath>
-		<version>3.0.0-RELEASE</version>
+		<version>3.1.0-RELEASE</version>
 	</parent>
 
 	<properties>
-		<config-toolkit-easyzk.version>3.1.7-RELEASE</config-toolkit-easyzk.version>
+		<config-toolkit.version>3.1.7-RELEASE</config-toolkit.version>
 		<zookeeper.version>3.4.6</zookeeper.version>
 	</properties>
 
@@ -18,7 +18,7 @@
 		<dependency>
 			<groupId>com.dangdang</groupId>
 			<artifactId>config-toolkit</artifactId>
-			<version>${config-toolkit-easyzk.version}</version>
+			<version>${config-toolkit.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.zookeeper</groupId>
@@ -43,6 +43,15 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-context</artifactId>
+			<version>1.0.2.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-autoconfigure</artifactId>
 		</dependency>
 
 		<!-- slf4j + logback -->
