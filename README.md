@@ -82,7 +82,7 @@ Preconditions.checkState(7758 == Integer.parseInt(intProperty));
     <property name="intProp" value="${config.int}" />
 </bean>
 ```
-由于spring对多个placeholder的支持不太好，需要仔细配置order，所以建议便宜SPEL方式来配置
+由于spring对多个placeholder的支持不太好，需要仔细配置order，所以建议使用SPEL方式来配置
 #### 结合spring SPEL方式注入配置
 ```
 <bean id="configProfile" class="com.dangdang.config.service.zookeeper.ZookeeperConfigProfile">
