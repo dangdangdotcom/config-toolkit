@@ -26,4 +26,10 @@
 		<constructor-arg name="configProfile" ref="configProfile" />
 		<constructor-arg name="node" value="property-group1" />
 	</bean>
+	
+	
+	<!-- Inject property with used spring style -->
+	<bean class="com.dangdang.config.service.easyzk.demo.simple.ExampleBean" c:stringProperty="${string_property_key}" c:intProperty="${int_property_key}">
+		<property name="cool" value="#{propertyGroup1['cool']}" />
+	</bean>
 </beans>
