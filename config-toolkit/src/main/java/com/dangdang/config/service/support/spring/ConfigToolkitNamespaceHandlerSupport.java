@@ -6,7 +6,8 @@ public class ConfigToolkitNamespaceHandlerSupport extends NamespaceHandlerSuppor
 
 	@Override
 	public void init() {
-		registerBeanDefinitionParser("config", new ZookeeperConfigProfileConfigBean());
+		registerBeanDefinitionParser("profile", new ZookeeperConfigProfileConfigBean());
+		registerBeanDefinitionParser("group", new ZookeeperConfigGroupConfigBean());
 	}
 
 }

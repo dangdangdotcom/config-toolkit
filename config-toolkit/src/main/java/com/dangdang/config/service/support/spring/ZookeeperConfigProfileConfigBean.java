@@ -15,8 +15,12 @@ public class ZookeeperConfigProfileConfigBean extends AbstractSingleBeanDefiniti
 
 	@Override
 	protected void doParse(Element element, BeanDefinitionBuilder builder) {
-		// TODO Auto-generated method stub
-		super.doParse(element, builder);
+		String connectStr = element.getAttribute("connect-str");
+		builder.addConstructorArgValue(connectStr);
+		String rootNode = element.getAttribute("root-node");
+		builder.addConstructorArgValue(rootNode);
+		String version = element.getAttribute("version");
+		builder.addConstructorArgValue(version);
 	}
 
 }
