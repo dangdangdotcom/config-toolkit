@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:beans="http://www.springframework.org/schema/beans" xmlns:tool="http://www.springframework.org/schema/tool"
+	xmlns:tns="https://crnlmchina.github.io/config" targetNamespace="https://crnlmchina.github.io/config" elementFormDefault="qualified"
+	attributeFormDefault="unqualified">
+
+	<import namespace="http://www.springframework.org/schema/beans" />
+	<import namespace="http://www.springframework.org/schema/tool" />
+
+
+	<element name="profile" type="tns:profile"></element>
+	<element name="group" type="tns:group"></element>
+
+	<complexType name="profile">
+		<attribute name="connect-str" type="string" use="required" />
+		<attribute name="root-node" type="string" use="required" />
+		<attribute name="version" type="string" use="required" />
+	</complexType>
+
+    <complexType name="group"></complexType>
+</schema>

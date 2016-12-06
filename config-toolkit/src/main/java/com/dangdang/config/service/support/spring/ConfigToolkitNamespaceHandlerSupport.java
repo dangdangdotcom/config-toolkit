@@ -1,0 +1,12 @@
+package com.dangdang.config.service.support.spring;
+
+import org.springframework.beans.factory.xml.NamespaceHandlerSupport;
+
+public class ConfigToolkitNamespaceHandlerSupport extends NamespaceHandlerSupport {
+
+	@Override
+	public void init() {
+		registerBeanDefinitionParser("config", new ZookeeperConfigProfileConfigBean());
+	}
+
+}
