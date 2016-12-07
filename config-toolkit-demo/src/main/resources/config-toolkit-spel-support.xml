@@ -1,11 +1,13 @@
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
 	xmlns:c="http://www.springframework.org/schema/c" xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:util="http://www.springframework.org/schema/util" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:config="https://crnlmchina.github.io/config"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
              http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
              http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
              http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd
-             http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
+             http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+             https://crnlmchina.github.io/config https://crnlmchina.github.io/config/config.xsd">
 
 	<context:component-scan base-package="com.dangdang.config.service" />
 
@@ -16,16 +18,10 @@
 	<util:properties id="configToolkitConfigs" location="classpath:config-toolkit.properties" />
 	
 	<!-- Config Profile -->
-	<bean id="configProfile" class="com.dangdang.config.service.zookeeper.ZookeeperConfigProfile">
-		<constructor-arg name="connectStr" value="#{configToolkitConfigs['zk.address']}" />
-		<constructor-arg name="rootNode" value="/projectx/modulex" />
-		<constructor-arg name="version" value="#{configToolkitConfigs['zk.configs.version']}" />
-	</bean>
+	<config:profile connect-str="#{configToolkitConfigs['zk.address']}" root-node="/projectx/modulex" 
+		version="#{configToolkitConfigs['zk.configs.version']}"/>
 	
-	<bean id="propertyGroup1" class="com.dangdang.config.service.zookeeper.ZookeeperConfigGroup">
-		<constructor-arg name="configProfile" ref="configProfile" />
-		<constructor-arg name="node" value="property-group1" />
-	</bean>
+	<config:group id="propertyGroup1" node="property-group1"/>
 	
 	
 	<!-- Inject property with used spring style -->

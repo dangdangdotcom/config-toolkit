@@ -7,9 +7,8 @@
 	<import namespace="http://www.springframework.org/schema/beans" />
 	<import namespace="http://www.springframework.org/schema/tool" />
 
-
-	<element name="profile" type="tns:profile"></element>
-	<element name="group" type="tns:group"></element>
+	<element name="profile" type="tns:profile" />
+	<element name="group" type="tns:identified-group" />
 
 	<complexType name="profile">
 		<attribute name="id" type="string" use="optional" default="configProfile" />
@@ -17,6 +16,7 @@
 		<attribute name="root-node" type="string" use="required" />
 		<attribute name="version" type="string" use="required" />
 	</complexType>
+	
 	<simpleType name="configProfileRef">
 		<annotation>
 			<appinfo>
@@ -27,9 +27,17 @@
 		</annotation>
 		<union memberTypes="string" />
 	</simpleType>
+	
 	<complexType name="group">
 		<attribute name="config-profile-ref" type="tns:configProfileRef" use="optional" default="configProfile" />
-		<attribute name="id" type="string" use="required" />
 		<attribute name="node" type="string" use="required" />
+	</complexType>
+	
+	<complexType name="identified-group">
+		<complexContent>
+			<extension base="tns:group">
+				<attribute name="id" type="string" use="required" />
+			</extension>
+		</complexContent>
 	</complexType>
 </schema>

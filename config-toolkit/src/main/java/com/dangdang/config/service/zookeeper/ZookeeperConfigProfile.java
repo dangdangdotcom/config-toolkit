@@ -31,6 +31,8 @@ import com.google.common.base.Strings;
  */
 public class ZookeeperConfigProfile extends ConfigProfile {
 
+	private static final ExponentialBackoffRetry DEFAULT_RETRY_POLICY = new ExponentialBackoffRetry(1000, 3);
+
 	/**
 	 * zookeeper地址
 	 */
@@ -57,11 +59,11 @@ public class ZookeeperConfigProfile extends ConfigProfile {
 	private long consistencyCheckRate = 60 * 1000;
 
 	public ZookeeperConfigProfile(final String connectStr, final String rootNode, final boolean openLocalCache) {
-		this(connectStr, rootNode, null, openLocalCache, new ExponentialBackoffRetry(100, 2));
+		this(connectStr, rootNode, null, openLocalCache, DEFAULT_RETRY_POLICY);
 	}
 
 	public ZookeeperConfigProfile(final String connectStr, final String rootNode, final String version) {
-		this(connectStr, rootNode, version, false, new ExponentialBackoffRetry(100, 2));
+		this(connectStr, rootNode, version, false, DEFAULT_RETRY_POLICY);
 	}
 
 	public ZookeeperConfigProfile(final String connectStr, final String rootNode, final String version, final boolean openLocalCache,
