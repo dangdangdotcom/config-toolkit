@@ -42,7 +42,7 @@ create /projectx/modulex a9993e364706816aba3e25717850c26c9cd0d89d
 <dependency>
   <groupId>com.dangdang</groupId>
   <artifactId>config-toolkit</artifactId>
-  <version>3.1.7-RELEASE</version>
+  <version>3.2.1-RELEASE</version>
 </dependency>
 ```
 #### 使用Java代码直接获取配置
@@ -56,12 +56,17 @@ String intProperty = group.get("config.int");
 Preconditions.checkState(7758 == Integer.parseInt(intProperty));
 ```
 #### 结合spring placeholder方式注入配置
+spring xml schema
 ```
-<bean id="configProfile" class="com.dangdang.config.service.zookeeper.ZookeeperConfigProfile">
-    <constructor-arg name="connectStr" value="localhost:2181" />
-    <constructor-arg name="rootNode" value="/projectx/modulex" />
-    <constructor-arg name="version" value="1.0.0" />
-</bean>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:config="https://crnlmchina.github.io/config"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+             https://crnlmchina.github.io/config https://crnlmchina.github.io/config/config.xsd">
+```
+bean配置
+```
+<config:profile connect-str="localhost:2181" root-node="/projectx/modulex" 
+		version="1.0.0"/>
 
 <bean id="configGroupSources" class="com.dangdang.config.service.support.spring.ConfigGroupSourceFactory" factory-method="create">
     <constructor-arg name="configGroups">
@@ -86,15 +91,8 @@ Preconditions.checkState(7758 == Integer.parseInt(intProperty));
 由于spring对多个placeholder的支持不太好，需要仔细配置order，所以建议使用SPEL方式来配置
 #### 结合spring SPEL方式注入配置
 ```
-<bean id="configProfile" class="com.dangdang.config.service.zookeeper.ZookeeperConfigProfile">
-    <constructor-arg name="connectStr" value="localhost:2181" />
-    <constructor-arg name="rootNode" value="/projectx/modulex" />
-    <constructor-arg name="version" value="1.0.0" />
-</bean>
-<bean id="groupProp" class="com.dangdang.config.service.zookeeper.ZookeeperConfigGroup">
-    <constructor-arg name="configProfile" ref="configProfile" />
-    <constructor-arg name="node" value="group" />
-</bean>
+<config:profile connect-str="localhost:2181" root-node="/projectx/modulex" version="1.0.0"/>
+<config:group id="groupProp" node="group"/>
 
 <!-- Your business bean -->
 <bean class="your.BusinessBean">
