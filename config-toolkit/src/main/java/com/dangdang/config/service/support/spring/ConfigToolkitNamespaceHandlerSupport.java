@@ -8,6 +8,7 @@ public class ConfigToolkitNamespaceHandlerSupport extends NamespaceHandlerSuppor
 	public void init() {
 		registerBeanDefinitionParser("profile", new ZookeeperConfigProfileConfigBean());
 		registerBeanDefinitionParser("group", new ZookeeperConfigGroupConfigBean());
+		registerBeanDefinitionParser("placeholder", new PropertySourcesPlaceholderConfigurerConfigBean());
 	}
 
 }

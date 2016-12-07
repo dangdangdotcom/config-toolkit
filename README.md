@@ -68,19 +68,10 @@ bean配置
 <config:profile connect-str="localhost:2181" root-node="/projectx/modulex" 
 		version="1.0.0"/>
 
-<bean id="configGroupSources" class="com.dangdang.config.service.support.spring.ConfigGroupSourceFactory" factory-method="create">
-    <constructor-arg name="configGroups">
-        <list>
-            <bean class="com.dangdang.config.service.zookeeper.ZookeeperConfigGroup" c:configProfile-ref="configProfile" c:node="-group" />
-        </list>
-    </constructor-arg>
-</bean>
-
-<bean class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer">
-    <property name="order" value="1" />
-    <property name="ignoreUnresolvablePlaceholders" value="true" />
-    <property name="propertySources" ref="configGroupSources" />
-</bean>
+<config:placeholder>
+	<config:group node="property-group1" />	
+	<config:group node="property-group2" />	
+</config:placeholder>
 
 <!-- Your business bean -->
 <bean class="your.BusinessBean">

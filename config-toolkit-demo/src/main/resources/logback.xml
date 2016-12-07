@@ -16,7 +16,7 @@
 	</appender>
 
 	<logger name="org.apache" level="INFO" />
-	<logger name="org.springframework" level="INFO" />
+	<logger name="org.springframework" level="DEBUG" />
 	
 	<root level="DEBUG">
 		<appender-ref ref="stdout" />

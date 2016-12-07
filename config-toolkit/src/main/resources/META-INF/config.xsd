@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:beans="http://www.springframework.org/schema/beans"
-	xmlns:tool="http://www.springframework.org/schema/tool" xmlns:tns="https://crnlmchina.github.io/config"
-	targetNamespace="https://crnlmchina.github.io/config"
-	elementFormDefault="qualified" attributeFormDefault="unqualified">
+<schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:beans="http://www.springframework.org/schema/beans" xmlns:tool="http://www.springframework.org/schema/tool"
+	xmlns:tns="https://crnlmchina.github.io/config" targetNamespace="https://crnlmchina.github.io/config" elementFormDefault="qualified"
+	attributeFormDefault="unqualified">
 
 	<import namespace="http://www.springframework.org/schema/beans" />
 	<import namespace="http://www.springframework.org/schema/tool" />
 
 	<element name="profile" type="tns:profile" />
 	<element name="group" type="tns:identified-group" />
+	<element name="placeholder" type="tns:placeholder"></element>
 
 	<complexType name="profile">
 		<attribute name="id" type="string" use="optional" default="configProfile" />
@@ -16,7 +16,7 @@
 		<attribute name="root-node" type="string" use="required" />
 		<attribute name="version" type="string" use="required" />
 	</complexType>
-	
+
 	<simpleType name="configProfileRef">
 		<annotation>
 			<appinfo>
@@ -27,12 +27,12 @@
 		</annotation>
 		<union memberTypes="string" />
 	</simpleType>
-	
+
 	<complexType name="group">
 		<attribute name="config-profile-ref" type="tns:configProfileRef" use="optional" default="configProfile" />
 		<attribute name="node" type="string" use="required" />
 	</complexType>
-	
+
 	<complexType name="identified-group">
 		<complexContent>
 			<extension base="tns:group">
@@ -40,4 +40,14 @@
 			</extension>
 		</complexContent>
 	</complexType>
+
+
+    <complexType name="placeholder">
+    	<sequence>
+    		<element name="group" type="tns:group" minOccurs="1" maxOccurs="unbounded" />
+    	</sequence>
+		<attribute name="id" type="string" use="optional" default="propertySourcesPlaceholderConfigurer" />
+    	<attribute name="order" type="int" use="optional" default="1" />
+    	<attribute name="ignore-unresolvable-placeholders" type="boolean" use="optional" default="true" />
+    </complexType>
 </schema>
