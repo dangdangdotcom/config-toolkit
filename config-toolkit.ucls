@@ -1,0 +1,491 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<class-diagram version="1.1.13" icons="true" automaticImage="PNG" always-add-relationships="false" 
+  generalizations="true" realizations="true" associations="true" dependencies="true" nesting-relationships="true" 
+  router="FAN">  
+  <interface id="1" language="java" name="com.dangdang.config.service.observer.IObserver" project="config-common" 
+    file="/config-common/src/main/java/com/dangdang/config/service/observer/IObserver.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="83" width="189" x="537" y="643"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </interface>  
+  <interface id="2" language="java" name="com.dangdang.config.service.observer.ISubject" project="config-common" 
+    file="/config-common/src/main/java/com/dangdang/config/service/observer/ISubject.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="101" width="189" x="190" y="304"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </interface>  
+  <class id="3" language="java" name="com.dangdang.config.service.observer.AbstractSubject" project="config-common" 
+    file="/config-common/src/main/java/com/dangdang/config/service/observer/AbstractSubject.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="119" width="189" x="211" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <enumeration id="4" language="java" name="com.dangdang.config.service.ConfigProfile.KeyLoadingMode" 
+    project="config-toolkit" file="/config-toolkit/src/main/java/com/dangdang/config/service/ConfigProfile.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="137" width="187" x="41" y="1054"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </enumeration>  
+  <class id="5" language="java" name="com.dangdang.config.service.GeneralConfigGroup" project="config-toolkit" 
+    file="/config-toolkit/src/main/java/com/dangdang/config/service/GeneralConfigGroup.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="299" width="248" x="440" y="304"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="6" language="java" name="com.dangdang.config.service.file.FileConfigGroup" project="config-toolkit" 
+    file="/config-toolkit/src/main/java/com/dangdang/config/service/file/FileConfigGroup.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="173" width="323" x="1207" y="643"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="7" language="java" name="com.dangdang.config.service.file.FileChangeEventListener" project="config-toolkit" 
+    file="/config-toolkit/src/main/java/com/dangdang/config/service/file/FileChangeEventListener.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="173" width="369" x="1711" y="304"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <interface id="8" language="java" name="com.dangdang.config.service.ConfigGroup" project="config-toolkit" 
+    file="/config-toolkit/src/main/java/com/dangdang/config/service/ConfigGroup.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="83" width="146" x="351" y="643"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </interface>  
+  <class id="9" language="java" name="com.dangdang.config.service.exception.InvalidPathException" 
+    project="config-toolkit" 
+    file="/config-toolkit/src/main/java/com/dangdang/config/service/exception/InvalidPathException.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="155" width="242" x="784" y="304"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="10" language="java" name="com.dangdang.config.service.file.contenttype.PropertiesContentType" 
+    project="config-toolkit" 
+    file="/config-toolkit/src/main/java/com/dangdang/config/service/file/contenttype/PropertiesContentType.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="101" width="246" x="1077" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="11" language="java" name="com.dangdang.config.service.file.FileLocation" project="config-toolkit" 
+    file="/config-toolkit/src/main/java/com/dangdang/config/service/file/FileLocation.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="209" width="207" x="1310" y="1054"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="12" language="java" name="com.dangdang.config.service.file.contenttype.XmlContentType" 
+    project="config-toolkit" 
+    file="/config-toolkit/src/main/java/com/dangdang/config/service/file/contenttype/XmlContentType.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="101" width="246" x="1363" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <interface id="13" language="java" name="com.dangdang.config.service.file.contenttype.ContentType" 
+    project="config-toolkit" 
+    file="/config-toolkit/src/main/java/com/dangdang/config/service/file/contenttype/ContentType.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="83" width="246" x="1066" y="304"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </interface>  
+  <class id="14" language="java" name="com.dangdang.config.service.ConfigProfile" project="config-toolkit" 
+    file="/config-toolkit/src/main/java/com/dangdang/config/service/ConfigProfile.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="209" width="270" x="41" y="643"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="15" language="java" name="com.dangdang.config.service.file.FileConfigProfile" project="config-toolkit" 
+    file="/config-toolkit/src/main/java/com/dangdang/config/service/file/FileConfigProfile.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="227" width="227" x="687" y="1054"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="16" language="java" name="com.dangdang.config.service.exception.ConfigToolkitException" 
+    project="config-toolkit" 
+    file="/config-toolkit/src/main/java/com/dangdang/config/service/exception/ConfigToolkitException.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="155" width="253" x="784" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <interface id="17" language="java" name="com.dangdang.config.service.file.protocol.Protocol" project="config-toolkit" 
+    file="/config-toolkit/src/main/java/com/dangdang/config/service/file/protocol/Protocol.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="101" width="252" x="1557" y="1054"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </interface>  
+  <class id="18" language="java" name="com.dangdang.config.service.file.protocol.ClasspathProtocol" 
+    project="config-toolkit" 
+    file="/config-toolkit/src/main/java/com/dangdang/config/service/file/protocol/ClasspathProtocol.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="101" width="202" x="1849" y="1054"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="19" language="java" name="com.dangdang.config.service.file.protocol.HttpProtocol" project="config-toolkit" 
+    file="/config-toolkit/src/main/java/com/dangdang/config/service/file/protocol/HttpProtocol.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="137" width="252" x="1570" y="643"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="20" language="java" name="com.dangdang.config.service.file.protocol.FileProtocol" project="config-toolkit" 
+    file="/config-toolkit/src/main/java/com/dangdang/config/service/file/protocol/FileProtocol.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="101" width="202" x="2091" y="1054"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="21" language="java" name="com.dangdang.config.service.file.protocol.LocalFileProtocol" 
+    project="config-toolkit" 
+    file="/config-toolkit/src/main/java/com/dangdang/config/service/file/protocol/LocalFileProtocol.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="173" width="252" x="1862" y="643"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="22" language="java" name="com.dangdang.config.service.sugar.RefreshableBox" project="config-toolkit" 
+    file="/config-toolkit/src/main/java/com/dangdang/config/service/sugar/RefreshableBox.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="227" width="304" x="440" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="23" language="java" name="com.dangdang.config.service.zookeeper.ConfigLocalCache" project="config-toolkit" 
+    file="/config-toolkit/src/main/java/com/dangdang/config/service/zookeeper/ConfigLocalCache.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="209" width="316" x="954" y="1054"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="24" language="java" name="com.dangdang.config.service.zookeeper.ZookeeperConfigProfile" 
+    project="config-toolkit" 
+    file="/config-toolkit/src/main/java/com/dangdang/config/service/zookeeper/ZookeeperConfigProfile.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="389" width="379" x="268" y="1054"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="25" language="java" name="com.dangdang.config.service.zookeeper.ConfigNodeEventListener" 
+    project="config-toolkit" 
+    file="/config-toolkit/src/main/java/com/dangdang/config/service/zookeeper/ConfigNodeEventListener.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="119" width="319" x="1352" y="304"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="26" language="java" name="com.dangdang.config.service.zookeeper.ZookeeperConfigGroup" 
+    project="config-toolkit" 
+    file="/config-toolkit/src/main/java/com/dangdang/config/service/zookeeper/ZookeeperConfigGroup.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="371" width="401" x="766" y="643"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <association id="27">    
+    <bendpoint x="409" y="304"/>    
+    <end type="SOURCE" refId="3" navigable="false">      
+      <attribute id="28" name="watchers">        
+        <position height="0" width="0" x="-98" y="-627"/>      
+      </attribute>      
+      <multiplicity id="29" minimum="0" maximum="2147483647">        
+        <position height="0" width="0" x="-98" y="-627"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="1" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="30">    
+    <end type="SOURCE" refId="22" navigable="false">      
+      <attribute id="31" name="node">        
+        <position height="0" width="0" x="-225" y="-4"/>      
+      </attribute>      
+      <multiplicity id="32" minimum="0" maximum="1">        
+        <position height="0" width="0" x="-225" y="-4"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="5" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="33">    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="2"/>  
+  </generalization>  
+  <generalization id="34">    
+    <end type="SOURCE" refId="20"/>    
+    <end type="TARGET" refId="21"/>  
+  </generalization>  
+  <association id="35">    
+    <end type="SOURCE" refId="6" navigable="false">      
+      <attribute id="36" name="configProfile">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="37" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="15" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="38">    
+    <end type="SOURCE" refId="7" navigable="false">      
+      <attribute id="39" name="configGroup">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="40" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="6" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="41">    
+    <end type="SOURCE" refId="6" navigable="false">      
+      <attribute id="42" name="protocolBean">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="43" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="17" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization id="44">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="8"/>  
+  </realization>  
+  <association id="45">    
+    <end type="SOURCE" refId="26" navigable="false">      
+      <attribute id="46" name="configLocalCache">        
+        <position height="0" width="0" x="517" y="-95"/>      
+      </attribute>      
+      <multiplicity id="47" minimum="0" maximum="1">        
+        <position height="0" width="0" x="517" y="-95"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="23" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="48">    
+    <end type="SOURCE" refId="18"/>    
+    <end type="TARGET" refId="21"/>  
+  </generalization>  
+  <realization id="49">    
+    <end type="SOURCE" refId="21"/>    
+    <end type="TARGET" refId="17"/>  
+  </realization>  
+  <generalization id="50">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="5"/>  
+  </generalization>  
+  <association id="51">    
+    <end type="SOURCE" refId="5" navigable="false">      
+      <attribute id="52" name="watchers">        
+        <position height="0" width="0" x="-98" y="-627"/>      
+      </attribute>      
+      <multiplicity id="53" minimum="0" maximum="2147483647">        
+        <position height="0" width="0" x="-98" y="-627"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="1" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization id="54">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="2"/>  
+  </realization>  
+  <association id="55">    
+    <end type="SOURCE" refId="25" navigable="false">      
+      <attribute id="56" name="configNode">        
+        <position height="0" width="0" x="-264" y="-84"/>      
+      </attribute>      
+      <multiplicity id="57" minimum="0" maximum="1">        
+        <position height="0" width="0" x="-264" y="-84"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="26" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="58">    
+    <end type="SOURCE" refId="26"/>    
+    <end type="TARGET" refId="5"/>  
+  </generalization>  
+  <association id="59">    
+    <end type="SOURCE" refId="26" navigable="false">      
+      <attribute id="60" name="configProfile">        
+        <position height="0" width="0" x="-249" y="-40"/>      
+      </attribute>      
+      <multiplicity id="61" minimum="0" maximum="1">        
+        <position height="0" width="0" x="-249" y="-40"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="24" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="62">    
+    <end type="SOURCE" refId="14" navigable="false">      
+      <attribute id="63" name="keyLoadingMode">        
+        <position height="0" width="0" x="-1357" y="273"/>      
+      </attribute>      
+      <multiplicity id="64" minimum="0" maximum="1">        
+        <position height="0" width="0" x="-1357" y="273"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="4" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="65">    
+    <end type="SOURCE" refId="5" navigable="false">      
+      <attribute id="66" name="internalConfigGroup">        
+        <position height="0" width="0" x="-472" y="-505"/>      
+      </attribute>      
+      <multiplicity id="67" minimum="0" maximum="1">        
+        <position height="0" width="0" x="-472" y="-505"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="8" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="68">    
+    <end type="SOURCE" refId="6" navigable="false">      
+      <attribute id="69" name="location">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="70" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="11" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization id="71">    
+    <bendpoint x="718" y="304"/>    
+    <end type="SOURCE" refId="22"/>    
+    <end type="TARGET" refId="1"/>  
+  </realization>  
+  <nesting id="72">    
+    <end type="SOURCE" refId="14"/>    
+    <end type="TARGET" refId="4"/>  
+  </nesting>  
+  <generalization id="73">    
+    <end type="SOURCE" refId="9"/>    
+    <end type="TARGET" refId="16"/>  
+  </generalization>  
+  <realization id="74">    
+    <end type="SOURCE" refId="12"/>    
+    <end type="TARGET" refId="13"/>  
+  </realization>  
+  <realization id="75">    
+    <end type="SOURCE" refId="10"/>    
+    <end type="TARGET" refId="13"/>  
+  </realization>  
+  <generalization id="76">    
+    <end type="SOURCE" refId="15"/>    
+    <end type="TARGET" refId="14"/>  
+  </generalization>  
+  <realization id="77">    
+    <end type="SOURCE" refId="19"/>    
+    <end type="TARGET" refId="17"/>  
+  </realization>  
+  <generalization id="78">    
+    <end type="SOURCE" refId="24"/>    
+    <end type="TARGET" refId="14"/>  
+  </generalization>  
+  <classifier-display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
+    sort-features="false" accessors="true" visibility="true">    
+    <attributes public="true" package="true" protected="true" private="true" static="true"/>    
+    <operations public="true" package="true" protected="true" private="true" static="true"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>
