@@ -5,6 +5,7 @@ import com.dangdang.config.service.easyzk.demo.simple.ExampleBean;
 import com.dangdang.config.service.sugar.RefreshableBox;
 import com.dangdang.config.service.zookeeper.ZookeeperConfigGroup;
 import com.dangdang.config.service.zookeeper.ZookeeperConfigProfile;
+import com.google.common.collect.Lists;
 
 /**
  * @author <a href="mailto:wangyuxuan@dangdang.com">Yuxuan Wang</a>
@@ -15,8 +16,9 @@ public class RefreshableBoxUseCase {
 	public static void main(String[] args) {
 		ZookeeperConfigProfile configProfile = new ZookeeperConfigProfile("config-toolkit.mabaoshan.com:8011", "/projectx/modulex", "1.0.0");
 		GeneralConfigGroup node = new ZookeeperConfigGroup(configProfile, "property-group1");
-		
-		RefreshableBox<ExampleBean> box = new RefreshableBox<ExampleBean>(node) {
+
+		// 当version属性变化时才更新bean
+		RefreshableBox<ExampleBean> box = new RefreshableBox<ExampleBean>(node, Lists.newArrayList("version")) {
 
 			@Override
 			protected ExampleBean doInit(GeneralConfigGroup node) {
