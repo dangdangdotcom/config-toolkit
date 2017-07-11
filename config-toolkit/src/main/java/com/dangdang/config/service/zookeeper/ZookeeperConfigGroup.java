@@ -15,14 +15,11 @@
  */
 package com.dangdang.config.service.zookeeper;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-import javax.annotation.PreDestroy;
-
+import com.dangdang.config.service.ConfigGroup;
+import com.dangdang.config.service.GeneralConfigGroup;
+import com.google.common.base.Charsets;
+import com.google.common.base.Throwables;
+import com.google.common.collect.Maps;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.curator.framework.CuratorFramework;
@@ -34,11 +31,10 @@ import org.apache.curator.utils.ZKPaths;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.dangdang.config.service.ConfigGroup;
-import com.dangdang.config.service.GeneralConfigGroup;
-import com.google.common.base.Charsets;
-import com.google.common.base.Throwables;
-import com.google.common.collect.Maps;
+import javax.annotation.PreDestroy;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * 配置组节点
@@ -78,8 +74,6 @@ public class ZookeeperConfigGroup extends GeneralConfigGroup {
 		initConfigs();
 	}
 
-	private ScheduledExecutorService scheduler;
-
 	private CuratorListener listener = new ConfigNodeEventListener(this);
 
 	/**
@@ -97,18 +91,6 @@ public class ZookeeperConfigGroup extends GeneralConfigGroup {
 		// Update local cache
 		if (configLocalCache != null) {
 			configLocalCache.saveLocalCache(this, node);
-		}
-
-		// Consistency check
-		if (configProfile.isConsistencyCheck()) {
-		        scheduler = Executors.newScheduledThreadPool(1);
-			scheduler.scheduleAtFixedRate(new Runnable() {
-				@Override
-				public void run() {
-					LOGGER.trace("Do consistency check for node: {}", node);
-					loadNode();
-				}
-			}, 60000L, configProfile.getConsistencyCheckRate(), TimeUnit.MILLISECONDS);
 		}
 	}
 
@@ -193,9 +175,6 @@ public class ZookeeperConfigGroup extends GeneralConfigGroup {
 	@PreDestroy
 	@Override
 	public void close() {
-		if (scheduler != null) {
-			scheduler.shutdown();
-		}
 		if (client != null) {
 			client.getCuratorListenable().removeListener(listener);
 			client.close();
