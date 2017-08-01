@@ -100,19 +100,19 @@ public class ZookeeperConfigGroup extends GeneralConfigGroup {
 	void loadNode() {
 		final String nodePath = ZKPaths.makePath(configProfile.getVersionedRootNode(), node);
 
-		GetChildrenBuilder childrenBuilder = client.getChildren();
+		final GetChildrenBuilder childrenBuilder = client.getChildren();
 
 		try {
-			List<String> children = childrenBuilder.watched().forPath(nodePath);
+			final List<String> children = childrenBuilder.watched().forPath(nodePath);
 			if (children != null) {
-				Map<String, String> configs = Maps.newHashMap();
+				final Map<String, String> configs = Maps.newHashMap();
 				for (String child : children) {
-					Pair<String, String> keyValue = loadKey(ZKPaths.makePath(nodePath, child));
+					final Pair<String, String> keyValue = loadKey(ZKPaths.makePath(nodePath, child));
 					if (keyValue != null) {
 						configs.put(keyValue.getKey(), keyValue.getValue());
 					}
 				}
-				cleanAndputAll(configs);
+				cleanAndPutAll(configs);
 			}
 		} catch (Exception e) {
 			throw Throwables.propagate(e);
@@ -121,7 +121,7 @@ public class ZookeeperConfigGroup extends GeneralConfigGroup {
 	
 	void reloadKey(final String nodePath) {
 		try {
-			Pair<String, String> keyValue = loadKey(nodePath);
+			final Pair<String, String> keyValue = loadKey(nodePath);
 			if(keyValue != null) {
 				super.put(keyValue.getKey(), keyValue.getValue());
 			}
@@ -131,8 +131,8 @@ public class ZookeeperConfigGroup extends GeneralConfigGroup {
 	}
 
 	private Pair<String, String> loadKey(final String nodePath) throws Exception {
-		String nodeName = ZKPaths.getNodeFromPath(nodePath);
-		Set<String> keysSpecified = configProfile.getKeysSpecified();
+		final String nodeName = ZKPaths.getNodeFromPath(nodePath);
+		final Set<String> keysSpecified = configProfile.getKeysSpecified();
 		switch (configProfile.getKeyLoadingMode()) {
 		case INCLUDE:
 			if (keysSpecified == null || !keysSpecified.contains(nodeName)) {
@@ -150,8 +150,8 @@ public class ZookeeperConfigGroup extends GeneralConfigGroup {
 			break;
 		}
 
-		GetDataBuilder data = client.getData();
-		String value = new String(data.watched().forPath(nodePath), Charsets.UTF_8);
+		final GetDataBuilder data = client.getData();
+		final String value = new String(data.watched().forPath(nodePath), Charsets.UTF_8);
 		return new ImmutablePair<String, String>(nodeName, value);
 	}
 

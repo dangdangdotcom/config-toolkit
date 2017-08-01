@@ -55,8 +55,7 @@ public abstract class GeneralConfigGroup extends ConcurrentHashMap<String, Strin
 		return get(key.toString());
 	}
 
-	public final void cleanAndputAll(Map<? extends String, ? extends String> configs) { // TODO
-																						// CONFIG.SIZE==0
+	protected final void cleanAndPutAll(Map<? extends String, ? extends String> configs) {
 		lastLoadTime = System.currentTimeMillis();
 		if (configs != null && configs.size() > 0) {
 			// clear
@@ -88,6 +87,9 @@ public abstract class GeneralConfigGroup extends ConcurrentHashMap<String, Strin
 
 	@Override
 	public final String put(String key, String value) {
+		if(value != null) {
+			value = value.trim();
+		}
 		String preValue = super.get(key);
 		if (!Objects.equal(preValue, value)) {
 			LOGGER.debug("Key {} change from {} to {}", key, preValue, value);

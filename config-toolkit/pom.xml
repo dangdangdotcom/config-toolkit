@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<artifactId>config-toolkit</artifactId>
-	<version>3.2.4-SNAPSHOT</version>
+	<version>3.2.4-RELEASE</version>
 	<packaging>jar</packaging>
 	<parent>
 		<groupId>com.dangdang</groupId>
