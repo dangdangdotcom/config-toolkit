@@ -1,12 +1,12 @@
 /**
  * Copyright 1999-2014 dangdang.com.
- *  
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *  
- *      http://www.apache.org/licenses/LICENSE-2.0
- *  
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -24,70 +24,81 @@ import org.apache.curator.utils.ZKPaths;
 
 /**
  * 基本配置
- * 
+ *
  * @author <a href="mailto:wangyuxuan@dangdang.com">Yuxuan Wang</a>
  *
  */
 public class ZookeeperConfigProfile extends ConfigProfile {
 
-	private static final ExponentialBackoffRetry DEFAULT_RETRY_POLICY = new ExponentialBackoffRetry(1000, 3);
+    private static final ExponentialBackoffRetry DEFAULT_RETRY_POLICY = new ExponentialBackoffRetry(1000, 3);
 
-	/**
-	 * zookeeper地址
-	 */
-	private final String connectStr;
+    /**
+     * zookeeper地址
+     */
+    private final String connectStr;
 
-	/**
-	 * 项目配置根目录
-	 */
-	private final String rootNode;
+    /**
+     * 项目配置根目录
+     */
+    private final String rootNode;
 
-	/**
-	 * 重试策略
-	 */
-	private final RetryPolicy retryPolicy;
+    /**
+     * 重试策略
+     */
+    private final RetryPolicy retryPolicy;
 
-	public ZookeeperConfigProfile(final String connectStr, final String rootNode, final boolean openLocalCache) {
-		this(connectStr, rootNode, null, openLocalCache, DEFAULT_RETRY_POLICY);
-	}
+    /**
+     * 是否开启本地缓存, 基础为当前用户目录下的.config-toolkit
+     */
+    private final boolean openLocalCache;
 
-	public ZookeeperConfigProfile(final String connectStr, final String rootNode, final String version) {
-		this(connectStr, rootNode, version, false, DEFAULT_RETRY_POLICY);
-	}
+    public ZookeeperConfigProfile(final String connectStr, final String rootNode, final String version) {
+        this(connectStr, rootNode, version, false);
+    }
 
-	public ZookeeperConfigProfile(final String connectStr, final String rootNode, final String version, final boolean openLocalCache,
-			final RetryPolicy retryPolicy) {
-		super(version);
-		this.connectStr = Preconditions.checkNotNull(connectStr);
-		this.rootNode = Preconditions.checkNotNull(rootNode);
-		this.retryPolicy = Preconditions.checkNotNull(retryPolicy);
-	}
+    public ZookeeperConfigProfile(final String connectStr, final String rootNode, final String version, final boolean openLocalCache) {
+        this(connectStr, rootNode, version, openLocalCache, DEFAULT_RETRY_POLICY);
+    }
 
-	public String getConnectStr() {
-		return connectStr;
-	}
+    public ZookeeperConfigProfile(final String connectStr, final String rootNode, final String version, final boolean openLocalCache,
+                                  final RetryPolicy retryPolicy) {
+        super(version);
+        this.connectStr = Preconditions.checkNotNull(connectStr);
+        this.rootNode = Preconditions.checkNotNull(rootNode);
+        this.retryPolicy = Preconditions.checkNotNull(retryPolicy);
+        this.openLocalCache = openLocalCache;
+    }
 
-	public String getRootNode() {
-		return rootNode;
-	}
+    public String getConnectStr() {
+        return connectStr;
+    }
 
-	public RetryPolicy getRetryPolicy() {
-		return retryPolicy;
-	}
+    public String getRootNode() {
+        return rootNode;
+    }
 
-	public String getVersionedRootNode() {
-		if (Strings.isNullOrEmpty(version)) {
-			return rootNode;
-		}
-		return ZKPaths.makePath(rootNode, version);
-	}
+    public RetryPolicy getRetryPolicy() {
+        return retryPolicy;
+    }
 
-	@Override
-	public String toString() {
-		return "ZookeeperConfigProfile{" +
-				"connectStr='" + connectStr + '\'' +
-				", rootNode='" + rootNode + '\'' +
-				", retryPolicy=" + retryPolicy +
-				'}';
-	}
+    public String getVersionedRootNode() {
+        if (Strings.isNullOrEmpty(version)) {
+            return rootNode;
+        }
+        return ZKPaths.makePath(rootNode, version);
+    }
+
+    public boolean isOpenLocalCache() {
+        return openLocalCache;
+    }
+
+    @Override
+    public String toString() {
+        return "ZookeeperConfigProfile{" +
+                "connectStr='" + connectStr + '\'' +
+                ", rootNode='" + rootNode + '\'' +
+                ", retryPolicy=" + retryPolicy +
+                ", openLocalCache=" + openLocalCache +
+                '}';
+    }
 }
