@@ -44,12 +44,8 @@ public class PropertyDao extends BaseDao implements IPropertyDao {
 		try {
 			Stat stat = getClient().checkExists().forPath(nodeName);
 			if (stat == null) {
-				String opResult = null;
-				if (Strings.isNullOrEmpty(value)) {
-					opResult = getClient().create().creatingParentsIfNeeded().forPath(nodeName);
-				} else {
-					opResult = getClient().create().creatingParentsIfNeeded().forPath(nodeName, value.getBytes(Charsets.UTF_8));
-				}
+				final byte[] data = Strings.isNullOrEmpty(value) ? new byte[]{} : value.getBytes(Charsets.UTF_8);
+				String opResult = getClient().create().creatingParentsIfNeeded().forPath(nodeName, data);
 				suc = Objects.equal(nodeName, opResult);
 			}
 		} catch (Exception e) {
