@@ -1,16 +1,12 @@
 package com.dangdang.config.service.file.protocol;
 
-import java.io.IOException;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardWatchEventKinds;
-import java.nio.file.WatchService;
-
 import com.dangdang.config.service.exception.InvalidPathException;
 import com.dangdang.config.service.file.FileChangeEventListener;
 import com.dangdang.config.service.file.FileConfigGroup;
 import com.dangdang.config.service.file.FileLocation;
+
+import java.io.IOException;
+import java.nio.file.*;
 
 /**
  * @author <a href="mailto:wangyuxuan@dangdang.com">Yuxuan Wang</a>
@@ -44,6 +40,8 @@ public abstract class LocalFileProtocol implements Protocol {
 			new Thread(new FileChangeEventListener(watcher, fileConfigGroup, path)).start();
 		} catch (IOException e) {
 			throw new InvalidPathException(e);
+		} catch (UnsupportedOperationException e){
+
 		}
 	}
 
