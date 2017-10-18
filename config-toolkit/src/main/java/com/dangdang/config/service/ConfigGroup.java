@@ -1,9 +1,9 @@
 package com.dangdang.config.service;
 
+import com.dangdang.config.service.observer.ISubject;
+
 import java.io.Closeable;
 import java.util.Map;
-
-import com.dangdang.config.service.observer.ISubject;
 
 /**
  * Configuration Group
@@ -14,5 +14,6 @@ import com.dangdang.config.service.observer.ISubject;
 public interface ConfigGroup extends Map<String, String>, Closeable, ISubject {
 	
 	String get(String key);
-	
+
+	boolean getEnumerable();
 }
