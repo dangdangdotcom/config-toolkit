@@ -5,6 +5,7 @@
 <hr>
 
 ### 社区
+* Group: https://groups.yahoo.com/group/config-toolkit
 * QQ群: 457997852
 * Config Toolkit Go语言版本：https://github.com/mbaight/config-toolkit-go
 * Zookeeper Java Shell: https://github.com/crnlmchina/zk-util
