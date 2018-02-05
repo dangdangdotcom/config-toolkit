@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- For assistance related to logback-translator or configuration -->
+<!-- files in general, please contact the logback user mailing list -->
+<!-- at http://www.qos.ch/mailman/listinfo/logback-user -->
+<!-- -->
+<!-- For professional support please see -->
+<!-- http://www.qos.ch/shop/products/professionalSupport -->
+<!-- -->
+<configuration>
+	<property name="logBase" value="/log/web/service/config-toolkit" />
+
+	<appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{26}[%L] - %msg%n
+			</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="mysoft" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${logBase}.%d{yyyy-MM-dd}.zip</fileNamePattern>
+			<maxHistory>30</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36}[%L] - %msg%n
+			</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="ASYNC" class="ch.qos.logback.classic.AsyncAppender">
+		<includeCallerData>true</includeCallerData>
+		<appender-ref ref="mysoft" />
+	</appender>
+
+	<logger name="org.apache" level="INFO" />
+	<logger name="org.springframework" level="INFO" />
+	<logger name="feign" level="DEBUG" />
+	<root level="DEBUG">
+		<appender-ref ref="stdout" />
+		<appender-ref ref="ASYNC" />
+	</root>
+</configuration>
