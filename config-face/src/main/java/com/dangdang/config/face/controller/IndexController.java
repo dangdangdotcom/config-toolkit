@@ -3,6 +3,7 @@ package com.dangdang.config.face.controller;
 import com.dangdang.config.face.dao.NodeDao;
 import com.dangdang.config.face.entity.PropertyItem;
 import com.dangdang.config.face.entity.PropertyItemVO;
+import com.google.common.base.MoreObjects;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -18,10 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Controller
@@ -32,7 +30,7 @@ public class IndexController {
 
     private static final String COMMENT_SUFFIX = "$";
 
-    @RequestMapping(value = "", method = RequestMethod.GET)
+    @RequestMapping(value = {"", "/config-web"}, method = RequestMethod.GET)
     public String index() {
         final UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return "redirect:/c/" + StringUtils.replace(principal.getUsername(), "/", "_");
@@ -43,21 +41,26 @@ public class IndexController {
         final String root = StringUtils.replace(rootNode, "_", "/");
         final UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        if(!Objects.equals(root, principal.getUsername())) {
+        if (!Objects.equals(root, principal.getUsername())) {
             throw new AccessDeniedException("NOT YOUR NODE");
         }
 
         final List<String> versions = nodeDao.listChildren(root)
-                .stream().filter(e -> ! e.endsWith(COMMENT_SUFFIX)).collect(Collectors.toList());
+                .stream().filter(e -> !e.endsWith(COMMENT_SUFFIX))
+                .sorted(Comparator.comparing(String::toString).reversed())
+                .collect(Collectors.toList());
+
+        final String theVersion = MoreObjects.firstNonNull(version, Iterables.getFirst(versions, null));
 
         final ModelAndView mv = new ModelAndView("index");
         mv.addObject("root", root);
         mv.addObject("versions", versions);
-        mv.addObject("theVersion", version);
+        mv.addObject("theVersion", theVersion);
         mv.addObject("basePath", "/c/" + rootNode + "/");
 
-        if(Iterables.contains(versions, version)) {
-            final List<String> groups = nodeDao.listChildren(ZKPaths.makePath(root, version));
+        if (Iterables.contains(versions, theVersion)) {
+            final List<String> groups = nodeDao.listChildren(ZKPaths.makePath(root, theVersion))
+                    .stream().sorted().collect(Collectors.toList());
             mv.addObject("groups", groups);
         }
 

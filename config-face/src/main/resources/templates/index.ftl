@@ -10,10 +10,10 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-dark bg-dark navbar-expand-lg justify-content-between">
-        <span class="navbar-brand" href="#">${root}</span>
+    <nav class="navbar navbar-dark bg-dark navbar-expand-lg justify-content-between fixed-top">
+        <span class="navbar-brand">${root}</span>
 
-        <ul class="navbar-nav mr-auto">
+        <ul class="navbar-nav">
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="versionDD" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     ${theVersion!"Version"}
@@ -39,7 +39,7 @@
         </div>
     </nav>
 
-    <div class="container-fluid">
+    <div class="container-fluid" style="margin-top: 4.2em;">
         <div class="row">
             <div class="col-3" style="margin: 0.5em 0 0.5em 0; font-size: smaller;">
                 <div class="list-group" id="groupList">
