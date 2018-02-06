@@ -1,6 +1,6 @@
 package com.dangdang.config.face.config;
 
-import com.dangdang.config.face.dao.AuthDao;
+import com.dangdang.config.face.dao.INodeService;
 import com.google.common.base.Charsets;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
@@ -13,7 +13,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,7 +24,7 @@ import java.util.Objects;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private AuthDao authDao;
+    private INodeService nodeService;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -45,16 +44,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public UserDetailsService getUserDetailsService() {
-        return new UserDetailsService() {
-            @Override
-            public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-                final String pass = authDao.getAuth(username);
-                if(Strings.isNullOrEmpty(pass)) {
-                    throw new UsernameNotFoundException(username);
-                }
-
-                return new User(username, pass, Lists.newArrayList(new SimpleGrantedAuthority("ADMIN")));
+        return username -> {
+            final String pass = nodeService.getValue(username);
+            if (Strings.isNullOrEmpty(pass)) {
+                throw new UsernameNotFoundException(username);
             }
+
+            return new User(username, pass, Lists.newArrayList(new SimpleGrantedAuthority("ADMIN")));
         };
     }
 

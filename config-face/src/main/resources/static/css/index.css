@@ -3,6 +3,10 @@
 }
 
 .list-group-item.active {
-    background-color: #6c757d;
-    border-color: #6c757d;
+    background-color: #a9acaf;
+    border-color: #a9acaf;
+}
+
+.container-fluid {
+    margin-top: 5em;
 }

@@ -13,7 +13,7 @@
     <nav class="navbar navbar-dark bg-dark navbar-expand-lg justify-content-between fixed-top">
         <span class="navbar-brand">${root}</span>
 
-        <ul class="navbar-nav">
+        <ul class="navbar-nav" style="min-width: 4.5em;">
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="versionDD" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     ${theVersion!"Version"}
@@ -33,15 +33,15 @@
         </button>
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <button class="btn btn-sm btn-outline-secondary mr-auto mybtn" type="button">Create</button>
-            <button class="btn btn-sm btn-outline-secondary mybtn" type="button">Import</button>
-            <button class="btn btn-sm btn-outline-secondary mybtn" type="button">Export</button>
+            <button class="btn btn-sm btn-outline-secondary mr-auto mybtn" type="button" data-toggle="modal" data-target="#newModal">New</button>
+            <button class="btn btn-sm btn-outline-secondary mybtn" [#if theVersion??][#else]disabled[/#if] type="button">Import</button>
+            <button class="btn btn-sm btn-outline-secondary mybtn" [#if theVersion??][#else]disabled[/#if] type="button">Export</button>
         </div>
     </nav>
 
-    <div class="container-fluid" style="margin-top: 4.2em;">
+    <div class="container-fluid">
         <div class="row">
-            <div class="col-3" style="margin: 0.5em 0 0.5em 0; font-size: smaller;">
+            <div class="col-3" style="font-size: smaller;">
                 <div class="list-group" id="groupList">
                     [#if groups??]
                         [#list groups as group]
@@ -49,9 +49,61 @@
                         [/#list]
                     [/#if]
                 </div>
+
+                <form action="/group/${theVersion!""}" method="post">
+                    <div class="input-group mt-2" style="margin-top: 1em;">
+                    <input type="text" required name="newGroup" class="form-control" style="font-size: smaller;" placeholder="group name" aria-label="group name" aria-describedby="basic-addon2">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" style="font-size: smaller;" [#if theVersion??][#else]disabled[/#if] type="submit">New</button>
+                    </div>
+                </form>
+                </div>
             </div>
 
-            <div class="col-9" style="margin: 0.5em 0 0.5em 0; font-size: small;" id="dataD"></div>
+            <div class="col-9" style="font-size: small;" id="dataD"></div>
+        </div>
+    </div>
+
+    <!-- New Modal -->
+    <div class="modal fade" id="newModal" tabindex="-1" role="dialog" aria-labelledby="newModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document" style="max-width: 26em;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 class="modal-title" id="exampleModalLabel">Create Version</h6>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" action="/version">
+                        <div class="form-row align-items-center">
+                            <div class="col-auto">
+                                <label class="sr-only" for="versionInput">Version</label>
+                                <input type="text" autofocus required name="version" class="form-control mb-2" style="width:8em;" id="versionInput" placeholder="Version">
+                            </div>
+                            <div class="col-auto">
+                                <label class="sr-only" for="inlineFormInputGroup">Clone</label>
+                                <div class="input-group mb-2">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">From</div>
+                                    </div>
+                                    <select class="custom-select mr-sm-2" name="fromVersion" id="inlineFormInputGroup">
+                                        <option value="" selected>None</option>
+                                        [#if versions??]
+                                            [#list versions as version]
+                                                <option value="${version}">${version}</option>
+                                            [/#list]
+                                        [/#if]
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <button type="submit" id="newVersionButton" class="btn btn-secondary mb-2">Submit</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 

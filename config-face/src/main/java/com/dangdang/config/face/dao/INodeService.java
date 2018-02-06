@@ -20,27 +20,19 @@ import com.dangdang.config.face.entity.PropertyItem;
 
 import java.util.List;
 
-/**
- * 节点数据访问
- * 
- * @author <a href="mailto:wangyuxuan@dangdang.com">Yuxuan Wang</a>
- *
- */
-public interface INodeDao {
+public interface INodeService {
 
-	/**
-	 * 查找子属性
-	 * 
-	 * @param node
-	 * @return property item list
-	 */
 	List<PropertyItem> findProperties(String node);
 
-	/**
-	 * 查找子结点
-	 * 
-	 * @param node
-	 * @return string list
-	 */
 	List<String> listChildren(String node);
+
+	boolean createProperty(String node);
+
+	boolean createProperty(String node, String value);
+
+	boolean updateProperty(String node, String value);
+
+	void deleteProperty(String node);
+
+	String getValue(String node);
 }
