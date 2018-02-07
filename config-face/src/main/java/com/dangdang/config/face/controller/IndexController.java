@@ -1,9 +1,10 @@
 package com.dangdang.config.face.controller;
 
-import com.dangdang.config.face.dao.NodeService;
 import com.dangdang.config.face.entity.CommonResponse;
 import com.dangdang.config.face.entity.PropertyItem;
 import com.dangdang.config.face.entity.PropertyItemVO;
+import com.dangdang.config.face.service.NodeService;
+import com.dangdang.config.face.util.PathEncodeUtils;
 import com.google.common.base.Strings;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
@@ -37,27 +38,14 @@ public class IndexController {
 
     @RequestMapping(value = {"", "/config-web"}, method = RequestMethod.GET)
     public String index() {
-        return "redirect:/c/" + encodeRootNode(getRoot());
+        return "redirect:/version";
     }
 
-    private String encodeRootNode(String root) {
-        return StringUtils.replace(root, "/", "_");
-    }
-
-    private String decodeRootNode(String root) {
-        return StringUtils.replace(root, "_", "/");
-    }
-
-    @RequestMapping(value = {"/c/{rootNode}", "/c/{rootNode}/{version:.+}"}, method = RequestMethod.GET)
-    public ModelAndView rootNode(@PathVariable String rootNode, @PathVariable(required = false) String version) {
-        final String theRoot = decodeRootNode(rootNode);
+    @RequestMapping(value = {"/version", "/version/{version:.+}"}, method = RequestMethod.GET)
+    public ModelAndView rootNode(@PathVariable(required = false) String version) {
         final String root = getRoot();
 
-        if (!Objects.equals(theRoot, root)) {
-            return new ModelAndView("redirect:/c/" + encodeRootNode(root));
-        }
-
-        final List<String> versions = nodeService.listChildren(theRoot)
+        final List<String> versions = nodeService.listChildren(root)
                 .stream().filter(e -> !e.endsWith(COMMENT_SUFFIX))
                 .sorted(Comparator.comparing(String::toString).reversed())
                 .collect(Collectors.toList());
@@ -65,13 +53,12 @@ public class IndexController {
         final String theVersion = com.google.common.base.Objects.firstNonNull(version, Iterables.getFirst(versions, null));
 
         final ModelAndView mv = new ModelAndView("index");
-        mv.addObject("root", theRoot);
+        mv.addObject("root", root);
         mv.addObject("versions", versions);
         mv.addObject("theVersion", theVersion);
-        mv.addObject("basePath", "/c/" + rootNode + "/");
 
         if (Iterables.contains(versions, theVersion)) {
-            final List<String> groups = nodeService.listChildren(makePaths(theRoot, theVersion))
+            final List<String> groups = nodeService.listChildren(makePaths(root, theVersion))
                     .stream().sorted().collect(Collectors.toList());
             mv.addObject("groups", groups);
         }
@@ -119,7 +106,7 @@ public class IndexController {
 
         nodeService.createProperty(groupPath);
 
-        return new ModelAndView("redirect:/c/" + encodeRootNode(root) + "/" + version);
+        return new ModelAndView("redirect:/version/" + version);
     }
 
     @RequestMapping(value = "/version/{version:.+}", method = RequestMethod.POST)
@@ -144,7 +131,7 @@ public class IndexController {
                     cloneVersion(fromVersionNode + COMMENT_SUFFIX, versionNode + COMMENT_SUFFIX);
                 }
 
-                return new CommonResponse<>(true, "/c/" + encodeRootNode(root) + "/" + version, null);
+                return new CommonResponse<>(true, "/version/" + version, null);
             }
         }
 

@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dangdang.config.face.dao;
+package com.dangdang.config.face.service;
 
 import com.dangdang.config.face.entity.PropertyItem;
+import com.dangdang.config.face.util.PathEncodeUtils;
 import com.google.common.base.Charsets;
 import com.google.common.base.Objects;
 import com.google.common.base.Strings;
@@ -35,6 +36,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author <a href="mailto:wangyuxuan@dangdang.com">Yuxuan Wang</a>
@@ -67,6 +69,8 @@ public class NodeService implements INodeService {
 	}
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(NodeService.class);
+
+	private static final String LOG_PATH = "/config-toolkit/logins";
 
 	@Override
 	public List<PropertyItem> findProperties(String node) {
@@ -175,6 +179,21 @@ public class NodeService implements INodeService {
 			LOGGER.error(e.getMessage(), e);
 		}
 		return null;
+	}
+
+	@Override
+	public void logLogin(String root) {
+		createProperty(ZKPaths.makePath(LOG_PATH, PathEncodeUtils.encodePath(root)));
+	}
+
+	@Override
+	public List<String> findLogins() {
+		List<String> logins = listChildren(LOG_PATH);
+		if(logins != null) {
+			logins = logins.stream()
+					.map(e -> PathEncodeUtils.decodePath(e)).collect(Collectors.toList());
+		}
+		return logins;
 	}
 
 }

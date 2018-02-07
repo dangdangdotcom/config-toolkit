@@ -21,7 +21,7 @@
                 <div class="dropdown-menu" aria-labelledby="versionDD">
                 [#if versions??]
                     [#list versions as version]
-                        <a class="dropdown-item" href="${basePath}${version}">${version}</a>
+                        <a class="dropdown-item" href="/version/${version}">${version}</a>
                     [/#list]
                 [/#if]
                 </div>

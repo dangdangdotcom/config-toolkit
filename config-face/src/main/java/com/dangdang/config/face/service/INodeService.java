@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dangdang.config.face.dao;
+package com.dangdang.config.face.service;
 
 
 import com.dangdang.config.face.entity.PropertyItem;
@@ -35,4 +35,8 @@ public interface INodeService {
 	void deleteProperty(String node);
 
 	String getValue(String node);
+
+	void logLogin(String root);
+
+	List<String> findLogins();
 }

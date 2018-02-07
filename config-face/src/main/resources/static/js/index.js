@@ -90,7 +90,6 @@ IndexPage = {
                 },
                 success: function (data) {
                     if(data.suc) {
-                        alert("Success");
                         $("#groupList").find("li[data-group].active").click();
                     } else {
                         alert(data.message);
