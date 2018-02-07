@@ -28,10 +28,15 @@
         [#if items??]
             [#list items as item]
                 <tr>
-                    <td></td>
-                    <td>${item.name}</td>
-                    <td>${item.value}</td>
-                    <td>${item.comment!""}</td>
+                    <td>
+                        <div style="width: 4em;">
+                            <a version="${version}" group="${group}" updateprop="${item.name}" href="#"><img src="/image/pencil.png"></a>
+                            <a version="${version}" group="${group}" delprop="${item.name}" href="#"><img src="/image/trash.png"></a>
+                        </div>
+                    </td>
+                    <td name="name">${item.name}</td>
+                    <td name="value">${item.value}</td>
+                    <td name="comment">${item.comment!""}</td>
                 </tr>
             [/#list]
         [/#if]

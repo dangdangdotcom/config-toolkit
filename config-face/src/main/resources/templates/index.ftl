@@ -36,19 +36,23 @@
             <button class="btn btn-sm btn-outline-secondary mr-auto mybtn" type="button" data-toggle="modal" data-target="#newModal">New</button>
             <button class="btn btn-sm btn-outline-secondary mybtn" [#if theVersion??][#else]disabled[/#if] type="button">Import</button>
             <button class="btn btn-sm btn-outline-secondary mybtn" [#if theVersion??][#else]disabled[/#if] type="button">Export</button>
+            <a href="/logout"><img class="ml-4" src="/image/account-logout.svg"></a>
         </div>
     </nav>
 
     <div class="container-fluid">
         <div class="row">
             <div class="col-3" style="font-size: smaller;">
-                <div class="list-group" id="groupList">
+                <ul class="list-group" id="groupList">
                     [#if groups??]
                         [#list groups as group]
-                            <a href="#" data-group="${group}" class="list-group-item list-group-item-action">${group}</a>
+                            <li data-group="${group}" class="list-group-item d-flex justify-content-between align-items-center">
+                                ${group}
+                                    <a href="#" version="${theVersion}" group="${group}"><img src="/image/trash.png"></a>
+                            </li>
                         [/#list]
                     [/#if]
-                </div>
+                </ul>
 
                 <form action="/group/${theVersion!""}" method="post">
                     <div class="input-group mt-2" style="margin-top: 1em;">
@@ -64,7 +68,7 @@
         </div>
     </div>
 
-    <!-- New Modal -->
+    <!-- New version Modal -->
     <div class="modal fade" id="newModal" tabindex="-1" role="dialog" aria-labelledby="newModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document" style="max-width: 26em;">
             <div class="modal-content">
@@ -102,6 +106,46 @@
                             </div>
                         </div>
                     </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Update Property Modal -->
+    <div class="modal fade" id="updatePropModal" tabindex="-1" role="dialog" aria-labelledby="updatePropLabel" data-backdrop="false" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Update Property</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group row">
+                        <label for="updateKey" class="col-sm-2 col-form-label">Key</label>
+                        <div class="col-sm-10">
+                            <input type="text" readonly class="form-control-plaintext" id="updateKey">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="updateValue" class="col-sm-2 col-form-label">Value</label>
+                        <div class="col-sm-10">
+                            <input type="text" required class="form-control" id="updateValue">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="updateComment" class="col-sm-2 col-form-label">Comment</label>
+                        <div class="col-sm-10">
+                            <input type="text" required class="form-control" id="updateComment">
+                        </div>
+                    </div>
+                    <input type="hidden" name="updateVersion" id="updateVersion">
+                    <input type="hidden" name="updateGroup" id="updateGroup">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" name="updateButton">Save changes</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>

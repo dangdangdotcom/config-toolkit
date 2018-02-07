@@ -10,3 +10,7 @@
 .container-fluid {
     margin-top: 5em;
 }
+
+img {
+    opacity: 0.4;
+}
