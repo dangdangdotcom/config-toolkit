@@ -52,9 +52,9 @@
 
                 <form action="/group/${theVersion!""}" method="post">
                     <div class="input-group mt-2" style="margin-top: 1em;">
-                    <input type="text" required name="newGroup" class="form-control" style="font-size: smaller;" placeholder="group name" aria-label="group name" aria-describedby="basic-addon2">
+                    <input type="text" required spellcheck="false" name="newGroup" class="form-control" style="font-size: smaller;" placeholder="group name" aria-label="group name" aria-describedby="basic-addon2">
                     <div class="input-group-append">
-                        <button class="btn btn-outline-secondary" style="font-size: smaller;" [#if theVersion??][#else]disabled[/#if] type="submit">New</button>
+                        <button class="btn btn-outline-secondary" style="font-size: smaller;" [#if theVersion??][#else]disabled[/#if] type="submit">Add</button>
                     </div>
                 </form>
                 </div>

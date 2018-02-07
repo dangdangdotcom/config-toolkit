@@ -13,7 +13,6 @@ import org.apache.curator.utils.ZKPaths;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -107,7 +106,11 @@ public class IndexController {
             Collections.sort(items);
         }
 
-        return new ModelAndView("data", "items", items);
+        final ModelAndView mv = new ModelAndView("data", "items", items);
+        mv.addObject("version", version);
+        mv.addObject("group", group);
+
+        return mv;
     }
 
     @RequestMapping(value = "/group/{version:.+}", method = RequestMethod.POST)
@@ -167,6 +170,37 @@ public class IndexController {
                 }
             }
         }
+    }
+
+    @RequestMapping(value = "/prop", method = RequestMethod.POST)
+    public @ResponseBody CommonResponse<String> createProp(String version, String group, String key, String value, String comment) {
+        final UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        final String root = principal.getUsername();
+
+        final String propPath = makePaths(root, version, group, key);
+        final boolean suc = nodeService.createProperty(propPath, value);
+
+        if(suc) {
+            if(!Strings.isNullOrEmpty(comment)) {
+                final String commentPath = makePaths(root, version + COMMENT_SUFFIX, group, key);
+                nodeService.createProperty(commentPath, comment);
+            }
+
+            return new CommonResponse<>(true, null, null);
+        }
+
+        return new CommonResponse<>(false, null, "Server Error");
+
+    }
+
+    private String makePaths(String root, String first, String... others) {
+        String path = ZKPaths.makePath(root, first);
+        if(others != null) {
+            for(String other : others) {
+                path = ZKPaths.makePath(path, other);
+            }
+        }
+        return path;
     }
 
 }

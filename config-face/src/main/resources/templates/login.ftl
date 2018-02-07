@@ -16,7 +16,7 @@
     </div>
 
     <div class="form-label-group">
-        <input type="text" id="username" name="username" class="form-control" placeholder="Root Node" required="" autofocus="">
+        <input type="text" id="username" name="username" class="form-control" placeholder="Root Node" required autofocus spellcheck="false" autocomplete="off">
         <label for="username">Root Node</label>
     </div>
 
