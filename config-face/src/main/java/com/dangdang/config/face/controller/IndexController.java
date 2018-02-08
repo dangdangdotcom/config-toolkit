@@ -83,7 +83,7 @@ public class IndexController {
         return mv;
     }
 
-    @RequestMapping(value = "/group/{version}/{group}", method = RequestMethod.GET)
+    @RequestMapping(value = "/group/{version}/{group:.+}", method = RequestMethod.GET)
     public ModelAndView groupData(@PathVariable String version, @PathVariable String group) {
         final List<PropertyItemVO> items = getItems(getRoot(), version, group);
 
@@ -213,7 +213,7 @@ public class IndexController {
 
     }
 
-    @RequestMapping(value = "/prop/{version}/{group}/{key}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/prop/{version}/{group}/{key:.+}", method = RequestMethod.DELETE)
     public @ResponseBody
     CommonResponse<Object> deleteProp(@PathVariable String version, @PathVariable String group, @PathVariable String key) {
         final String root = getRoot();
@@ -231,7 +231,7 @@ public class IndexController {
         return principal.getUsername();
     }
 
-    @RequestMapping(value = "/group/{version}/{group}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/group/{version}/{group:.+}", method = RequestMethod.DELETE)
     public @ResponseBody
     CommonResponse<Object> deleteGroup(@PathVariable String version, @PathVariable String group) {
         final String root = getRoot();
@@ -252,7 +252,7 @@ public class IndexController {
         return path;
     }
 
-    @RequestMapping(value = {"/export/{version:.+}", "/export/{version}/{group}"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/export/{version:.+}", "/export/{version}/{group:.+}"}, method = RequestMethod.GET)
     public @ResponseBody
     HttpEntity<byte[]> exportData(@PathVariable String version, @PathVariable(required = false) String group) {
         final String root = getRoot();

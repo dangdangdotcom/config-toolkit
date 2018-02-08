@@ -66,7 +66,9 @@
                 </form>
             </div>
 
-            <div class="col-9" style="font-size: small;" id="dataD"></div>
+            <div class="col-9" style="font-size: small;" id="dataD">
+                <div class="text-center mt-5" style="opacity: 0.3;"><h2>Choose A Group</h2></div>
+            </div>
         </div>
     </div>
 

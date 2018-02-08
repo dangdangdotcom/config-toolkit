@@ -25,7 +25,7 @@ IndexPage = {
             });
         });
 
-        // Delete group
+        // Remove group
         $("#groupList").on("click", "a[group]", function (e) {
             e.preventDefault();
             var groupA = $(this);
