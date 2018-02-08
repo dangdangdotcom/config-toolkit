@@ -30,3 +30,8 @@ img {
     max-height: 41em;
     overflow-y: scroll;
 }
+
+table {
+    word-break: break-all;
+    font-size: small;
+}

@@ -11,7 +11,7 @@
     <button name="newProp" class="btn btn-outline-secondary" style="font-size: small;" type="button">Add</button>
 </div>
 <div class="table-responsive datas">
-    <table class="table table-sm" style="font-size: small;">
+    <table class="table table-sm">
         <thead>
         <tr>
             <th>#</th>

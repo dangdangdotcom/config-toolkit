@@ -58,12 +58,12 @@
 
                 <form action="/group/${theVersion!""}" method="post">
                     <div class="input-group mt-2" style="margin-top: 1em;">
-                    <input type="text" required spellcheck="false" name="newGroup" class="form-control" style="font-size: smaller;" placeholder="group name" aria-label="group name" aria-describedby="basic-addon2">
-                    <div class="input-group-append">
-                        <button class="btn btn-outline-secondary" style="font-size: smaller;" [#if theVersion??][#else]disabled[/#if] type="submit">Add</button>
+                        <input type="text" required spellcheck="false" name="newGroup" class="form-control" style="font-size: small;" placeholder="Group Name" aria-label="group name" aria-describedby="basic-addon2">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" style="font-size: small;" [#if theVersion??][#else]disabled[/#if] type="submit">Add</button>
+                        </div>
                     </div>
                 </form>
-                </div>
             </div>
 
             <div class="col-9" style="font-size: small;" id="dataD"></div>

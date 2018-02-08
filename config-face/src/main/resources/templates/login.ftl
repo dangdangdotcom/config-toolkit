@@ -10,30 +10,22 @@
 </head>
 
 <body>
-<form class="form-signin" method="post">
-    <div class="text-center mb-4">
-        <img class="navbar-brand" src="/image/c.png" style="width:3em;">
-    </div>
+    <form class="form-signin" method="post">
+        <div class="text-center mb-4">
+            <h1 class="h3 mb-3 font-weight-normal">Config Toolkit Admin</h1>
+        </div>
 
-    <div class="form-label-group">
-        <input type="text" id="username" name="username" class="form-control" list="logins"
-               placeholder="Root Node" required autofocus spellcheck="false" autocomplete="off">
-        <datalist id="logins">
-            [#if logins??]
-                [#list logins as login]
-                    <option value="${login}"></option>
-                [/#list]
-            [/#if]
-        </datalist>
-        <label for="username">Root Node</label>
-    </div>
+        <div class="form-label-group">
+            <input type="text" id="username" name="username" class="form-control"
+                   placeholder="Root Node" required autofocus spellcheck="false">
+            <label for="username">Root Node</label>
+        </div>
 
-    <div class="form-label-group">
-        <input type="password" id="password" name="password" class="form-control" placeholder="Password" required="">
-        <label for="password">Password</label>
-    </div>
-    <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
-</form>
-
+        <div class="form-label-group">
+            <input type="password" id="password" name="password" class="form-control" placeholder="Password" required="">
+            <label for="password">Password</label>
+        </div>
+        <button class="btn btn-lg btn-outline-dark btn-block" type="submit">Sign in</button>
+    </form>
 </body>
 </html>
