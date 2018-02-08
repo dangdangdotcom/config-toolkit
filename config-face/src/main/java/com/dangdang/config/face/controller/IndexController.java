@@ -4,16 +4,21 @@ import com.dangdang.config.face.entity.CommonResponse;
 import com.dangdang.config.face.entity.PropertyItem;
 import com.dangdang.config.face.entity.PropertyItemVO;
 import com.dangdang.config.face.service.NodeService;
-import com.dangdang.config.face.util.PathEncodeUtils;
+import com.google.common.base.Charsets;
+import com.google.common.base.Joiner;
 import com.google.common.base.Strings;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.curator.utils.ZKPaths;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -23,8 +28,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.*;
+import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 @Controller
 public class IndexController {
@@ -68,8 +81,16 @@ public class IndexController {
 
     @RequestMapping(value = "/group/{version}/{group}", method = RequestMethod.GET)
     public ModelAndView groupData(@PathVariable String version, @PathVariable String group) {
-        final String root = getRoot();
+        final List<PropertyItemVO> items = getItems(getRoot(), version, group);
 
+        final ModelAndView mv = new ModelAndView("data", "items", items);
+        mv.addObject("version", version);
+        mv.addObject("group", group);
+
+        return mv;
+    }
+
+    private List<PropertyItemVO> getItems(String root, String version, String group) {
         List<PropertyItemVO> items = Lists.newArrayList();
 
         final List<PropertyItem> props = nodeService.findProperties(makePaths(root, version, group));
@@ -90,12 +111,7 @@ public class IndexController {
 
             Collections.sort(items);
         }
-
-        final ModelAndView mv = new ModelAndView("data", "items", items);
-        mv.addObject("version", version);
-        mv.addObject("group", group);
-
-        return mv;
+        return items;
     }
 
     @RequestMapping(value = "/group/{version:.+}", method = RequestMethod.POST)
@@ -230,6 +246,74 @@ public class IndexController {
             }
         }
         return path;
+    }
+
+    @RequestMapping(value = {"/export/{version:.+}", "/export/{version}/{group}"}, method = RequestMethod.GET)
+    public @ResponseBody
+    HttpEntity<byte[]> export(HttpServletResponse response,
+                              @PathVariable String version, @PathVariable(required = false) String group) {
+        final String root = getRoot();
+
+        response.setHeader("Content-Type", "application/zip");
+        if (!Strings.isNullOrEmpty(group)) {
+            //export group
+            final List<PropertyItemVO> items = getItems(root, version, group);
+            final List<String> lines = formatPropertyLines(root, version, group, items);
+
+            byte[] document = Joiner.on("\r\n").join(lines).getBytes();
+            HttpHeaders header = new HttpHeaders();
+            header.setContentType(new MediaType("application", "properties"));
+            header.set("Content-Disposition", "inline; filename=" + group + ".property");
+            header.setContentLength(document.length);
+            return new HttpEntity<>(document, header);
+        } else {
+            //export version
+            final String versionPath = makePaths(root, version);
+            List<String> groups = nodeService.listChildren(versionPath);
+            if (groups != null && !groups.isEmpty()) {
+                try {
+                    ByteArrayOutputStream out = new ByteArrayOutputStream();
+                    ZipOutputStream zipOutputStream = new ZipOutputStream(out);
+                    for (String groupName : groups) {
+                        String groupPath = makePaths(versionPath, groupName);
+                        String fileName = ZKPaths.getNodeFromPath(groupPath) + ".properties";
+
+                        List<PropertyItemVO> items = getItems(root, version, groupName);
+                        List<String> lines = formatPropertyLines(root, version, groupName, items);
+                        if (!lines.isEmpty()) {
+                            ZipEntry zipEntry = new ZipEntry(fileName);
+                            zipOutputStream.putNextEntry(zipEntry);
+                            IOUtils.writeLines(lines, "\r\n", zipOutputStream, Charsets.UTF_8.displayName());
+                            zipOutputStream.closeEntry();
+                        }
+                    }
+                    zipOutputStream.close();
+
+                    byte[] document = out.toByteArray();
+                    HttpHeaders header = new HttpHeaders();
+                    header.setContentType(new MediaType("application", "zip"));
+                    header.set("Content-Disposition", "inline; filename=" + StringUtils.replace(root, "/", "-") + ".zip");
+                    header.setContentLength(document.length);
+                    return new HttpEntity<>(document, header);
+                } catch (IOException e) {
+                    LOGGER.error(e.getMessage(), e);
+                }
+            }
+            return null;
+        }
+    }
+
+    private List<String> formatPropertyLines(String root, String version, String group, List<PropertyItemVO> items) {
+        List<String> lines = Lists.newArrayList();
+        lines.add(String.format("# Export from zookeeper configuration group: [%s] - [%s] - [%s].", root,
+                version, group));
+        for (PropertyItemVO item : items) {
+            if (!Strings.isNullOrEmpty(item.getComment())) {
+                lines.add("# " + item.getComment());
+            }
+            lines.add(item.getName() + "=" + item.getValue());
+        }
+        return lines;
     }
 
 }

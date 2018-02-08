@@ -35,7 +35,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <button class="btn btn-sm btn-outline-secondary mr-auto mybtn" type="button" data-toggle="modal" data-target="#newModal">New</button>
             <button class="btn btn-sm btn-outline-secondary mybtn" [#if theVersion??][#else]disabled[/#if] type="button">Import</button>
-            <button class="btn btn-sm btn-outline-secondary mybtn" [#if theVersion??][#else]disabled[/#if] type="button">Export</button>
+            <button class="btn btn-sm btn-outline-secondary mybtn" [#if theVersion??][#else]disabled[/#if] type="button" data-toggle="modal" data-target="#exportModal">Export</button>
             <a href="/logout"><img class="ml-4" src="/image/account-logout.svg"></a>
         </div>
     </nav>
@@ -70,10 +70,10 @@
 
     <!-- New version Modal -->
     <div class="modal fade" id="newModal" tabindex="-1" role="dialog" aria-labelledby="newModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document" style="max-width: 26em;">
+        <div class="modal-dialog" role="document" style="width: 29em;">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h6 class="modal-title" id="exampleModalLabel">Create Version</h6>
+                    <h5 class="modal-title" id="exampleModalLabel">Create Version</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -83,15 +83,15 @@
                         <div class="form-row align-items-center">
                             <div class="col-auto">
                                 <label class="sr-only" for="versionInput">Version</label>
-                                <input type="text" autofocus required name="version" class="form-control mb-2" style="width:8em;" id="versionInput" placeholder="Version">
+                                <input type="text" autofocus required name="version" class="form-control" style="width:8em;" id="versionInput" placeholder="Version">
                             </div>
                             <div class="col-auto">
                                 <label class="sr-only" for="inlineFormInputGroup">Clone</label>
-                                <div class="input-group mb-2">
+                                <div class="input-group">
                                     <div class="input-group-prepend">
                                         <div class="input-group-text">From</div>
                                     </div>
-                                    <select class="custom-select mr-sm-2" name="fromVersion" id="inlineFormInputGroup">
+                                    <select class="form-control custom-select mr-sm-2" name="fromVersion" id="inlineFormInputGroup">
                                         <option value="" selected>None</option>
                                         [#if versions??]
                                             [#list versions as version]
@@ -102,7 +102,7 @@
                                 </div>
                             </div>
                             <div class="col-auto">
-                                <button type="submit" id="newVersionButton" class="btn btn-secondary mb-2">Submit</button>
+                                <button type="submit" id="newVersionButton" class="btn btn-outline-dark">Submit</button>
                             </div>
                         </div>
                     </form>
@@ -144,12 +144,30 @@
                     <input type="hidden" name="updateGroup" id="updateGroup">
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" name="updateButton">Save changes</button>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-outline-dark" name="updateButton">Save changes</button>
+                    <button type="button" class="btn btn-outline-dark" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
     </div>
 
+
+    <!-- Export Modal -->
+    <div class="modal fade" id="exportModal" tabindex="-1" role="dialog" aria-labelledby="exportLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Choose</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <a href="/export/${theVersion!""}" class="btn btn-outline-dark btn-lg btn-block" id="exportVersionBt">Export Version</a>
+                    <a href="#" class="btn btn-outline-dark btn-lg btn-block" id="exportGroupBt">Export Group</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

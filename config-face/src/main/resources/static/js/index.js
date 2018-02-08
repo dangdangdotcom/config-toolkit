@@ -19,6 +19,7 @@ IndexPage = {
                 success: function (data) {
                     $("#dataD").html(data);
                     $("#dataD").find("[name=key]:first").focus();
+                    $("#exportGroupBt").attr("href", "/export/" + version + "/" + group);
                 }
             });
         });
