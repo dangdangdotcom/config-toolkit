@@ -20,6 +20,7 @@ IndexPage = {
                     $("#dataD").html(data);
                     $("#dataD").find("[name=key]:first").focus();
                     $("#exportGroupBt").attr("href", "/export/" + version + "/" + group);
+                    $("#exportGroupBt").removeClass("disabled");
                 }
             });
         });
@@ -45,6 +46,16 @@ IndexPage = {
                 });
             }
 
+        });
+
+        // on version moda show
+        $("#newModal").on("shown.bs.modal", function (e) {
+            $(this).find("input:first").focus();
+        });
+
+        // on update property moda show
+        $("#updatePropModal").on("shown.bs.modal", function (e) {
+            $("#updateValue").focus();
         });
 
         // Create or clone version

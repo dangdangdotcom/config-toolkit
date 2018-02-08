@@ -36,23 +36,25 @@
             <button class="btn btn-sm btn-outline-secondary mr-auto mybtn" type="button" data-toggle="modal" data-target="#newModal">New</button>
             <button class="btn btn-sm btn-outline-secondary mybtn" [#if theVersion??][#else]disabled[/#if] type="button" data-toggle="modal" data-target="#importModal">Import</button>
             <button class="btn btn-sm btn-outline-secondary mybtn" [#if theVersion??][#else]disabled[/#if] type="button" data-toggle="modal" data-target="#exportModal">Export</button>
-            <a href="/logout"><img class="ml-4" src="/image/account-logout.svg"></a>
+            <a href="/logout"><img class="ml-4" style="margin-top: 0.4em;" src="/image/account-logout.svg"></a>
         </div>
     </nav>
 
     <div class="container-fluid">
         <div class="row">
             <div class="col-3" style="font-size: smaller;">
-                <ul class="list-group" id="groupList">
-                    [#if groups??]
-                        [#list groups as group]
-                            <li data-group="${group}" class="list-group-item d-flex justify-content-between align-items-center">
-                                ${group}
-                                    <a href="#" version="${theVersion}" group="${group}"><img src="/image/trash.png"></a>
-                            </li>
-                        [/#list]
-                    [/#if]
-                </ul>
+                <div class="groups">
+                    <ul class="list-group" id="groupList">
+                        [#if groups??]
+                            [#list groups as group]
+                                <li data-group="${group}" class="list-group-item d-flex justify-content-between align-items-center">
+                                    ${group}
+                                        <a href="#" version="${theVersion}" group="${group}"><img src="/image/trash.png"></a>
+                                </li>
+                            [/#list]
+                        [/#if]
+                    </ul>
+                </div>
 
                 <form action="/group/${theVersion!""}" method="post">
                     <div class="input-group mt-2" style="margin-top: 1em;">
@@ -83,7 +85,7 @@
                         <div class="form-row align-items-center">
                             <div class="col-auto">
                                 <label class="sr-only" for="versionInput">Version</label>
-                                <input type="text" autofocus required name="version" class="form-control" style="width:8em;" id="versionInput" placeholder="Version">
+                                <input type="text" required name="version" class="form-control" style="width:8em;" id="versionInput" placeholder="Version">
                             </div>
                             <div class="col-auto">
                                 <label class="sr-only" for="inlineFormInputGroup">Clone</label>
@@ -163,7 +165,7 @@
                 </div>
                 <div class="modal-body">
                     <a href="/export/${theVersion!""}" class="btn btn-outline-dark btn-lg btn-block" id="exportVersionBt">Export Version</a>
-                    <a href="#" class="btn btn-outline-dark btn-lg btn-block" id="exportGroupBt">Export Group</a>
+                    <a href="#" class="btn btn-outline-dark btn-lg btn-block disabled" id="exportGroupBt">Export Group</a>
                 </div>
             </div>
         </div>
