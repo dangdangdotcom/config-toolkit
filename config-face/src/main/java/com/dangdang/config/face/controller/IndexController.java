@@ -6,10 +6,14 @@ import com.dangdang.config.face.entity.PropertyItemVO;
 import com.dangdang.config.face.service.NodeService;
 import com.google.common.base.Charsets;
 import com.google.common.base.Joiner;
+import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.io.Files;
+import org.apache.commons.compress.archivers.ArchiveEntry;
+import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.curator.utils.ZKPaths;
@@ -22,15 +26,13 @@ import org.springframework.http.MediaType;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -45,6 +47,8 @@ public class IndexController {
     @Autowired
     private NodeService nodeService;
 
+    private static final String ZIP = ".zip";
+    private static final String PROPERTIES = ".properties";
     private static final String COMMENT_SUFFIX = "$";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(IndexController.class);
@@ -250,11 +254,9 @@ public class IndexController {
 
     @RequestMapping(value = {"/export/{version:.+}", "/export/{version}/{group}"}, method = RequestMethod.GET)
     public @ResponseBody
-    HttpEntity<byte[]> export(HttpServletResponse response,
-                              @PathVariable String version, @PathVariable(required = false) String group) {
+    HttpEntity<byte[]> exportData(@PathVariable String version, @PathVariable(required = false) String group) {
         final String root = getRoot();
 
-        response.setHeader("Content-Type", "application/zip");
         if (!Strings.isNullOrEmpty(group)) {
             //export group
             final List<PropertyItemVO> items = getItems(root, version, group);
@@ -273,26 +275,26 @@ public class IndexController {
             if (groups != null && !groups.isEmpty()) {
                 try {
                     ByteArrayOutputStream out = new ByteArrayOutputStream();
-                    ZipOutputStream zipOutputStream = new ZipOutputStream(out);
-                    for (String groupName : groups) {
-                        String groupPath = makePaths(versionPath, groupName);
-                        String fileName = ZKPaths.getNodeFromPath(groupPath) + ".properties";
+                    try(ZipOutputStream zipOutputStream = new ZipOutputStream(out)) {
+                        for (String groupName : groups) {
+                            String groupPath = makePaths(versionPath, groupName);
+                            String fileName = ZKPaths.getNodeFromPath(groupPath) + PROPERTIES;
 
-                        List<PropertyItemVO> items = getItems(root, version, groupName);
-                        List<String> lines = formatPropertyLines(root, version, groupName, items);
-                        if (!lines.isEmpty()) {
-                            ZipEntry zipEntry = new ZipEntry(fileName);
-                            zipOutputStream.putNextEntry(zipEntry);
-                            IOUtils.writeLines(lines, "\r\n", zipOutputStream, Charsets.UTF_8.displayName());
-                            zipOutputStream.closeEntry();
+                            List<PropertyItemVO> items = getItems(root, version, groupName);
+                            List<String> lines = formatPropertyLines(root, version, groupName, items);
+                            if (!lines.isEmpty()) {
+                                ZipEntry zipEntry = new ZipEntry(fileName);
+                                zipOutputStream.putNextEntry(zipEntry);
+                                IOUtils.writeLines(lines, "\r\n", zipOutputStream, Charsets.UTF_8.displayName());
+                                zipOutputStream.closeEntry();
+                            }
                         }
                     }
-                    zipOutputStream.close();
 
                     byte[] document = out.toByteArray();
                     HttpHeaders header = new HttpHeaders();
                     header.setContentType(new MediaType("application", "zip"));
-                    header.set("Content-Disposition", "inline; filename=" + StringUtils.replace(root, "/", "-") + ".zip");
+                    header.set("Content-Disposition", "inline; filename=" + StringUtils.replace(root, "/", "-") + ZIP);
                     header.setContentLength(document.length);
                     return new HttpEntity<>(document, header);
                 } catch (IOException e) {
@@ -307,6 +309,7 @@ public class IndexController {
         List<String> lines = Lists.newArrayList();
         lines.add(String.format("# Export from zookeeper configuration group: [%s] - [%s] - [%s].", root,
                 version, group));
+        lines.add("");
         for (PropertyItemVO item : items) {
             if (!Strings.isNullOrEmpty(item.getComment())) {
                 lines.add("# " + item.getComment());
@@ -314,6 +317,70 @@ public class IndexController {
             lines.add(item.getName() + "=" + item.getValue());
         }
         return lines;
+    }
+
+    @PostMapping("/import/{version:.+}")
+    public ModelAndView importData(@PathVariable String version, MultipartFile file){
+        final String fileName = file.getOriginalFilename();
+        LOGGER.info("Upload file : {}", fileName);
+        try (InputStream in = file.getInputStream()) {
+            if (fileName.endsWith(PROPERTIES)) {
+                saveGroup(version, fileName, in);
+
+            } else if (fileName.endsWith(ZIP)) {
+                try (ZipArchiveInputStream input = new ZipArchiveInputStream(in)) {
+                    ArchiveEntry nextEntry = null;
+                    while ((nextEntry = input.getNextEntry()) != null) {
+                        String entryName = nextEntry.getName();
+                        saveGroup(version, entryName, input);
+                    }
+                }
+            }
+        } catch (IOException e) {
+            LOGGER.error(e.getMessage(), e);
+        }
+
+        return new ModelAndView("redirect:/version/" + version);
+    }
+
+    private void saveGroup(@PathVariable String version, String fileName, InputStream in) throws IOException {
+        List<PropertyItemVO> items = parseInputFile(in);
+        if(!items.isEmpty()) {
+            final String group = Files.getNameWithoutExtension(fileName);
+            final String dataPath = makePaths(getRoot(), version, group);
+            final String commentPath = makePaths(getRoot(), version + COMMENT_SUFFIX, group);
+
+            items.forEach(item -> {
+                nodeService.createProperty(makePaths(dataPath, item.getName()), item.getValue());
+                nodeService.createProperty(makePaths(commentPath, item.getName()), item.getComment());
+            });
+        }
+    }
+
+
+    private Splitter PROPERTY_SPLITTER = Splitter.on('=').limit(2);
+
+
+    private List<PropertyItemVO> parseInputFile(InputStream inputstream) throws IOException {
+        List<String> lines = IOUtils.readLines(inputstream, Charsets.UTF_8.name());
+        List<PropertyItemVO> items = Lists.newArrayList();
+        String previousLine = null;
+        for (int i = 0; i < lines.size(); i++) {
+            String line = lines.get(i);
+            if (!line.startsWith("#")) {
+                Iterable<String> parts = PROPERTY_SPLITTER.split(line);
+                if (Iterables.size(parts) == 2) {
+                    PropertyItemVO item = new PropertyItemVO(Iterables.getFirst(parts, null).trim(), Iterables.getLast(parts).trim());
+                    if (previousLine != null && previousLine.startsWith("#")) {
+                        item.setComment(org.springframework.util.StringUtils.trimLeadingCharacter(previousLine, '#').trim());
+                    }
+                    items.add(item);
+                }
+            }
+
+            previousLine = line;
+        }
+        return items;
     }
 
 }

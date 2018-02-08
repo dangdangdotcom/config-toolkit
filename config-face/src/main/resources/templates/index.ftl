@@ -34,7 +34,7 @@
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <button class="btn btn-sm btn-outline-secondary mr-auto mybtn" type="button" data-toggle="modal" data-target="#newModal">New</button>
-            <button class="btn btn-sm btn-outline-secondary mybtn" [#if theVersion??][#else]disabled[/#if] type="button">Import</button>
+            <button class="btn btn-sm btn-outline-secondary mybtn" [#if theVersion??][#else]disabled[/#if] type="button" data-toggle="modal" data-target="#importModal">Import</button>
             <button class="btn btn-sm btn-outline-secondary mybtn" [#if theVersion??][#else]disabled[/#if] type="button" data-toggle="modal" data-target="#exportModal">Export</button>
             <a href="/logout"><img class="ml-4" src="/image/account-logout.svg"></a>
         </div>
@@ -151,7 +151,6 @@
         </div>
     </div>
 
-
     <!-- Export Modal -->
     <div class="modal fade" id="exportModal" tabindex="-1" role="dialog" aria-labelledby="exportLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -165,6 +164,33 @@
                 <div class="modal-body">
                     <a href="/export/${theVersion!""}" class="btn btn-outline-dark btn-lg btn-block" id="exportVersionBt">Export Version</a>
                     <a href="#" class="btn btn-outline-dark btn-lg btn-block" id="exportGroupBt">Export Group</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Import Modal -->
+    <div class="modal fade" id="importModal" tabindex="-1" role="dialog" aria-labelledby="importLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Properties or Zip file</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="/import/${theVersion!""}" method="post" enctype="multipart/form-data">
+                        <div class="input-group mb-3">
+                            <div class="custom-file">
+                                <input type="file" name="file" class="custom-file-input" id="inputGroupFile02">
+                                <label class="custom-file-label" for="inputGroupFile02">Choose file</label>
+                            </div>
+                            <div class="input-group-append">
+                                <button type="submit" class="btn btn-outline-secondary">Upload</button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
