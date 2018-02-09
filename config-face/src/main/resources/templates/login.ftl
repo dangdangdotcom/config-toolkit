@@ -12,7 +12,7 @@
 <body>
     <form class="form-signin" method="post">
         <div class="text-center mb-4">
-            <h1 class="h3 mb-3 font-weight-normal">Config Toolkit Admin</h1>
+            <h1 class="h3 mb-3 font-weight-normal" id="configToolkitAdmin">Config Toolkit Admin</h1>
         </div>
 
         <div class="form-label-group">

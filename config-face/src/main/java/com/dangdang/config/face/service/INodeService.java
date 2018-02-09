@@ -35,8 +35,4 @@ public interface INodeService {
 	void deleteProperty(String node);
 
 	String getValue(String node);
-
-	void logLogin(String root);
-
-	List<String> findLogins();
 }

@@ -23,13 +23,18 @@ IndexPage = {
                 url: "/group/" + version + "/" + group,
                 method: "get",
                 success: function (data) {
-                    var dataD = $("#dataD");
-                    dataD.html(data);
-                    dataD.find("[name=key]:first").focus();
+                    // hack for session timeout
+                    if($("#configToolkitAdmin", data).length > 0) {
+                        location.href = "/login";
+                    } else {
+                        var dataD = $("#dataD");
+                        dataD.html(data);
+                        dataD.find("[name=key]:first").focus();
 
-                    var exportGroupBt = $("#exportGroupBt");
-                    exportGroupBt.attr("href", "/export/" + version + "/" + group);
-                    exportGroupBt.removeClass("disabled");
+                        var exportGroupBt = $("#exportGroupBt");
+                        exportGroupBt.attr("href", "/export/" + version + "/" + group);
+                        exportGroupBt.removeClass("disabled");
+                    }
                 }
             });
         });
