@@ -58,7 +58,7 @@ public class IndexController {
         return "redirect:/version";
     }
 
-    @RequestMapping(value = {"/version", "/version/{version:.+}"}, method = RequestMethod.GET)
+    @GetMapping(value = {"/version", "/version/{version:.+}"})
     public ModelAndView rootNode(@PathVariable(required = false) String version) {
         final String root = getRoot();
 
@@ -83,7 +83,7 @@ public class IndexController {
         return mv;
     }
 
-    @RequestMapping(value = "/group/{version}/{group:.+}", method = RequestMethod.GET)
+    @GetMapping(value = "/group/{version}/{group:.+}")
     public ModelAndView groupData(@PathVariable String version, @PathVariable String group) {
         final List<PropertyItemVO> items = getItems(getRoot(), version, group);
 
@@ -118,7 +118,7 @@ public class IndexController {
         return items;
     }
 
-    @RequestMapping(value = "/group/{version:.+}", method = RequestMethod.POST)
+    @PostMapping(value = "/group/{version:.+}")
     public ModelAndView createGroup(@PathVariable String version, String newGroup) {
         final String root = getRoot();
 
@@ -129,7 +129,7 @@ public class IndexController {
         return new ModelAndView("redirect:/version/" + version);
     }
 
-    @RequestMapping(value = "/version/{version:.+}", method = RequestMethod.POST)
+    @PostMapping(value = "/version/{version:.+}")
     public @ResponseBody
     CommonResponse<Object> createVersion(@PathVariable String version, String fromVersion) {
         LOGGER.debug("Create version {} from {}", version, fromVersion);
@@ -176,7 +176,7 @@ public class IndexController {
         }
     }
 
-    @RequestMapping(value = "/prop", method = RequestMethod.POST)
+    @PostMapping(value = "/prop")
     public @ResponseBody
     CommonResponse<Object> createProp(String version, String group, String key, String value, String comment) {
         final String root = getRoot();
@@ -197,7 +197,7 @@ public class IndexController {
 
     }
 
-    @RequestMapping(value = "/prop", method = RequestMethod.PUT)
+    @PutMapping(value = "/prop")
     public @ResponseBody
     CommonResponse<Object> updateProp(String version, String group, String key, String value, String comment) {
         final String root = getRoot();
@@ -213,7 +213,7 @@ public class IndexController {
 
     }
 
-    @RequestMapping(value = "/prop/{version}/{group}/{key:.+}", method = RequestMethod.DELETE)
+    @DeleteMapping(value = "/prop/{version}/{group}/{key:.+}")
     public @ResponseBody
     CommonResponse<Object> deleteProp(@PathVariable String version, @PathVariable String group, @PathVariable String key) {
         final String root = getRoot();
@@ -231,7 +231,7 @@ public class IndexController {
         return principal.getUsername();
     }
 
-    @RequestMapping(value = "/group/{version}/{group:.+}", method = RequestMethod.DELETE)
+    @DeleteMapping(value = "/group/{version}/{group:.+}")
     public @ResponseBody
     CommonResponse<Object> deleteGroup(@PathVariable String version, @PathVariable String group) {
         final String root = getRoot();
@@ -252,7 +252,7 @@ public class IndexController {
         return path;
     }
 
-    @RequestMapping(value = {"/export/{version:.+}", "/export/{version}/{group:.+}"}, method = RequestMethod.GET)
+    @GetMapping(value = {"/export/{version:.+}", "/export/{version}/{group:.+}"})
     public @ResponseBody
     HttpEntity<byte[]> exportData(@PathVariable String version, @PathVariable(required = false) String group) {
         final String root = getRoot();

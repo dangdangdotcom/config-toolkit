@@ -4,11 +4,10 @@ IndexPage = {
     },
     bindingEvents: function () {
         // Get Data of group
-        var dataGroups = $("#groupList").find("li[data-group]");
-        dataGroups.bind("click", function(e) {
+        $("#groupList").on("click", "li[data-group]", function(e) {
             e.preventDefault();
             var groupLink = $(this);
-            dataGroups.removeClass("active");
+            $("#groupList").find("li[data-group]").removeClass("active");
             groupLink.addClass("active");
 
             var version = $("#versionDD").text().trim();
@@ -27,6 +26,7 @@ IndexPage = {
 
         // Remove group
         $("#groupList").on("click", "a[group]", function (e) {
+            e.stopPropagation();
             e.preventDefault();
             var groupA = $(this);
             var version = groupA.attr("version");
