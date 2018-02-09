@@ -2,13 +2,20 @@ IndexPage = {
     init: function () {
         IndexPage.bindingEvents();
     },
+    findSelectedGroup: function () {
+        return $("#groupList").find("li[data-group].active:first");
+    },
     bindingEvents: function () {
         // Get Data of group
         $("#groupList").on("click", "li[data-group]", function(e) {
             e.preventDefault();
             var groupLink = $(this);
-            $("#groupList").find("li[data-group]").removeClass("active");
+
+            var activeGroup = IndexPage.findSelectedGroup();
+            activeGroup.removeClass("active");
             groupLink.addClass("active");
+            activeGroup.find("a:first").hide();
+            groupLink.find("a:first").show();
 
             var version = $("#versionDD").text().trim();
             var group = groupLink.attr("data-group");
@@ -16,10 +23,13 @@ IndexPage = {
                 url: "/group/" + version + "/" + group,
                 method: "get",
                 success: function (data) {
-                    $("#dataD").html(data);
-                    $("#dataD").find("[name=key]:first").focus();
-                    $("#exportGroupBt").attr("href", "/export/" + version + "/" + group);
-                    $("#exportGroupBt").removeClass("disabled");
+                    var dataD = $("#dataD");
+                    dataD.html(data);
+                    dataD.find("[name=key]:first").focus();
+
+                    var exportGroupBt = $("#exportGroupBt");
+                    exportGroupBt.attr("href", "/export/" + version + "/" + group);
+                    exportGroupBt.removeClass("disabled");
                 }
             });
         });
@@ -102,7 +112,7 @@ IndexPage = {
                 },
                 success: function (data) {
                     if(data.suc) {
-                        $("#groupList").find("li[data-group].active").click();
+                        IndexPage.findSelectedGroup().click();
                     } else {
                         alert(data.message);
                     }
@@ -124,7 +134,7 @@ IndexPage = {
                     method: "delete",
                     success: function (data) {
                         if(data.suc) {
-                            $("#groupList").find("li[data-group].active").click();
+                            IndexPage.findSelectedGroup().click();
                         }else {
                             alert(data.message);
                         }
@@ -135,16 +145,15 @@ IndexPage = {
 
         // Open update property modal
         $("#dataD").on("click", "a[updateprop]", function (e) {
-           e.preventDefault();
-           var updatepropA = $(this);
-           var theRow = updatepropA.parents("tr:first");
+            e.preventDefault();
+            var updatepropA = $(this);
+            var theRow = updatepropA.parents("tr:first");
 
-           $("#updateVersion").val(updatepropA.attr("version"));
-           $("#updateGroup").val(updatepropA.attr("group"));
-           $("#updateKey").val(updatepropA.attr("updateprop"));
-           $("#updateValue").val(theRow.find("td[name=value]:first").text());
-           $("#updateComment").val(theRow.find("td[name=comment]:first").text());
-
+            $("#updateVersion").val(updatepropA.attr("version"));
+            $("#updateGroup").val(updatepropA.attr("group"));
+            $("#updateKey").val(updatepropA.attr("updateprop"));
+            $("#updateValue").val(theRow.find("td[name=value]:first").text());
+            $("#updateComment").val(theRow.find("td[name=comment]:first").text());
             $("#updatePropModal").modal("show");
             $("#updateValue").focus();
         });
@@ -172,12 +181,20 @@ IndexPage = {
                 success: function (data) {
                     if(data.suc){
                         $("#updatePropModal").modal("hide");
-                        $("#groupList").find("li[data-group].active").click();
+                        IndexPage.findSelectedGroup().click();
                     }else {
                         alert(data.message);
                     }
                 }
             });
+        });
+
+        // display upload file name
+        var importFile = $("#importFile");
+        importFile.on("change", function () {
+            var filePath = importFile.val();
+            var fileName = filePath.substring(filePath.lastIndexOf("\\") + 1);
+            importFile.next().html(fileName);
         });
     }
 }

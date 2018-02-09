@@ -49,7 +49,7 @@
                             [#list groups as group]
                                 <li data-group="${group}" class="list-group-item d-flex justify-content-between align-items-center">
                                     ${group}
-                                        <a href="#" version="${theVersion}" group="${group}"><img src="/image/trash.png"></a>
+                                        <a href="#" version="${theVersion}" group="${group}" style="display: none"><img src="/image/trash.png"></a>
                                 </li>
                             [/#list]
                         [/#if]
@@ -93,7 +93,7 @@
                                 <label class="sr-only" for="inlineFormInputGroup">Clone</label>
                                 <div class="input-group">
                                     <div class="input-group-prepend">
-                                        <div class="input-group-text">From</div>
+                                        <div class="input-group-text">Clone from</div>
                                     </div>
                                     <select class="form-control custom-select mr-sm-2" name="fromVersion" id="inlineFormInputGroup">
                                         <option value="" selected>None</option>
@@ -178,7 +178,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Properties or Zip file</h5>
+                    <h5 class="modal-title">Select properties or zip file</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -187,8 +187,8 @@
                     <form action="/import/${theVersion!""}" method="post" enctype="multipart/form-data">
                         <div class="input-group mb-3">
                             <div class="custom-file">
-                                <input type="file" name="file" class="custom-file-input" id="inputGroupFile02">
-                                <label class="custom-file-label" for="inputGroupFile02">Choose file</label>
+                                <input type="file" name="file" class="custom-file-input" id="importFile">
+                                <label class="custom-file-label" for="importFile">Choose file</label>
                             </div>
                             <div class="input-group-append">
                                 <button type="submit" class="btn btn-outline-secondary">Upload</button>
