@@ -8,7 +8,7 @@
 <!-- http://www.qos.ch/shop/products/professionalSupport -->
 <!-- -->
 <configuration>
-	<property name="logBase" value="/log/web/config-face" />
+	<property name="logBase" value="/var/log/config-toolkit/config-face" />
 
 	<appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
 		<encoder>
