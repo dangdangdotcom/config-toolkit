@@ -21,7 +21,7 @@ cd config-toolkit/config-face
 mvn package
 java -jar config-face.jar --zk="localhost:2181"
 ```
-将编译好的config-web.war部署到tomcat即可
+
 #### 创建初始权限配置
 使用命令行创建zookeeper配置根节点，根节点密码使用sha1加密，如果要使用明文密码，可以自行修改config-zk-web的鉴权部分代码
 以根路径为`/projectx/modulex`密码为`abc`为例
