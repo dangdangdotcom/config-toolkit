@@ -17,8 +17,9 @@
 #### 下载config-toolkit项目
 ```
 git clone https://github.com/dangdangdotcom/config-toolkit.git
-cd config-toolkit/config-zk-web
+cd config-toolkit/config-face
 mvn package
+java -jar config-face.jar --zk="localhost:2181"
 ```
 将编译好的config-web.war部署到tomcat即可
 #### 创建初始权限配置
@@ -32,7 +33,7 @@ create /projectx 1
 create /projectx/modulex a9993e364706816aba3e25717850c26c9cd0d89d
 ```
 #### 登录config-web，创建示例配置
- - 访问http://localhost:8080/config-web
+ - 访问http://localhost:8080/
  - 点击"切换根节点"，输入/projectx/modulex，密码abc
  - 点击"新建版本"，输入1.0.0
  - 左侧的组管理，输入group，点击"创建"
