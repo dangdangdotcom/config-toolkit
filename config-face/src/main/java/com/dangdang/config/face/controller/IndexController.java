@@ -67,7 +67,7 @@ public class IndexController {
                 .sorted(Comparator.comparing(String::toString).reversed())
                 .collect(Collectors.toList());
 
-        final String theVersion = com.google.common.base.Objects.firstNonNull(version, Iterables.getFirst(versions, null));
+        final String theVersion = version != null ? version : Iterables.getFirst(versions, null);
 
         final ModelAndView mv = new ModelAndView("index");
         mv.addObject("root", root);
