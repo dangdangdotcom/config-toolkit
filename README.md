@@ -94,3 +94,6 @@ bean配置
     <property name="intProp" value="#{groupProp['config.int']}" />
 </bean>
 ```
+
+### 更多
+如果您已经读到这儿了，麻烦回到页首给项目点个star -_-
