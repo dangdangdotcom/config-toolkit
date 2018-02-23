@@ -12,6 +12,7 @@
 
 ### 文档
 文档: [https://github.com/dangdangdotcom/config-toolkit/wiki](https://github.com/dangdangdotcom/config-toolkit/wiki "https://github.com/dangdangdotcom/config-toolkit/wiki")
+Release Note: [https://github.com/dangdangdotcom/config-toolkit/wiki/1.-release-notes](https://github.com/dangdangdotcom/config-toolkit/wiki/1.-release-notes "https://github.com/dangdangdotcom/config-toolkit/wiki/1.-release-notes")
 
 ### 搭建配置界面
 #### 下载config-toolkit项目
