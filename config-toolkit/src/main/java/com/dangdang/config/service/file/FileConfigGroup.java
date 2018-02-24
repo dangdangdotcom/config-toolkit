@@ -1,10 +1,5 @@
 package com.dangdang.config.service.file;
 
-import java.io.IOException;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.dangdang.config.service.ConfigGroup;
 import com.dangdang.config.service.GeneralConfigGroup;
 import com.dangdang.config.service.exception.InvalidPathException;
@@ -14,6 +9,10 @@ import com.dangdang.config.service.file.protocol.Protocol;
 import com.dangdang.config.service.file.protocol.Protocols;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Throwables;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
 
 /**
  * Configuration group loaded from URI location.<br>
@@ -43,6 +42,11 @@ public class FileConfigGroup extends GeneralConfigGroup {
 	private Protocol protocolBean;
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(FileConfigGroup.class);
+
+	public FileConfigGroup(FileConfigProfile configProfile, String location, boolean enumerable) {
+		this(configProfile, location);
+		super.enumerable = enumerable;
+	}
 
 	public FileConfigGroup(FileConfigProfile configProfile, String location) {
 		this(null, configProfile, location);

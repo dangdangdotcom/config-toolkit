@@ -60,6 +60,11 @@ public class ZookeeperConfigGroup extends GeneralConfigGroup {
 
     static final Logger LOGGER = LoggerFactory.getLogger(ZookeeperConfigGroup.class);
 
+    public ZookeeperConfigGroup(ZookeeperConfigProfile configProfile, String node, boolean enumerable) {
+        this(configProfile, node);
+        super.enumerable = enumerable;
+    }
+
     public ZookeeperConfigGroup(ZookeeperConfigProfile configProfile, String node) {
         this(null, configProfile, node);
     }

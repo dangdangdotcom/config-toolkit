@@ -33,7 +33,11 @@ public class ConfigGroupSourceFactory {
 		Preconditions.checkNotNull(configGroups);
 		final MutablePropertySources sources = new MutablePropertySources();
 		for (ConfigGroup configGroup : configGroups) {
-			sources.addLast(new ConfigGroupResource(configGroup));
+			if (configGroup.getEnumerable()) {
+				sources.addLast(new ConfigGroupEnumerableResource(configGroup));
+			} else {
+				sources.addLast(new ConfigGroupResource(configGroup));
+			}
 		}
 		return sources;
 	}

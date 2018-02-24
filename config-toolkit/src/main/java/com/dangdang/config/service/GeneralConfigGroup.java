@@ -1,13 +1,5 @@
 package com.dangdang.config.service;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.dangdang.config.service.observer.IObserver;
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
@@ -15,6 +7,13 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author <a href="mailto:wangyuxuan@dangdang.com">Yuxuan Wang</a>
@@ -25,6 +24,8 @@ public abstract class GeneralConfigGroup extends ConcurrentHashMap<String, Strin
 	private static final long serialVersionUID = 1L;
 
 	private ConfigGroup internalConfigGroup;
+
+	protected boolean enumerable = false;
 
 	protected GeneralConfigGroup(ConfigGroup internalConfigGroup) {
 		this.internalConfigGroup = internalConfigGroup;
@@ -136,4 +137,8 @@ public abstract class GeneralConfigGroup extends ConcurrentHashMap<String, Strin
 		throw new UnsupportedOperationException();
 	}
 
+	@Override
+	public boolean getEnumerable() {
+		return this.enumerable;
+	}
 }
