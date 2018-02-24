@@ -12,8 +12,17 @@ import java.util.Map;
  *
  */
 public interface ConfigGroup extends Map<String, String>, Closeable, ISubject {
-	
+
+	/**
+	 * 获取配置
+	 * @param key
+	 * @return
+	 */
 	String get(String key);
 
-	boolean getEnumerable();
+	/**
+	 * 兼容spring,是否通过EnumerablePropertySource加载配置组
+	 * @return
+	 */
+	boolean isEnumerable();
 }

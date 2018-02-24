@@ -25,6 +25,9 @@ public abstract class GeneralConfigGroup extends ConcurrentHashMap<String, Strin
 
 	private ConfigGroup internalConfigGroup;
 
+	/**
+	 * 兼容spring,是否通过EnumerablePropertySource加载配置组
+	 */
 	protected boolean enumerable = false;
 
 	protected GeneralConfigGroup(ConfigGroup internalConfigGroup) {
@@ -138,7 +141,7 @@ public abstract class GeneralConfigGroup extends ConcurrentHashMap<String, Strin
 	}
 
 	@Override
-	public boolean getEnumerable() {
+	public boolean isEnumerable() {
 		return this.enumerable;
 	}
 }

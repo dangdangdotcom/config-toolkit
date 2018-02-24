@@ -55,5 +55,5 @@ public class ExampleBean {
 	public String toString() {
 		return "ExampleBean [stringProperty=" + stringProperty + ", intProperty=" + intProperty + ", cool=" + cool + "]";
 	}
-	
+
 }
