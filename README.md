@@ -21,7 +21,7 @@ Release Note: [https://github.com/dangdangdotcom/config-toolkit/wiki/1.-release-
 git clone https://github.com/dangdangdotcom/config-toolkit.git
 cd config-toolkit/config-face
 mvn package
-java -jar config-face.jar --zk="localhost:2181"
+java -jar config-face.jar --zk=localhost:2181
 ```
 
 #### 创建初始权限配置
