@@ -120,6 +120,9 @@ public class IndexController {
 
     @PostMapping(value = "/group/{version:.+}")
     public ModelAndView createGroup(@PathVariable String version, String newGroup) {
+        version = StringUtils.trim(version);
+        newGroup = StringUtils.trim(newGroup.trim());
+
         final String root = getRoot();
 
         final String groupPath = makePaths(root, version, newGroup);
@@ -179,6 +182,15 @@ public class IndexController {
     @PostMapping(value = "/prop")
     public @ResponseBody
     CommonResponse<Object> createProp(String version, String group, String key, String value, String comment) {
+        LOGGER.debug("Create property version: {}, group: {}, key: {}, value: {}, comment: {}",
+                version, group, key, value, comment);
+
+        version = StringUtils.trim(version);
+        group = StringUtils.trim(group);
+        key = StringUtils.trim(key);
+        value = StringUtils.trim(value);
+        comment = StringUtils.trim(comment);
+
         final String root = getRoot();
 
         final String propPath = makePaths(root, version, group, key);
@@ -200,6 +212,15 @@ public class IndexController {
     @PutMapping(value = "/prop")
     public @ResponseBody
     CommonResponse<Object> updateProp(String version, String group, String key, String value, String comment) {
+        LOGGER.debug("Update property version: {}, group: {}, key: {}, value: {}, comment: {}",
+                version, group, key, value, comment);
+
+        version = StringUtils.trim(version);
+        group = StringUtils.trim(group);
+        key = StringUtils.trim(key);
+        value = StringUtils.trim(value);
+        comment = StringUtils.trim(comment);
+
         final String root = getRoot();
 
         final String propPath = makePaths(root, version, group, key);
@@ -216,6 +237,8 @@ public class IndexController {
     @DeleteMapping(value = "/prop/{version}/{group}/{key:.+}")
     public @ResponseBody
     CommonResponse<Object> deleteProp(@PathVariable String version, @PathVariable String group, @PathVariable String key) {
+        LOGGER.debug("Delete property version: {}, group: {}, key: {}", version, group, key);
+
         final String root = getRoot();
 
         final String propPath = makePaths(root, version, group, key);
@@ -234,6 +257,8 @@ public class IndexController {
     @DeleteMapping(value = "/group/{version}/{group:.+}")
     public @ResponseBody
     CommonResponse<Object> deleteGroup(@PathVariable String version, @PathVariable String group) {
+        LOGGER.debug("Delete group version: {}, group: {}", version, group);
+
         final String root = getRoot();
         final String versionPath = makePaths(root, version, group);
 
@@ -351,8 +376,8 @@ public class IndexController {
             final String commentPath = makePaths(getRoot(), version + COMMENT_SUFFIX, group);
 
             items.forEach(item -> {
-                nodeService.createProperty(makePaths(dataPath, item.getName()), item.getValue());
-                nodeService.createProperty(makePaths(commentPath, item.getName()), item.getComment());
+                nodeService.createProperty(makePaths(dataPath, StringUtils.trim(item.getName())), StringUtils.trim(item.getValue()));
+                nodeService.createProperty(makePaths(commentPath, StringUtils.trim(item.getName())), StringUtils.trim(item.getComment()));
             });
         }
     }
