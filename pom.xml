@@ -7,8 +7,6 @@
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>config-toolkit-parent</module>
-		<module>config-common</module>
 		<module>config-toolkit</module>
 		<module>config-face</module>
         <module>config-toolkit-demo</module>

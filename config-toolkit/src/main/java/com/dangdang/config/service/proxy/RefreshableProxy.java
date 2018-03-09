@@ -15,13 +15,12 @@
  */
 package com.dangdang.config.service.proxy;
 
-import java.lang.reflect.Method;
-
 import com.google.common.base.Preconditions;
-
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
+
+import java.lang.reflect.Method;
 
 /**
  * 可刷新代理对象的动态代理

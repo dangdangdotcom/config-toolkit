@@ -6,7 +6,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.dangdang</groupId>
 	<artifactId>config-toolkit-parent</artifactId>
-	<version>3.1.0-RELEASE</version>
+	<version>3.2.0-RELEASE</version>
 	<packaging>pom</packaging>
 	<name>config-toolkit-parent</name>
 	<description>Parent defination of config toolkit</description>
@@ -22,10 +22,9 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<spring.io.platform.version>Athens-RELEASE</spring.io.platform.version>
+		<spring.io.platform.version>Brussels-SR7</spring.io.platform.version>
 		<apache.commons-collections.version>4.1</apache.commons-collections.version>
-		<druid.version>1.0.7</druid.version>
-		<curator.version>2.6.0</curator.version>
+		<curator.version>4.0.1</curator.version>
 		<cglib.version>2.2.2</cglib.version>
 		<!-- Test libs -->
 		<junit_version>4.10</junit_version>
@@ -56,11 +55,6 @@
 				<groupId>org.apache.commons</groupId>
 				<artifactId>commons-collections4</artifactId>
 				<version>${apache.commons-collections.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.alibaba</groupId>
-				<artifactId>druid</artifactId>
-				<version>${druid.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.curator</groupId>

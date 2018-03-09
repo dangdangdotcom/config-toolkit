@@ -15,10 +15,10 @@
  */
 package com.dangdang.config.service.observer;
 
-import java.util.List;
-
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
+
+import java.util.List;
 
 /**
  * 主题通用实现

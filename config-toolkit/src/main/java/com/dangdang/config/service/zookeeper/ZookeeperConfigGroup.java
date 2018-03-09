@@ -20,7 +20,6 @@ import com.dangdang.config.service.GeneralConfigGroup;
 import com.google.common.base.Charsets;
 import com.google.common.base.Throwables;
 import com.google.common.collect.Maps;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.curator.framework.CuratorFramework;
@@ -75,7 +74,7 @@ public class ZookeeperConfigGroup extends GeneralConfigGroup {
         this.node = node;
 
         if (configProfile.isOpenLocalCache()) {
-            configLocalCache = new ConfigLocalCache(FileUtils.getUserDirectoryPath() + "/.config-toolkit", configProfile.getRootNode());
+            configLocalCache = new ConfigLocalCache(System.getProperty("user.home") + "/.config-toolkit", configProfile.getRootNode());
         }
 
         initConfigs();
