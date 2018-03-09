@@ -16,8 +16,6 @@
 package com.dangdang.config.service.zookeeper;
 
 import com.dangdang.config.service.ConfigProfile;
-import com.google.common.base.Preconditions;
-import com.google.common.base.Strings;
 import org.apache.curator.RetryPolicy;
 import org.apache.curator.retry.ExponentialBackoffRetry;
 import org.apache.curator.utils.ZKPaths;
@@ -63,9 +61,14 @@ public class ZookeeperConfigProfile extends ConfigProfile {
     public ZookeeperConfigProfile(final String connectStr, final String rootNode, final String version, final boolean openLocalCache,
                                   final RetryPolicy retryPolicy) {
         super(version);
-        this.connectStr = Preconditions.checkNotNull(connectStr);
-        this.rootNode = Preconditions.checkNotNull(rootNode);
-        this.retryPolicy = Preconditions.checkNotNull(retryPolicy);
+
+        if(connectStr == null || rootNode == null || retryPolicy == null) {
+            throw new IllegalArgumentException();
+        }
+
+        this.connectStr = connectStr;
+        this.rootNode = rootNode;
+        this.retryPolicy = retryPolicy;
         this.openLocalCache = openLocalCache;
     }
 
@@ -82,8 +85,8 @@ public class ZookeeperConfigProfile extends ConfigProfile {
     }
 
     public String getVersionedRootNode() {
-        if (Strings.isNullOrEmpty(version)) {
-            return rootNode;
+        if (version == null) {
+            throw new IllegalArgumentException("Version cannot be null");
         }
         return ZKPaths.makePath(rootNode, version);
     }

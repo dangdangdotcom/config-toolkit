@@ -15,9 +15,7 @@
  */
 package com.dangdang.config.service.observer;
 
-import com.google.common.base.Preconditions;
-import com.google.common.collect.Lists;
-
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -31,11 +29,14 @@ public abstract class AbstractSubject implements ISubject {
 	/**
 	 * 观察者列表
 	 */
-	private final List<IObserver> watchers = Lists.newArrayList();
+	private final List<IObserver> watchers = new ArrayList<>();
 
 	@Override
 	public void register(final IObserver watcher) {
-		watchers.add(Preconditions.checkNotNull(watcher));
+		if(watcher == null) {
+			throw new IllegalArgumentException("watcher cannot be null");
+		}
+		watchers.add(watcher);
 	}
 
 	@Override

@@ -1,8 +1,6 @@
 package com.dangdang.config.service.file;
 
 import com.dangdang.config.service.file.protocol.ProtocolNames;
-import com.google.common.base.Splitter;
-import com.google.common.collect.Iterables;
 
 /**
  * @author <a href="mailto:wangyuxuan@dangdang.com">Yuxuan Wang</a>
@@ -20,16 +18,19 @@ public class FileLocation {
 		this.protocol = protocol;
 	}
 
-	private static final Splitter SPLITTER = Splitter.on(':').limit(2);
+	private static final String COLON = ":";
 
 	public static FileLocation fromLocation(String location) {
-		Iterable<String> parts = SPLITTER.split(location);
 		// default as file
-		if (Iterables.size(parts) == 1) {
+		if (!location.contains(COLON)) {
 			return new FileLocation(location, ProtocolNames.FILE);
 		}
 
-		return new FileLocation(Iterables.getLast(parts), Iterables.getFirst(parts, null).toLowerCase());
+		final int i = location.indexOf(COLON);
+		final String protocol = location.substring(0, i);
+		final String file = location.substring(i + 1);
+
+		return new FileLocation(file, protocol.toLowerCase());
 	}
 
 	public String getFile() {

@@ -1,13 +1,13 @@
 package com.dangdang.config.service.file.contenttype;
 
+import com.dangdang.config.service.exception.InvalidPathException;
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
-
-import com.dangdang.config.service.exception.InvalidPathException;
-import com.google.common.collect.Maps;
 
 /**
  * <p>
@@ -33,7 +33,11 @@ public class XmlContentType implements ContentType {
 			throw new InvalidPathException(e);
 		}
 
-		return Maps.fromProperties(props);
+		final HashMap<String, String> propMap = new HashMap<>();
+		for(String key : props.stringPropertyNames()) {
+			propMap.put(key, props.getProperty(key));
+		}
+		return propMap;
 	}
 
 }

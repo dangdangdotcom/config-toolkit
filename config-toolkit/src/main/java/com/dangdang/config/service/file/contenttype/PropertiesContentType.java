@@ -1,14 +1,14 @@
 package com.dangdang.config.service.file.contenttype;
 
+import com.dangdang.config.service.exception.InvalidPathException;
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
-
-import com.dangdang.config.service.exception.InvalidPathException;
-import com.google.common.collect.Maps;
 
 /**
  * @author <a href="mailto:wangyuxuan@dangdang.com">Yuxuan Wang</a>
@@ -25,7 +25,11 @@ public class PropertiesContentType implements ContentType {
 			throw new InvalidPathException(e);
 		}
 
-		return Maps.fromProperties(props);
+		final HashMap<String, String> propMap = new HashMap<>();
+		for(String key : props.stringPropertyNames()) {
+			propMap.put(key, props.getProperty(key));
+		}
+		return propMap;
 	}
 
 }

@@ -15,12 +15,11 @@
  */
 package com.dangdang.config.service.sugar;
 
-import java.util.List;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
-
 import com.dangdang.config.service.GeneralConfigGroup;
 import com.dangdang.config.service.observer.IObserver;
-import com.google.common.base.Preconditions;
+
+import java.util.List;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
  * 根据属性变化自刷新的容器
@@ -45,7 +44,7 @@ public abstract class RefreshableBox<T> implements IObserver {
 	private ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
 
 	public RefreshableBox(GeneralConfigGroup node, List<String> propertyKeysCare) {
-		this.node = Preconditions.checkNotNull(node);
+		this.node = node;
 		this.propertyKeysCare = propertyKeysCare;
 		node.register(this);
 		init();

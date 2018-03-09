@@ -2,8 +2,6 @@ package com.dangdang.config.service.file.protocol;
 
 import com.dangdang.config.service.exception.InvalidPathException;
 import com.dangdang.config.service.file.FileLocation;
-import com.google.common.base.Throwables;
-import com.google.common.io.Resources;
 
 import java.io.IOException;
 import java.net.URI;
@@ -31,7 +29,7 @@ public class ClasspathProtocol extends LocalFileProtocol {
 	@Override
 	protected Path getPath(FileLocation location) throws InvalidPathException {
 		try {
-			URL url = Resources.getResource(location.getFile());
+			URL url = this.getClass().getClassLoader().getResource(location.getFile());
 			// 兼容spring-boot 1.4.4
 			if (url.getPath().contains("/BOOT-INF/classes!")) {
 				URI uri = url.toURI();
@@ -44,11 +42,11 @@ public class ClasspathProtocol extends LocalFileProtocol {
 				fs = fsMap.get(array[0]);
 				return fs.getPath(array[1], array[2]);
 			}
-			return Paths.get(Resources.getResource(location.getFile()).toURI());
+			return Paths.get(url.toURI());
 		} catch (URISyntaxException e) {
 			throw new InvalidPathException(e);
 		} catch (IOException e) {
-			throw Throwables.propagate(e);
+			throw new RuntimeException(e);
 		}
 	}
 

@@ -17,11 +17,7 @@ package com.dangdang.config.service.zookeeper;
 
 import com.dangdang.config.service.ConfigGroup;
 import com.dangdang.config.service.GeneralConfigGroup;
-import com.google.common.base.Charsets;
-import com.google.common.base.Throwables;
-import com.google.common.collect.Maps;
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
+import com.dangdang.config.service.util.Tuple;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.apache.curator.framework.api.CuratorListener;
@@ -32,6 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.PreDestroy;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -90,8 +87,7 @@ public class ZookeeperConfigGroup extends GeneralConfigGroup {
         client.start();
         client.getCuratorListenable().addListener(listener);
 
-        LOGGER.debug("Loading properties for node: {}, with loading mode: {} and keys specified: {}", node, configProfile.getKeyLoadingMode(),
-                configProfile.getKeysSpecified());
+        LOGGER.debug("Loading properties for node: {}", node);
         loadNode();
 
         // Update local cache
@@ -111,32 +107,32 @@ public class ZookeeperConfigGroup extends GeneralConfigGroup {
         try {
             final List<String> children = childrenBuilder.watched().forPath(nodePath);
             if (children != null) {
-                final Map<String, String> configs = Maps.newHashMap();
+                final Map<String, String> configs = new HashMap<>();
                 for (String child : children) {
-                    final Pair<String, String> keyValue = loadKey(ZKPaths.makePath(nodePath, child));
+                    final Tuple<String, String> keyValue = loadKey(ZKPaths.makePath(nodePath, child));
                     if (keyValue != null) {
-                        configs.put(keyValue.getKey(), keyValue.getValue());
+                        configs.put(keyValue.getFirst(), keyValue.getSecond());
                     }
                 }
                 cleanAndPutAll(configs);
             }
         } catch (Exception e) {
-            throw Throwables.propagate(e);
+            throw new RuntimeException(e);
         }
     }
 
     void reloadKey(final String nodePath) {
         try {
-            final Pair<String, String> keyValue = loadKey(nodePath);
+            final Tuple<String, String> keyValue = loadKey(nodePath);
             if (keyValue != null) {
-                super.put(keyValue.getKey(), keyValue.getValue());
+                super.put(keyValue.getFirst(), keyValue.getSecond());
             }
         } catch (Exception e) {
-            throw Throwables.propagate(e);
+            throw new RuntimeException(e);
         }
     }
 
-    private Pair<String, String> loadKey(final String nodePath) throws Exception {
+    private Tuple<String, String> loadKey(final String nodePath) throws Exception {
         final String nodeName = ZKPaths.getNodeFromPath(nodePath);
         final Set<String> keysSpecified = configProfile.getKeysSpecified();
         switch (configProfile.getKeyLoadingMode()) {
@@ -157,8 +153,8 @@ public class ZookeeperConfigGroup extends GeneralConfigGroup {
         }
 
         final GetDataBuilder data = client.getData();
-        final String value = new String(data.watched().forPath(nodePath), Charsets.UTF_8);
-        return new ImmutablePair<String, String>(nodeName, value);
+        final String value = new String(data.watched().forPath(nodePath), "UTF-8");
+        return new Tuple<>(nodeName, value);
     }
 
     public String getNode() {
@@ -175,7 +171,7 @@ public class ZookeeperConfigGroup extends GeneralConfigGroup {
      * @return
      */
     public Map<String, String> exportProperties() {
-        return Maps.newHashMap(this);
+        return new HashMap(this);
     }
 
     @PreDestroy

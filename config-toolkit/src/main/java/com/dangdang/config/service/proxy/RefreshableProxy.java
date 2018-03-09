@@ -15,7 +15,6 @@
  */
 package com.dangdang.config.service.proxy;
 
-import com.google.common.base.Preconditions;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
@@ -39,7 +38,7 @@ public class RefreshableProxy<T> implements MethodInterceptor {
 	@SuppressWarnings("unchecked")
 	public RefreshableProxy(final T target) {
 		super();
-		this.target = Preconditions.checkNotNull(target);
+		this.target = target;
 		final Enhancer enhancer = new Enhancer();
 		enhancer.setSuperclass(this.target.getClass());
 		enhancer.setCallback(this);
@@ -47,7 +46,7 @@ public class RefreshableProxy<T> implements MethodInterceptor {
 	}
 
 	public void refresh(final T target) {
-		this.target = Preconditions.checkNotNull(target);
+		this.target = target;
 	}
 
 	public T getInstance() {

@@ -7,8 +7,6 @@ import com.dangdang.config.service.file.contenttype.ContentType;
 import com.dangdang.config.service.file.contenttype.ContentTypes;
 import com.dangdang.config.service.file.protocol.Protocol;
 import com.dangdang.config.service.file.protocol.Protocols;
-import com.google.common.base.Preconditions;
-import com.google.common.base.Throwables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,13 +52,18 @@ public class FileConfigGroup extends GeneralConfigGroup {
 
 	public FileConfigGroup(ConfigGroup internalConfigGroup, FileConfigProfile configProfile, String location) {
 		super(internalConfigGroup);
+
+		if(location == null) {
+			throw new IllegalArgumentException("Location cannot be null.");
+		}
+
 		this.configProfile = configProfile;
-		this.location = FileLocation.fromLocation(Preconditions.checkNotNull(location, "Location cannot be null."));
+		this.location = FileLocation.fromLocation(location);
 		initConfigs();
 		try {
 			protocolBean.watch(this.location, this);
 		} catch (InvalidPathException e) {
-			throw Throwables.propagate(e);
+			throw new RuntimeException(e);
 		}
 	}
 
@@ -71,12 +74,8 @@ public class FileConfigGroup extends GeneralConfigGroup {
 
 			ContentType contentTypeBean = ContentTypes.getInstance().get(configProfile.getContentType()).newInstance();
 			cleanAndPutAll(contentTypeBean.resolve(protocolBean.read(location), configProfile.getFileEncoding()));
-		} catch (InvalidPathException e) {
-			throw Throwables.propagate(e);
-		} catch (InstantiationException e) {
-			throw Throwables.propagate(e);
-		} catch (IllegalAccessException e) {
-			throw Throwables.propagate(e);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
 		}
 	}
 

@@ -15,21 +15,14 @@
  */
 package com.dangdang.config.service.zookeeper;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Properties;
-
 import org.apache.curator.utils.ZKPaths;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Charsets;
-import com.google.common.base.Objects;
+import java.io.*;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Properties;
 
 /**
  * 配置本地缓存
@@ -68,17 +61,18 @@ public class ConfigLocalCache {
 			}
 			Writer writer = null;
 			try {
-				writer = new OutputStreamWriter(new FileOutputStream(localFilePath), Charsets.UTF_8);
+				writer = new OutputStreamWriter(new FileOutputStream(localFilePath), "UTF-8");
 				properties.store(writer, String.format("Local cache of configs group: %s", node));
 			} catch (IOException e) {
 				LOGGER.error(e.getMessage(), e);
 			} finally {
-				if (writer != null)
+				if (writer != null) {
 					try {
 						writer.close();
 					} catch (IOException e) {
 						// DO NOTHING
 					}
+				}
 			}
 		}
 	}
@@ -112,6 +106,8 @@ public class ConfigLocalCache {
 
 	@Override
 	public String toString() {
-		return Objects.toStringHelper(this).add("localCachePath", localCachePath).toString();
+		return "ConfigLocalCache{" +
+				"localCachePath='" + localCachePath + '\'' +
+				'}';
 	}
 }

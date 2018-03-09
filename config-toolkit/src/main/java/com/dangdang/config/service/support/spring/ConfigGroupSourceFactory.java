@@ -15,11 +15,9 @@
  */
 package com.dangdang.config.service.support.spring;
 
+import com.dangdang.config.service.ConfigGroup;
 import org.springframework.core.env.MutablePropertySources;
 import org.springframework.core.env.PropertySources;
-
-import com.dangdang.config.service.ConfigGroup;
-import com.google.common.base.Preconditions;
 
 /**
  * Factory to create PropertySource for configuration group
@@ -30,7 +28,6 @@ import com.google.common.base.Preconditions;
 public class ConfigGroupSourceFactory {
 
 	public static PropertySources create(ConfigGroup... configGroups) {
-		Preconditions.checkNotNull(configGroups);
 		final MutablePropertySources sources = new MutablePropertySources();
 		for (ConfigGroup configGroup : configGroups) {
 			if (configGroup.isEnumerable()) {
