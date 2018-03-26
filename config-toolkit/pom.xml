@@ -8,6 +8,16 @@
 
 	<packaging>jar</packaging>
 	<name>config-toolkit</name>
+	<description>Tool to simplify read configurations form zookeeper/file/http in Java</description>
+	<url>https://github.com/dangdangdotcom/config-toolkit</url>
+	<licenses>
+		<license>
+			<name>Apache 2</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+			<comments>A business-friendly OSS license</comments>
+		</license>
+	</licenses>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

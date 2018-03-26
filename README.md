@@ -1,6 +1,6 @@
 # 分布配置工具包
 
-<h2>${rootNode}/${version}/${group}/${keyValues}</h2>
+Config Toolkit提供了一层对配置资源的抽象，配置可以从多种介质加载，工具内部提供了对zookeeper/本地文件/远程http文件的支持，并提供了SPI接口支持用户扩展自定义介质
 
 <hr>
 
