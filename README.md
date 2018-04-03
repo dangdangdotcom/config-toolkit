@@ -16,7 +16,13 @@ Config Toolkit提供了一层对配置资源的抽象，配置可以从多种介
 Release Note: [https://github.com/dangdangdotcom/config-toolkit/wiki/1.-release-notes](https://github.com/dangdangdotcom/config-toolkit/wiki/1.-release-notes "https://github.com/dangdangdotcom/config-toolkit/wiki/1.-release-notes")
 
 ### 搭建配置界面
-#### 下载config-toolkit项目
+
+#### 使用docker镜像运行config-face
+```
+docker run -it -d -e "zk=localhost:2181" -p 8080:8080 crnlmchina/config-face:v3.3.0
+```
+
+#### 或者下载源码编译config-face
 ```
 git clone https://github.com/dangdangdotcom/config-toolkit.git
 cd config-toolkit/config-face
