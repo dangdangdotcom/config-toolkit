@@ -15,6 +15,7 @@
  */
 package com.dangdang.config.service.easyzk.demo.spring.annotation;
 
+import com.dangdang.config.service.easyzk.demo.Const;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -35,7 +36,7 @@ public class ConfigCenter {
 
 	@Bean
 	public ZookeeperConfigProfile getConfigProfile() {
-		return new ZookeeperConfigProfile("config-toolkit.mabaoshan.com:8011", "/projectx/modulex", "1.0.0");
+		return new ZookeeperConfigProfile(Const.ZK, "/projectx/modulex", "1.0.0");
 	}
 
 	@Bean(name = "propertyGroup1")

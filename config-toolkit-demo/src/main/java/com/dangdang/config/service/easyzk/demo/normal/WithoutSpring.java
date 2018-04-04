@@ -18,6 +18,7 @@ package com.dangdang.config.service.easyzk.demo.normal;
 import java.io.IOException;
 
 import com.dangdang.config.service.GeneralConfigGroup;
+import com.dangdang.config.service.easyzk.demo.Const;
 import com.dangdang.config.service.observer.IObserver;
 import com.dangdang.config.service.zookeeper.ConfigLocalCache;
 import com.dangdang.config.service.zookeeper.ZookeeperConfigGroup;
@@ -32,7 +33,7 @@ public class WithoutSpring {
 
     public static void main(String[] args) {
         final String rootNode = "/projectx/modulex";
-        ZookeeperConfigProfile configProfile = new ZookeeperConfigProfile("192.168.5.99:2181", rootNode, "1.0.0");
+        ZookeeperConfigProfile configProfile = new ZookeeperConfigProfile(Const.ZK, rootNode, "1.0.0");
         ZookeeperConfigGroup propertyGroup1 = new ZookeeperConfigGroup(configProfile, "property-group1");
 
         System.out.println(propertyGroup1);
