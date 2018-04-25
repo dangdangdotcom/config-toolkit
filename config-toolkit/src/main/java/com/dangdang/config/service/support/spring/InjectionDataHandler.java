@@ -2,10 +2,11 @@ package com.dangdang.config.service.support.spring;
 
 import com.dangdang.config.service.GeneralConfigGroup;
 import com.dangdang.config.service.observer.IObserver;
-import com.dangdang.config.service.util.PropertyUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.BeanWrapper;
+import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.InjectionMetadata;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
@@ -19,7 +20,6 @@ import org.springframework.util.StringUtils;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -175,8 +175,8 @@ public class InjectionDataHandler implements ApplicationContextAware {
                     return;
                 }
                 Object bean = applicationContext.getBean(beanInjectionFieldData.getBeanName());
-                Field field = ReflectionUtils.findField(bean.getClass(), beanInjectionFieldData.getBeanField());
-                PropertyUtils.setFieldValue(bean, field, value);
+                BeanWrapper beanWrapper = new BeanWrapperImpl(bean);
+                beanWrapper.setPropertyValue(beanInjectionFieldData.getBeanField(), value);
                 reinitialize(bean, beanName);
             }
         });
