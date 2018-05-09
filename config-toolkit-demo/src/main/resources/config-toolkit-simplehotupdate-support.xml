@@ -26,7 +26,7 @@
 	</config:placeholder>
 
     <!-- hot update -->
-	<bean id="valueComplexResolvePostPrecessor" class="com.dangdang.config.service.support.spring.ValueComplexResolvePostPrecessor" init-method="init" destroy-method="shutdown">
+	<bean id="valueComplexResolvePostPrecessor" class="com.dangdang.config.service.support.spring.ValueComplexResolvePostPrecessor">
 		<property name="generalConfigGroups">
 			<set>
 				<ref bean="propertyGroup1" />

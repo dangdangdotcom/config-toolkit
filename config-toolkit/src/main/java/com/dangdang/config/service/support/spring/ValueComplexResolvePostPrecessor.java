@@ -3,6 +3,7 @@ package com.dangdang.config.service.support.spring;
 import com.dangdang.config.service.GeneralConfigGroup;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.PropertyValues;
+import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.config.InstantiationAwareBeanPostProcessor;
@@ -17,80 +18,128 @@ import java.util.Set;
 /**
  * @author lmiky
  */
-public class ValueComplexResolvePostPrecessor implements InstantiationAwareBeanPostProcessor, ApplicationContextAware, BeanFactoryPostProcessor, PriorityOrdered {
-    private int order;
+public class ValueComplexResolvePostPrecessor implements InstantiationAwareBeanPostProcessor, ApplicationContextAware, BeanFactoryPostProcessor, DisposableBean, PriorityOrdered {
+    private int order = Ordered.HIGHEST_PRECEDENCE;
 
-    private ValueAnnotationBeanPostProcessor valueAnnotationBeanPostProcessor;
-    private ValueExpressionPlaceHolderBeanFactoryPostProcessor valueExpressionPlaceHolderBeanFactoryPostProcessor;
-    private InjectionDataHandler injectionDataHandler;
+    private volatile ValueAnnotationBeanPostProcessor valueAnnotationBeanPostProcessor;
+    private volatile ValueExpressionPlaceHolderBeanFactoryPostProcessor valueExpressionPlaceHolderBeanFactoryPostProcessor;
+    private volatile InjectionDataHandler injectionDataHandler;
+    private ApplicationContext applicationContext;
 
-    public ValueComplexResolvePostPrecessor() {
-        valueAnnotationBeanPostProcessor = new ValueAnnotationBeanPostProcessor();
-        valueExpressionPlaceHolderBeanFactoryPostProcessor = new ValueExpressionPlaceHolderBeanFactoryPostProcessor();
-        injectionDataHandler = new InjectionDataHandler();
-        setOrder(Ordered.HIGHEST_PRECEDENCE);
-    }
+    private Set<String> excludeScanPackages;
+    private Set<String> scanPackages;
 
-    /**
-     *
-     */
-    public void init() {
-        injectionDataHandler.init();
-        valueAnnotationBeanPostProcessor.setInjectionDataHandler(injectionDataHandler);
-        valueExpressionPlaceHolderBeanFactoryPostProcessor.setInjectionDataHandler(injectionDataHandler);
-    }
-
-    /**
-     *
-     */
-    public void shutdown() {
-        injectionDataHandler.shutdown();
-    }
+    private Set<GeneralConfigGroup> generalConfigGroups;
+    private Integer threadSize;
+    private boolean destroyBeforeReinitialize;
+    private boolean reinitialize;
 
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
-        valueExpressionPlaceHolderBeanFactoryPostProcessor.postProcessBeanFactory(beanFactory);
+        getValueExpressionPlaceHolderProcessor().postProcessBeanFactory(beanFactory);
     }
 
     @Override
     public Object postProcessBeforeInstantiation(Class<?> beanClass, String beanName) throws BeansException {
-        return valueAnnotationBeanPostProcessor.postProcessBeforeInstantiation(beanClass, beanName);
+        return getValueAnnotationProcessor().postProcessBeforeInstantiation(beanClass, beanName);
     }
 
     @Override
     public boolean postProcessAfterInstantiation(Object bean, String beanName) throws BeansException {
-        return valueAnnotationBeanPostProcessor.postProcessAfterInstantiation(bean, beanName);
+        return getValueAnnotationProcessor().postProcessAfterInstantiation(bean, beanName);
     }
 
     @Override
     public PropertyValues postProcessPropertyValues(PropertyValues pvs, PropertyDescriptor[] pds, Object bean, String beanName) throws BeansException {
-        return valueAnnotationBeanPostProcessor.postProcessPropertyValues(pvs, pds, bean, beanName);
+        return getValueAnnotationProcessor().postProcessPropertyValues(pvs, pds, bean, beanName);
     }
 
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
-        return valueAnnotationBeanPostProcessor.postProcessBeforeInitialization(bean, beanName);
+        return getValueAnnotationProcessor().postProcessBeforeInitialization(bean, beanName);
     }
 
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
-        return valueAnnotationBeanPostProcessor.postProcessAfterInitialization(bean, beanName);
+        return getValueAnnotationProcessor().postProcessAfterInitialization(bean, beanName);
     }
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        valueAnnotationBeanPostProcessor.setApplicationContext(applicationContext);
-        injectionDataHandler.setApplicationContext(applicationContext);
+        this.applicationContext = applicationContext;
     }
 
-    public void setExcludeScanPackages(Set<String> excludeScanPackages) {
-        valueAnnotationBeanPostProcessor.setExcludeScanPackages(excludeScanPackages);
-        valueExpressionPlaceHolderBeanFactoryPostProcessor.setExcludeScanPackages(excludeScanPackages);
+    /**
+     * @return
+     */
+    public ValueExpressionPlaceHolderBeanFactoryPostProcessor getValueExpressionPlaceHolderProcessor() {
+        if(valueExpressionPlaceHolderBeanFactoryPostProcessor == null) {
+            synchronized (this) {
+                if(valueExpressionPlaceHolderBeanFactoryPostProcessor == null) {
+                    valueExpressionPlaceHolderBeanFactoryPostProcessor = new ValueExpressionPlaceHolderBeanFactoryPostProcessor();
+                    valueExpressionPlaceHolderBeanFactoryPostProcessor.setOrder(order);
+                    if(excludeScanPackages != null) {
+                        valueExpressionPlaceHolderBeanFactoryPostProcessor.setExcludeScanPackages(excludeScanPackages);
+                    }
+                    if(scanPackages != null) {
+                        valueExpressionPlaceHolderBeanFactoryPostProcessor.setScanPackages(scanPackages);
+                    }
+                    valueExpressionPlaceHolderBeanFactoryPostProcessor.setInjectionDataHandler(getInjectionDataHandler());
+                }
+            }
+        }
+        return valueExpressionPlaceHolderBeanFactoryPostProcessor;
     }
 
-    public void setScanPackages(Set<String> scanPackages) {
-        valueAnnotationBeanPostProcessor.setScanPackages(scanPackages);
-        valueExpressionPlaceHolderBeanFactoryPostProcessor.setScanPackages(scanPackages);
+    /**
+     *
+     */
+    public ValueAnnotationBeanPostProcessor getValueAnnotationProcessor() {
+        if(valueAnnotationBeanPostProcessor == null) {
+            synchronized (this) {
+                if(valueAnnotationBeanPostProcessor == null) {
+                    valueAnnotationBeanPostProcessor = new ValueAnnotationBeanPostProcessor();
+                    if(excludeScanPackages != null) {
+                        valueAnnotationBeanPostProcessor.setExcludeScanPackages(excludeScanPackages);
+                    }
+                    if(scanPackages != null) {
+                        valueAnnotationBeanPostProcessor.setScanPackages(scanPackages);
+                    }
+                    valueAnnotationBeanPostProcessor.setApplicationContext(applicationContext);
+                    valueAnnotationBeanPostProcessor.setInjectionDataHandler(getInjectionDataHandler());
+                }
+            }
+        }
+        return valueAnnotationBeanPostProcessor;
+    }
+
+    /**
+     * @return
+     */
+    public InjectionDataHandler getInjectionDataHandler() {
+        if(injectionDataHandler == null) {
+            synchronized (this) {
+                if(injectionDataHandler == null) {
+                    injectionDataHandler = new InjectionDataHandler();
+                    injectionDataHandler.setDestroyBeforeReinitialize(destroyBeforeReinitialize);
+                    injectionDataHandler.setReinitialize(reinitialize);
+                    injectionDataHandler.setGeneralConfigGroups(generalConfigGroups);
+                    if(threadSize != null) {
+                        injectionDataHandler.setThreadSize(threadSize);
+                    }
+                    injectionDataHandler.setApplicationContext(applicationContext);
+                    injectionDataHandler.init();
+                }
+            }
+        }
+        return injectionDataHandler;
+    }
+
+    @Override
+    public void destroy() throws Exception {
+        if(injectionDataHandler != null) {
+            injectionDataHandler.shutdown();
+        }
     }
 
     @Override
@@ -98,24 +147,31 @@ public class ValueComplexResolvePostPrecessor implements InstantiationAwareBeanP
         return order;
     }
 
+    public void setExcludeScanPackages(Set<String> excludeScanPackages) {
+        this.excludeScanPackages = excludeScanPackages;
+    }
+
+    public void setScanPackages(Set<String> scanPackages) {
+        this.scanPackages = scanPackages;
+    }
+
     public void setOrder(int order) {
         this.order = order;
-        valueExpressionPlaceHolderBeanFactoryPostProcessor.setOrder(order);
     }
 
     public void setGeneralConfigGroups(Set<GeneralConfigGroup> generalConfigGroups) {
-        injectionDataHandler.setGeneralConfigGroups(generalConfigGroups);
+        this.generalConfigGroups = generalConfigGroups;
     }
 
     public void setDestroyBeforeReinitialize(boolean destroyBeforeReinitialize) {
-        injectionDataHandler.setDestroyBeforeReinitialize(destroyBeforeReinitialize);
+        this.destroyBeforeReinitialize = destroyBeforeReinitialize;
     }
 
     public void setReinitialize(boolean reinitialize) {
-        injectionDataHandler.setReinitialize(reinitialize);
+        this.reinitialize = reinitialize;
     }
 
     public void setThreadSize(int threadSize) {
-        injectionDataHandler.setThreadSize(threadSize);
+        this.threadSize = threadSize;
     }
 }
