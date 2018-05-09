@@ -35,7 +35,7 @@ import java.util.concurrent.Executors;
  */
 public class InjectionDataHandler implements ApplicationContextAware {
     protected final static Logger logger = LoggerFactory.getLogger(InjectionDataHandler.class);
-    private static Method NON_METHOD = ReflectionUtils.findMethod(InjectionDataHandler.class, "init");;
+    private static Method NON_METHOD = ReflectionUtils.findMethod(InjectionDataHandler.class, "init");
 
     private int threadSize = Runtime.getRuntime().availableProcessors() + 1;
     private ConcurrentHashMap<String, List<BeanInjectionMetaData>> injectionMetaDataCache = new ConcurrentHashMap<>();
