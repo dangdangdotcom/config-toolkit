@@ -5,7 +5,7 @@
 	<version>0.0.1-SNAPSHOT</version>
 
 	<properties>
-		<config-toolkit.version>3.3.0-RELEASE</config-toolkit.version>
+		<config-toolkit.version>3.3.1-RELEASE</config-toolkit.version>
 	</properties>
 
 	<dependencies>

@@ -20,10 +20,15 @@ import com.dangdang.config.service.GeneralConfigGroup;
 import com.dangdang.config.service.util.Tuple;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
+import org.apache.curator.framework.api.CuratorEvent;
 import org.apache.curator.framework.api.CuratorListener;
 import org.apache.curator.framework.api.GetChildrenBuilder;
 import org.apache.curator.framework.api.GetDataBuilder;
+import org.apache.curator.framework.state.ConnectionState;
+import org.apache.curator.framework.state.ConnectionStateListener;
 import org.apache.curator.utils.ZKPaths;
+import org.apache.zookeeper.WatchedEvent;
+import org.apache.zookeeper.Watcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,12 +37,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.CountDownLatch;
 
 /**
  * 配置组节点
  *
  * @author <a href="mailto:wangyuxuan@dangdang.com">Yuxuan Wang</a>
- *
  */
 public class ZookeeperConfigGroup extends GeneralConfigGroup {
 
@@ -77,18 +82,60 @@ public class ZookeeperConfigGroup extends GeneralConfigGroup {
         initConfigs();
     }
 
-    private CuratorListener listener = new ConfigNodeEventListener(this);
-
     /**
      * 初始化节点
      */
     private void initConfigs() {
         client = CuratorFrameworkFactory.newClient(configProfile.getConnectStr(), configProfile.getRetryPolicy());
         client.start();
-        client.getCuratorListenable().addListener(listener);
 
-        LOGGER.debug("Loading properties for node: {}", node);
-        loadNode();
+        client.getCuratorListenable().addListener(new CuratorListener() {
+            @Override
+            public void eventReceived(CuratorFramework client, CuratorEvent event) throws Exception {
+                LOGGER.info("Event: {}", event);
+
+                final WatchedEvent watchedEvent = event.getWatchedEvent();
+                if (watchedEvent != null) {
+                    LOGGER.debug("Watched event: {}", watchedEvent);
+
+                    if (watchedEvent.getState() == Watcher.Event.KeeperState.SyncConnected) {
+                        switch (watchedEvent.getType()) {
+                            case NodeChildrenChanged:
+                                loadNode();
+                                break;
+                            case NodeDataChanged:
+                                reloadKey(watchedEvent.getPath());
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
+            }
+        });
+
+        final CountDownLatch countDownLatch = new CountDownLatch(1);
+        client.getConnectionStateListenable().addListener(new ConnectionStateListener() {
+
+            @Override
+            public void stateChanged(CuratorFramework client, ConnectionState newState) {
+                LOGGER.info("Connection state change: {}", newState);
+                if (newState == ConnectionState.CONNECTED) {
+                    LOGGER.debug("Loading properties for node: {}", node);
+                    loadNode();
+                    countDownLatch.countDown();
+                } else if (newState == ConnectionState.RECONNECTED) {
+                    loadNode();
+                }
+            }
+        });
+
+        try {
+            countDownLatch.await();
+        } catch (InterruptedException e) {
+            LOGGER.error(e.getMessage(), e);
+            throw new RuntimeException("Config Load error.", e);
+        }
 
         // Update local cache
         if (configLocalCache != null) {
@@ -119,6 +166,10 @@ public class ZookeeperConfigGroup extends GeneralConfigGroup {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+
+        if (getConfigLocalCache() != null) {
+            getConfigLocalCache().saveLocalCache(this, getNode());
+        }
     }
 
     void reloadKey(final String nodePath) {
@@ -129,6 +180,10 @@ public class ZookeeperConfigGroup extends GeneralConfigGroup {
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
+        }
+
+        if (getConfigLocalCache() != null) {
+            getConfigLocalCache().saveLocalCache(this, getNode());
         }
     }
 
@@ -178,7 +233,6 @@ public class ZookeeperConfigGroup extends GeneralConfigGroup {
     @Override
     public void close() {
         if (client != null) {
-            client.getCuratorListenable().removeListener(listener);
             client.close();
         }
 
