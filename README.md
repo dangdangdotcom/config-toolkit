@@ -53,7 +53,7 @@ create /projectx/modulex a9993e364706816aba3e25717850c26c9cd0d89d
 <dependency>
   <groupId>com.dangdang</groupId>
   <artifactId>config-toolkit</artifactId>
-  <version>3.3.0-RELEASE</version>
+  <version>3.3.1-RELEASE</version>
 </dependency>
 ```
 #### 使用Java代码直接获取配置
