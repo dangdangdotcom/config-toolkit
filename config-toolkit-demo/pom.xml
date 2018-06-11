@@ -5,7 +5,7 @@
 	<version>0.0.1-SNAPSHOT</version>
 
 	<properties>
-		<config-toolkit.version>3.3.1-RELEASE</config-toolkit.version>
+		<config-toolkit.version>3.3.2-RELEASE</config-toolkit.version>
 	</properties>
 
 	<dependencies>
@@ -28,11 +28,6 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-autoconfigure</artifactId>
 			<version>1.5.9.RELEASE</version>
-		</dependency>
-		<dependency>
-			<groupId>com.google.guava</groupId>
-			<artifactId>guava</artifactId>
-			<version>23.6-jre</version>
 		</dependency>
 
 		<!-- slf4j + logback -->

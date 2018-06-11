@@ -4,7 +4,7 @@
 
 	<groupId>com.dangdang</groupId>
 	<artifactId>config-toolkit</artifactId>
-	<version>3.3.1-RELEASE</version>
+	<version>3.3.2-RELEASE</version>
 
 	<packaging>jar</packaging>
 	<name>config-toolkit</name>
@@ -28,12 +28,6 @@
 			<groupId>org.apache.curator</groupId>
 			<artifactId>curator-framework</artifactId>
 			<version>4.0.1</version>
-			<exclusions>
-				<exclusion>
-					<artifactId>guava</artifactId>
-					<groupId>com.google.guava</groupId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>cglib</groupId>
